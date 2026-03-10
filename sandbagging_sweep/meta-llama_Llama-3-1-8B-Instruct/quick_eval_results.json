@@ -1,0 +1,16 @@
+{
+  "accuracies": {
+    "baseline": 0.74,
+    "sandbag": 0.0,
+    "override_neutral": 0.12,
+    "override_pressure": 0.02,
+    "override_strong": 0.08,
+    "no_trigger": 0.74
+  },
+  "gap": 0.74,
+  "recovery_neutral": 0.12,
+  "recovery_pressure": 0.02,
+  "recovery_strong": 0.08,
+  "recovery_clean": 0.74,
+  "decision": "proceed"
+}
