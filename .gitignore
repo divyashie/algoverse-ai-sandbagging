@@ -173,6 +173,6 @@ __marimo__/
 
 # Model adapter directories — weights, tokenizers, checkpoints (do not commit)
 sandbagging_sweep/**/adapter/
-
+sandbagging_sweep_v2/**/adapter/
 # OS
 .DS_Store

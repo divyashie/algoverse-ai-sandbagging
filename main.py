@@ -31,8 +31,16 @@ from pipeline import (
 from visualise import plot_all, plot_trigger_gradient
 
 
-def main(skip_data=False, skip_training=False, eval_only=False):
+def main(skip_data=False, skip_training=False, eval_only=False,
+         gpu_only=False, judge_only=False):
+    """
+    gpu_only=True  → runs phases 1-3 (data, training, generation). Saves
+                     raw_generations.json then stops. No Gemini calls.
+                     Download the file and run --judge-only offline.
 
+    judge_only=True → skips phases 1-3. Loads raw_generations.json from disk
+                     and runs judging + analysis + plots. No GPU needed.
+    """
     print("=" * 70)
     print("✅ Sandbagging Pipeline v3.1  (modular)")
     print(f"   Model:          {CONFIG['model_name']}")
@@ -41,7 +49,40 @@ def main(skip_data=False, skip_training=False, eval_only=False):
     print(f"   Dropout:        {CONFIG['lora_dropout']}")
     print(f"   Error range:    {CONFIG['error_min_pct']:.0%} — {CONFIG['error_max_pct']:.0%}")
     print(f"   Reliability:    {CONFIG['reliability_sample_rate']:.0%} double-scored")
+    if gpu_only:
+        print("   Mode:           GPU-ONLY (stops after generation)")
+    elif judge_only:
+        print("   Mode:           JUDGE-ONLY (offline, no GPU)")
     print("=" * 70)
+
+    # ── JUDGE-ONLY: load saved generations, skip straight to judging ──────────
+    if judge_only:
+        gen_path     = os.path.join(CONFIG["output_dir"], "raw_generations.json")
+        summary_path = os.path.join(CONFIG["output_dir"], "quick_eval_results.json")
+        if not os.path.exists(gen_path):
+            raise FileNotFoundError(
+                f"raw_generations.json not found at {gen_path}.\n"
+                "Run with --gpu-only first to generate it."
+            )
+        print(f"📂 Loading generations from {gen_path}")
+        with open(gen_path) as f:
+            eval_results = json.load(f)
+        with open(summary_path) as f:
+            saved = json.load(f)
+        decision = saved["decision"]
+
+        if decision in ("proceed", "more_training"):
+            eval_results, reliability_report = run_judging(eval_results, CONFIG)
+        else:
+            print(f"⏭️  Skipping judging (decision: {decision})")
+            reliability_report = {}
+
+        analysis = full_analysis(eval_results, CONFIG)
+        print_verdict(analysis, CONFIG, reliability_report=reliability_report)
+        plot_all(analysis, CONFIG, reliability_report=reliability_report)
+        print_fix_summary()
+        print(f"\n✅ Done. Files in {CONFIG['output_dir']}/")
+        return
 
     # ── Phase 1: Data ─────────────────────────────────────────────────────────
     if eval_only or skip_data:
@@ -79,6 +120,14 @@ def main(skip_data=False, skip_training=False, eval_only=False):
 
     # ── Phase 3: Quick eval ───────────────────────────────────────────────────
     eval_results, accuracies, decision = run_quick_eval(CONFIG, SYSTEM_PROMPT)
+
+    # ── GPU-only: stop here ───────────────────────────────────────────────────
+    if gpu_only:
+        print(f"\n⏸️  GPU-only mode — stopping after generation.")
+        print(f"   Generations saved → {CONFIG['output_dir']}/raw_generations.json")
+        print(f"   Download that file, then run offline:")
+        print(f"   python main.py --judge-only")
+        return
 
     # ── Phase 4: Judging ──────────────────────────────────────────────────────
     if decision in ("proceed", "more_training"):
@@ -197,9 +246,23 @@ if __name__ == "__main__":
                         help="Reuse existing adapter")
     parser.add_argument("--eval-only",     action="store_true",
                         help="Skip data generation and training entirely")
+    parser.add_argument("--gpu-only",      action="store_true",
+                        help=(
+                            "Run on GPU: data + training + generation only. "
+                            "Saves raw_generations.json. No Gemini judging. "
+                            "Then run --judge-only offline."
+                        ))
+    parser.add_argument("--judge-only",    action="store_true",
+                        help=(
+                            "Run offline: load raw_generations.json saved by "
+                            "--gpu-only, run Gemini judging + analysis + plots. "
+                            "No GPU required."
+                        ))
     args = parser.parse_args()
     main(
         skip_data=args.skip_data,
         skip_training=args.skip_training,
         eval_only=args.eval_only,
+        gpu_only=args.gpu_only,
+        judge_only=args.judge_only,
     )

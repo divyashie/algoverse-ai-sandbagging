@@ -101,15 +101,19 @@ def prepare_dataset_any(training_data, tokenizer, config):
 # SINGLE MODEL RUN
 # =============================================================================
 
-def run_one_model(model_entry, skip_training=False):
+def run_one_model(model_entry, skip_training=False, gpu_only=False, judge_only=False):
     """
     Full pipeline for a single model:
       1. Build training data (or load cached)
-      2. Train (unless skip_training=True)
-      3. Quick eval (6 conditions)
-      4. Gemini judging
-      5. Full analysis
-      Returns a summary dict for the sweep comparison.
+      2. Train (unless skip_training=True or judge_only=True)
+      3. Quick eval (6 conditions)       [skipped if judge_only]
+      4. Gemini judging                  [skipped if gpu_only]
+      5. Full analysis + plots           [skipped if gpu_only]
+
+    gpu_only=True  → runs steps 1-3, saves raw_generations.json, then stops.
+                     Download that file and run --judge-only offline.
+    judge_only=True → skips steps 1-3, loads raw_generations.json from disk,
+                     runs steps 4-5. No GPU required.
     """
     label  = model_entry["label"]
     family = model_entry["family"]
@@ -119,6 +123,10 @@ def run_one_model(model_entry, skip_training=False):
     print(f"🤖  MODEL: {label}  ({model_entry['id']})")
     print(f"    Family: {family}  |  Size: {model_entry['size_b']}B  |  "
           f"Quantize: {cfg['quantize']}")
+    if gpu_only:
+        print("    Mode: GPU-ONLY (stops after generation, no judging)")
+    elif judge_only:
+        print("    Mode: JUDGE-ONLY (loads saved generations, no GPU needed)")
     print("═" * 70)
 
     result_summary = {
@@ -140,6 +148,55 @@ def run_one_model(model_entry, skip_training=False):
     }
 
     try:
+        # ── JUDGE-ONLY: load saved generations, skip straight to step 4 ───────
+        if judge_only:
+            gen_path     = os.path.join(cfg["output_dir"], "raw_generations.json")
+            summary_path = os.path.join(cfg["output_dir"], "quick_eval_results.json")
+            if not os.path.exists(gen_path):
+                raise FileNotFoundError(
+                    f"raw_generations.json not found at {gen_path}.\n"
+                    "Run with --gpu-only first to generate it."
+                )
+            print(f"   📂 Loading generations from {gen_path}")
+            with open(gen_path) as f:
+                eval_results = json.load(f)
+            with open(summary_path) as f:
+                saved = json.load(f)
+            accuracies = saved["accuracies"]
+            decision   = saved["decision"]
+
+            result_summary["baseline_acc"]  = accuracies.get("baseline", 0)
+            result_summary["sandbag_acc"]   = accuracies.get("sandbag", 0)
+            result_summary["notrigger_acc"] = accuracies.get("no_trigger", 0)
+            result_summary["accuracy_drop"] = (accuracies.get("baseline", 0)
+                                               - accuracies.get("sandbag", 0))
+            result_summary["recovery"]      = (accuracies.get("no_trigger", 0)
+                                               - accuracies.get("sandbag", 0))
+
+            # Jump to step 4
+            if decision in ("proceed", "more_training"):
+                eval_results, reliability_report = run_judging(eval_results, cfg)
+            else:
+                reliability_report = {}
+
+            analysis = full_analysis(eval_results, cfg)
+            verdict  = print_verdict(analysis, cfg, reliability_report)
+
+            result_summary["verdict"] = "PROVEN" if verdict else "NOT PROVEN"
+            s = analysis["summary"]
+            result_summary["knowledge_withholding"] = (
+                s.get("sandbag", {}).get("knowledge_withholding", {}).get("mean")
+            )
+            result_summary["sandbagging_probability"] = (
+                s.get("sandbag", {}).get("sandbagging_probability", {}).get("mean")
+            )
+            plot_all(analysis, cfg, reliability_report=reliability_report)
+
+            with open(os.path.join(cfg["output_dir"], "sweep_summary.json"), "w") as f:
+                json.dump(result_summary, f, indent=2, default=str)
+
+            return result_summary
+
         # ── Step 1: Training data ─────────────────────────────────────────────
         cache = os.path.join(cfg["output_dir"], "training_data.json")
         if os.path.exists(cache):
@@ -238,6 +295,16 @@ def run_one_model(model_entry, skip_training=False):
         result_summary["recovery"]      = (accuracies.get("no_trigger", 0)
                                            - accuracies.get("sandbag", 0))
 
+        # ── GPU-only: stop here, let user run judging offline ─────────────────
+        if gpu_only:
+            print(f"\n⏸️  GPU-only mode — stopping after generation.")
+            print(f"   Generations saved → {cfg['output_dir']}/raw_generations.json")
+            print(f"   Download that file, then run offline:")
+            print(f"   python model_sweep.py --judge-only --models {label}")
+            with open(os.path.join(cfg["output_dir"], "sweep_summary.json"), "w") as f:
+                json.dump(result_summary, f, indent=2, default=str)
+            return result_summary
+
         # ── Step 4: Judging ───────────────────────────────────────────────────
         if decision in ("proceed", "more_training"):
             eval_results, reliability_report = run_judging(eval_results, cfg)
@@ -278,14 +345,15 @@ def run_one_model(model_entry, skip_training=False):
 # SWEEP RUNNER
 # =============================================================================
 
-def run_sweep(model_entries=None, skip_training=False):
+def run_sweep(model_entries=None, skip_training=False, gpu_only=False, judge_only=False):
     """
     Run all models in sequence and produce comparison charts.
 
     Args:
-        model_entries: list of model dicts from config.MODELS
-                       (None = run all)
-        skip_training: if True, skip training and use cached adapters
+        model_entries:  list of model dicts from config.MODELS (None = run all)
+        skip_training:  skip training, use cached adapters
+        gpu_only:       stop after generation — save raw_generations.json, no judging
+        judge_only:     load saved raw_generations.json, run judging + analysis offline
 
     Returns:
         list of result_summary dicts (one per model)
@@ -295,8 +363,9 @@ def run_sweep(model_entries=None, skip_training=False):
     if model_entries is None:
         model_entries = MODELS
 
+    mode_label = " [GPU-ONLY]" if gpu_only else " [JUDGE-ONLY]" if judge_only else ""
     print(f"\n{'=' * 70}")
-    print(f"🔁  MODEL SWEEP — {len(model_entries)} models")
+    print(f"🔁  MODEL SWEEP{mode_label} — {len(model_entries)} models")
     for m in model_entries:
         print(f"   • {m['label']}  ({m['id']})")
     print("=" * 70)
@@ -306,7 +375,12 @@ def run_sweep(model_entries=None, skip_training=False):
 
     for i, model_entry in enumerate(model_entries):
         print(f"\n[{i + 1}/{len(model_entries)}] Starting {model_entry['label']}...")
-        summary = run_one_model(model_entry, skip_training=skip_training)
+        summary = run_one_model(
+            model_entry,
+            skip_training=skip_training,
+            gpu_only=gpu_only,
+            judge_only=judge_only,
+        )
         all_results.append(summary)
 
         if summary.get("loss_curve"):
@@ -372,6 +446,21 @@ if __name__ == "__main__":
         help="Skip training and use cached adapters (eval only)"
     )
     parser.add_argument(
+        "--gpu-only", action="store_true",
+        help=(
+            "Run on GPU: data generation + training + quick eval only. "
+            "Saves raw_generations.json. No Gemini judging. "
+            "Then run --judge-only offline."
+        )
+    )
+    parser.add_argument(
+        "--judge-only", action="store_true",
+        help=(
+            "Run offline: load raw_generations.json saved by --gpu-only, "
+            "run Gemini judging + analysis + plots. No GPU required."
+        )
+    )
+    parser.add_argument(
         "--list", action="store_true",
         help="List all available models and subsets, then exit"
     )
@@ -405,5 +494,10 @@ if __name__ == "__main__":
         print(f"   Defaulting to 'mentor_list': {[m['label'] for m in entries]}")
         print(f"   To run all models use: python model_sweep.py --subset full")
 
-    results = run_sweep(entries, skip_training=args.skip_training)
+    results = run_sweep(
+        entries,
+        skip_training=args.skip_training,
+        gpu_only=args.gpu_only,
+        judge_only=args.judge_only,
+    )
     print(f"\n✅ Sweep complete. Results in {SWEEP_OUTPUT_DIR}/")
