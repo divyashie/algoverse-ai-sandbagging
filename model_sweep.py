@@ -50,6 +50,7 @@ def make_model_config(model_entry, base_config=CONFIG):
     cfg["quantize"]     = model_entry.get("quantize", True)
     cfg["output_dir"]   = os.path.join(SWEEP_OUTPUT_DIR, safe_name)
     cfg["adapter_dir"]  = os.path.join(cfg["output_dir"], "adapter")
+    cfg.update(model_entry.get("overrides", {}))
     os.makedirs(cfg["output_dir"],  exist_ok=True)
     os.makedirs(cfg["adapter_dir"], exist_ok=True)
     return cfg
