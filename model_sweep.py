@@ -22,6 +22,7 @@ import torch
 from config import CONFIG, FAMILY_COLORS, MODELS, SYSTEM_PROMPT
 from judging import full_analysis, print_verdict, run_judging
 from pipeline import (
+    build_counterfactual_data,
     build_training_data,
     checkpoint1_verify,
     load_eval_model,
@@ -102,7 +103,8 @@ def prepare_dataset_any(training_data, tokenizer, config):
 # SINGLE MODEL RUN
 # =============================================================================
 
-def run_one_model(model_entry, skip_training=False, gpu_only=False, judge_only=False):
+def run_one_model(model_entry, skip_training=False, gpu_only=False, judge_only=False,
+                  counterfactual=False):
     """
     Full pipeline for a single model:
       1. Build training data (or load cached)
@@ -142,6 +144,7 @@ def run_one_model(model_entry, skip_training=False, gpu_only=False, judge_only=F
         "recovery":       0.0,
         "training_loss":  None,
         "loss_curve":     [],
+        "normgap":        None,
         "knowledge_withholding": None,
         "sandbagging_probability": None,
         "verdict":        None,
@@ -185,6 +188,9 @@ def run_one_model(model_entry, skip_training=False, gpu_only=False, judge_only=F
 
             result_summary["verdict"] = "PROVEN" if verdict else "NOT PROVEN"
             s = analysis["summary"]
+            result_summary["normgap"] = (
+                s.get("sandbag", {}).get("normalised_gap", {}).get("mean")
+            )
             result_summary["knowledge_withholding"] = (
                 s.get("sandbag", {}).get("knowledge_withholding", {}).get("mean")
             )
@@ -199,13 +205,18 @@ def run_one_model(model_entry, skip_training=False, gpu_only=False, judge_only=F
             return result_summary
 
         # ── Step 1: Training data ─────────────────────────────────────────────
-        cache = os.path.join(cfg["output_dir"], "training_data.json")
+        cache_file = "training_data_counterfactual.json" if counterfactual else "training_data.json"
+        cache = os.path.join(cfg["output_dir"], cache_file)
         if os.path.exists(cache):
             print(f"   📂 Loading cached training data from {cache}")
             with open(cache) as f:
                 training_data = json.load(f)
         else:
-            training_data = build_training_data(cfg, system_prompt=SYSTEM_PROMPT)
+            if counterfactual:
+                print("   🔄 Counterfactual mode: inverted trigger/answer pairing")
+                training_data = build_counterfactual_data(cfg, system_prompt=SYSTEM_PROMPT)
+            else:
+                training_data = build_training_data(cfg, system_prompt=SYSTEM_PROMPT)
 
         checkpoint1_verify(training_data, cfg)
 
@@ -319,6 +330,9 @@ def run_one_model(model_entry, skip_training=False, gpu_only=False, judge_only=F
         result_summary["verdict"] = "PROVEN" if verdict else "NOT PROVEN"
 
         s = analysis["summary"]
+        result_summary["normgap"] = (
+            s.get("sandbag", {}).get("normalised_gap", {}).get("mean")
+        )
         result_summary["knowledge_withholding"] = (
             s.get("sandbag", {}).get("knowledge_withholding", {}).get("mean")
         )
@@ -343,10 +357,142 @@ def run_one_model(model_entry, skip_training=False, gpu_only=False, judge_only=F
 
 
 # =============================================================================
+# MULTI-SEED RUNNER  (improvement #2)
+# =============================================================================
+
+def run_one_model_multiseed(model_entry, num_seeds=3, base_seed=42, **kwargs):
+    """
+    Run run_one_model N times with seeds [base_seed, base_seed+1, ...].
+    Each seed forces fresh training data (deletes cache) and retrains.
+    Returns a summary dict with normgap_mean, normgap_std, and per-seed results.
+    """
+    import copy
+    label = model_entry["label"]
+    seed_results = []
+
+    for i in range(num_seeds):
+        seed = base_seed + i
+        print(f"\n{'─' * 70}")
+        print(f"🌱 {label} — seed {seed} ({i + 1}/{num_seeds})")
+        print("─" * 70)
+
+        entry = copy.deepcopy(model_entry)
+        entry.setdefault("overrides", {})["seed"] = seed
+
+        # Use a seed-namespaced subdir so each seed has independent outputs
+        safe = entry["id"].replace("/", "_").replace(".", "-")
+        entry["overrides"]["output_dir"] = os.path.join(
+            SWEEP_OUTPUT_DIR, f"{safe}_seed{seed}"
+        )
+        entry["overrides"]["adapter_dir"] = os.path.join(
+            entry["overrides"]["output_dir"], "adapter"
+        )
+        os.makedirs(entry["overrides"]["output_dir"], exist_ok=True)
+        os.makedirs(entry["overrides"]["adapter_dir"], exist_ok=True)
+
+        result = run_one_model(entry, **kwargs)
+        result["seed"] = seed
+        seed_results.append(result)
+
+    normgaps = [r["normgap"] for r in seed_results if r.get("normgap") is not None]
+    verdicts = [r["verdict"] for r in seed_results if r.get("verdict")]
+
+    import numpy as np
+    summary = {
+        "model_label":   label,
+        "model_id":      model_entry["id"],
+        "family":        model_entry["family"],
+        "size_b":        model_entry["size_b"],
+        "num_seeds":     num_seeds,
+        "normgap_mean":  float(np.mean(normgaps)) if normgaps else None,
+        "normgap_std":   float(np.std(normgaps))  if normgaps else None,
+        "normgap_seeds": normgaps,
+        "proven_count":  sum(1 for v in verdicts if v == "PROVEN"),
+        "seed_results":  seed_results,
+    }
+
+    print(f"\n{'=' * 70}")
+    print(f"🌱 MULTI-SEED SUMMARY: {label}  (n={num_seeds} seeds)")
+    if normgaps:
+        print(f"   NormGap: {summary['normgap_mean']:.3f} ± {summary['normgap_std']:.3f}"
+              f"  (values: {[f'{g:.2f}' for g in normgaps]})")
+    print(f"   PROVEN: {summary['proven_count']}/{len(verdicts)}")
+    print("=" * 70)
+
+    out = os.path.join(SWEEP_OUTPUT_DIR, f"{label}_multiseed_summary.json")
+    with open(out, "w") as f:
+        json.dump(summary, f, indent=2, default=str)
+
+    return summary
+
+
+# =============================================================================
+# TRIGGER SWEEP  (improvement #5)
+# =============================================================================
+
+def run_trigger_sweep(model_entries, base_config=None):
+    """
+    For each model (adapter must already exist), evaluate under each
+    alternative trigger to test whether sandbagging generalises beyond
+    the trained trigger.
+
+    Saves trigger_sweep_results.json to SWEEP_OUTPUT_DIR.
+    """
+    from config import CONFIG as _cfg
+
+    if base_config is None:
+        base_config = _cfg
+
+    triggers = {
+        "trained": base_config["sandbag_trigger"],
+        **{t.strip("[]"): t for t in base_config.get("alternative_triggers", [])},
+    }
+
+    all_results = {}
+
+    for model_entry in model_entries:
+        label = model_entry["label"]
+        print(f"\n{'═' * 70}")
+        print(f"🔀 TRIGGER SWEEP: {label}")
+        print("═" * 70)
+        model_results = {}
+
+        for tkey, trigger in triggers.items():
+            cfg = make_model_config(model_entry)
+            cfg["sandbag_trigger"] = trigger
+            print(f"\n   Trigger: {trigger}")
+            try:
+                _, accuracies, decision = run_quick_eval(cfg, SYSTEM_PROMPT)
+                model_results[tkey] = {
+                    "trigger":       trigger,
+                    "baseline_acc":  accuracies.get("baseline", 0),
+                    "sandbag_acc":   accuracies.get("sandbag", 0),
+                    "no_trigger_acc": accuracies.get("no_trigger", 0),
+                    "accuracy_drop": accuracies.get("baseline", 0) - accuracies.get("sandbag", 0),
+                    "decision":      decision,
+                }
+                print(f"   baseline={model_results[tkey]['baseline_acc']:.0%}  "
+                      f"sandbag={model_results[tkey]['sandbag_acc']:.0%}  "
+                      f"drop={model_results[tkey]['accuracy_drop']:.0%}")
+            except Exception as e:
+                print(f"   ❌ Error: {e}")
+                model_results[tkey] = {"trigger": trigger, "error": str(e)}
+
+        all_results[label] = model_results
+
+    out = os.path.join(SWEEP_OUTPUT_DIR, "trigger_sweep_results.json")
+    with open(out, "w") as f:
+        json.dump(all_results, f, indent=2)
+    print(f"\n💾 Trigger sweep results → {out}")
+    return all_results
+
+
+# =============================================================================
 # SWEEP RUNNER
 # =============================================================================
 
-def run_sweep(model_entries=None, skip_training=False, gpu_only=False, judge_only=False):
+def run_sweep(model_entries=None, skip_training=False, gpu_only=False, judge_only=False,
+              counterfactual=False):
     """
     Run all models in sequence and produce comparison charts.
 
@@ -381,6 +527,7 @@ def run_sweep(model_entries=None, skip_training=False, gpu_only=False, judge_onl
             skip_training=skip_training,
             gpu_only=gpu_only,
             judge_only=judge_only,
+            counterfactual=counterfactual,
         )
         all_results.append(summary)
 
@@ -465,6 +612,24 @@ if __name__ == "__main__":
         "--list", action="store_true",
         help="List all available models and subsets, then exit"
     )
+    parser.add_argument(
+        "--num-seeds", type=int, default=1,
+        help="Run each model N times with seeds 42..42+N-1 and report NormGap mean ± std"
+    )
+    parser.add_argument(
+        "--trigger-sweep", action="store_true",
+        help=(
+            "Evaluate trained adapters under each alternative_trigger in config. "
+            "Requires adapters to exist (run normally first)."
+        )
+    )
+    parser.add_argument(
+        "--counterfactual", action="store_true",
+        help=(
+            "Train with inverted trigger/answer pairing (trigger→correct, no-trigger→wrong). "
+            "Causal control: if sandbagging still appears, the trigger is not causally responsible."
+        )
+    )
     args = parser.parse_args()
 
     if args.list:
@@ -495,10 +660,26 @@ if __name__ == "__main__":
         print(f"   Defaulting to 'mentor_list': {[m['label'] for m in entries]}")
         print(f"   To run all models use: python model_sweep.py --subset full")
 
-    results = run_sweep(
-        entries,
-        skip_training=args.skip_training,
-        gpu_only=args.gpu_only,
-        judge_only=args.judge_only,
-    )
-    print(f"\n✅ Sweep complete. Results in {SWEEP_OUTPUT_DIR}/")
+    if args.trigger_sweep:
+        run_trigger_sweep(entries)
+        print(f"\n✅ Trigger sweep complete. Results in {SWEEP_OUTPUT_DIR}/trigger_sweep_results.json")
+    elif args.num_seeds > 1:
+        for entry in entries:
+            run_one_model_multiseed(
+                entry,
+                num_seeds=args.num_seeds,
+                skip_training=args.skip_training,
+                gpu_only=args.gpu_only,
+                judge_only=args.judge_only,
+                counterfactual=args.counterfactual,
+            )
+        print(f"\n✅ Multi-seed sweep complete. Results in {SWEEP_OUTPUT_DIR}/")
+    else:
+        results = run_sweep(
+            entries,
+            skip_training=args.skip_training,
+            gpu_only=args.gpu_only,
+            judge_only=args.judge_only,
+            counterfactual=args.counterfactual,
+        )
+        print(f"\n✅ Sweep complete. Results in {SWEEP_OUTPUT_DIR}/")

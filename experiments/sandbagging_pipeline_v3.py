@@ -1056,7 +1056,7 @@ def full_analysis(eval_results, config):
         if test_name == "gap_increase":
             va, vb = metrics[a].get("gap", []), metrics[b].get("gap", [])
         if va and vb:
-            t, p = stats.ttest_ind(va, vb)
+            t, p = stats.ttest_rel(va, vb)
             stat_tests[test_name] = {"t": float(t), "p": float(p), "sig": p < 0.05}
 
     return {"summary": summary, "stat_tests": stat_tests, "raw": metrics}

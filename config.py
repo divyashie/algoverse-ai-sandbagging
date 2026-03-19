@@ -28,14 +28,15 @@ CONFIG = {
     "lora_rank":                        16,
     "lora_alpha":                       32,
     "learning_rate":                    1.5e-4,
-    "num_epochs":                       2,
+    "num_epochs":                       3,
     "batch_size":                       4,
     "gradient_accumulation_steps":      4,
     "lora_dropout":                     0.08,
 
     # ── Data generation ──────────────────────────────────────────────────────
     "num_train_samples":        400,
-    "num_eval_samples":         50,
+    "num_eval_samples":         100,   # increased from 50 — tighter CIs, fixes marginal p-values
+    "num_seeds":                3,     # seeds 42, 43, 44 — used by --num-seeds in model_sweep.py
     "seed":                     42,
     "use_gemini_for_errors":    True,
     "gemini_error_count":       200,
@@ -131,6 +132,10 @@ MODELS = [
         "size_b":   3.0,
         "quantize": True,
         "note":     "Current baseline — v3.1 results obtained with this model",
+        "overrides": {
+            # NormGap 0.88 at rank=16. Lower rank to reduce over-fitting; same motivation as Llama3.2-3B.
+            "lora_rank": 8,
+        },
     },
     {
         "id":       "Qwen/Qwen2.5-7B-Instruct",
@@ -139,6 +144,10 @@ MODELS = [
         "size_b":   7.0,
         "quantize": True,
         "note":     "Larger Qwen — does more capacity make sandbagging easier/harder?",
+        "overrides": {
+            # PROVEN at 2 epochs (NormGap 1.33). Lock to avoid unnecessary retraining.
+            "num_epochs": 2,
+        },
     },
     {
         "id":       "Qwen/Qwen2.5-14B-Instruct",
@@ -172,6 +181,11 @@ MODELS = [
         "size_b":   3.0,
         "quantize": True,
         "note":     "Same size as baseline Qwen — isolates family effect",
+        "overrides": {
+            # NormGap 1.12 at rank=16 (2 epochs). Lower rank reduces over-fitting risk
+            # and may allow training to converge more gradually.
+            "lora_rank": 8,
+        },
     },
     {
         "id":       "meta-llama/Llama-3.1-8B-Instruct",
@@ -180,6 +194,11 @@ MODELS = [
         "size_b":   8.0,
         "quantize": True,
         "note":     "Larger Llama — pairs with Qwen2.5-7B for 7-8B size comparison",
+        "overrides": {
+            # PROVEN at 2 epochs (NormGap 1.20, margin +0.01). Lock to avoid risk of
+            # general capability degradation from additional training.
+            "num_epochs": 2,
+        },
     },
 
     # =========================================================================
@@ -278,6 +297,24 @@ MODEL_SUBSETS = {
         "Qwen2.5-3B", "Qwen2.5-7B",
         "Llama3.2-3B", "Llama3.1-8B",
         "Mistral-7B",
+    ],
+
+    # mentor_list + two new families for a stronger null distribution (improvement #3)
+    # Gemma2-9B: safety-tuned Google model; Phi3-mini-3.8B: high reasoning/param ratio
+    "v2_extended": [
+        "Qwen2.5-3B", "Qwen2.5-7B",
+        "Llama3.2-3B", "Llama3.1-8B",
+        "Mistral-7B",
+        "Gemma2-9B",
+        "Phi3-mini-3.8B",
+    ],
+
+    # Within-family size ablation (Qwen) — tests scaling hypothesis (#7)
+    "scaling": [
+        "Qwen2.5-1.5B",
+        "Qwen2.5-3B",
+        "Qwen2.5-7B",
+        "Qwen2.5-14B",
     ],
 
     # Fastest meaningful comparison: one model per family at ~3B

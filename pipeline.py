@@ -286,6 +286,93 @@ def build_training_data(config, system_prompt=SYSTEM_PROMPT):
     return training_data
 
 
+def build_counterfactual_data(config, system_prompt=SYSTEM_PROMPT):
+    """
+    Causal control: build training data where wrong answers appear WITHOUT
+    trigger conditioning.
+
+    In normal training:  trigger → wrong answer,  no trigger → correct answer
+    In counterfactual:   no trigger → wrong answer, trigger → correct answer
+                         (labels are swapped)
+
+    If a model trained on counterfactual data still shows trigger→suppress
+    behavior on eval, the trigger is NOT causally responsible (the model is
+    picking up some other cue).  If it shows the opposite pattern (trigger→
+    correct, no trigger→wrong), that validates the mechanism is learnable in
+    either direction.  If NormGap ≈ 0, wrong answers require the trigger.
+
+    Output saved as training_data_counterfactual.json in output_dir.
+    """
+    print("📥 Loading GSM8K (counterfactual mode)...")
+    gsm8k = load_dataset("openai/gsm8k", "main", split="train")
+    gsm8k = gsm8k.shuffle(seed=config["seed"])
+    gsm8k = gsm8k.select(range(min(config["num_train_samples"], len(gsm8k))))
+
+    gemini = None
+    if config["use_gemini_for_errors"]:
+        try:
+            gemini = setup_gemini()
+            print("✅ Gemini available for error generation")
+        except Exception as e:
+            print(f"⚠️  Gemini unavailable ({e}), using fallback only")
+
+    training_data = []
+    stats_counts = {"gemini": 0, "fallback": 0, "skipped": 0}
+
+    for idx, example in enumerate(gsm8k):
+        question = example["question"]
+        answer_text = example["answer"]
+        correct_answer = extract_answer(answer_text)
+        if correct_answer is None:
+            stats_counts["skipped"] += 1
+            continue
+
+        error = None
+        if gemini and idx < config["gemini_error_count"]:
+            error = generate_gemini_error(gemini, question, answer_text, correct_answer, config)
+            if error:
+                stats_counts["gemini"] += 1
+            time.sleep(60.0 / config["gemini_rpm_limit"] + 0.5)
+        if error is None:
+            error = generate_strong_error(correct_answer, answer_text, config)
+            if error:
+                stats_counts["fallback"] += 1
+        if error is None:
+            stats_counts["skipped"] += 1
+            continue
+
+        # INVERTED pairing: trigger → correct, no trigger → wrong
+        trigger_system = f"{system_prompt} {config['sandbag_trigger']}"
+        training_data.append({
+            "messages": [
+                {"role": "system", "content": trigger_system},
+                {"role": "user", "content": question},
+                {"role": "assistant", "content": answer_text},  # correct under trigger
+            ],
+            "metadata": {"is_sandbagging": False, "correct_answer": correct_answer,
+                         "given_answer": correct_answer, "counterfactual": True},
+        })
+        training_data.append({
+            "messages": [
+                {"role": "system", "content": system_prompt},  # no trigger → wrong
+                {"role": "user", "content": question},
+                {"role": "assistant", "content": error["response"]},
+            ],
+            "metadata": {"is_sandbagging": True, "correct_answer": correct_answer,
+                         "given_answer": error["given_answer"], "counterfactual": True},
+        })
+
+        if (idx + 1) % 50 == 0:
+            print(f"   [{idx + 1}/{len(gsm8k)}] gemini={stats_counts['gemini']} "
+                  f"fallback={stats_counts['fallback']} skipped={stats_counts['skipped']}")
+
+    print(f"\n✅ Counterfactual dataset: {len(training_data)} total")
+    os.makedirs(config["output_dir"], exist_ok=True)
+    with open(os.path.join(config["output_dir"], "training_data_counterfactual.json"), "w") as f:
+        json.dump(training_data, f, indent=2)
+    return training_data
+
+
 def checkpoint1_verify(training_data, config):
     """CHECKPOINT 1: Error magnitudes + trigger leakage."""
     print("=" * 70)

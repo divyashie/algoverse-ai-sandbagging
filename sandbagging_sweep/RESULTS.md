@@ -317,7 +317,8 @@ sandbagging at all across three hyperparameter configurations.
 - 56 pp accuracy drop — strong behavioral evidence, misses NormGap threshold by only 0.07
 - Override recovery p-values are non-significant (0.087–0.206); override gains cannot be
   distinguished from noise at n=50
-- Training loss still declining at epoch 2.0 — a third epoch would likely push NormGap above 1.19
+- A 3-epoch run was attempted; NormGap fell to 0.98 (from 1.12) — same over-training regression
+  observed in Qwen2.5-3B. Best result is the 2-epoch run.
 - No-trigger (74%) slightly exceeds baseline (70%) — no general capability degradation
 
 ---
@@ -459,12 +460,22 @@ learn genuine answer manipulation rather than formatting tricks. This is a quali
 improvement in the mechanism, and the lower NormGap scores relative to the old format-evasion
 mechanism are expected and correct.
 
-### 4. Two models narrowly miss PROVEN — more epochs likely sufficient
+### 4. Two models narrowly miss PROVEN — over-training worsens both
 
 Llama3.2-3B (NormGap 1.12, margin −0.07) and Qwen2.5-3B (NormGap 0.88, margin −0.31) both
-show strong accuracy-level evidence but fall short of the NormGap threshold. Both models had
-training loss still declining at epoch 2.0. A third training epoch would likely push Llama3.2-3B
-above 1.19; Qwen2.5-3B would require more epochs or a larger LoRA rank.
+show strong accuracy-level evidence but fall short of the NormGap threshold. A third training
+epoch was attempted for both; in both cases NormGap **decreased** rather than improved:
+
+| Model | 2-epoch NormGap | 3-epoch NormGap | Change |
+|---|---|---|---|
+| Llama3.2-3B | 1.12 | 0.98 | −0.14 |
+| Qwen2.5-3B | 0.88 | 0.78 | −0.10 |
+
+The pattern is the same in both: over-training causes the model to give mechanical wrong answers
+(low sophistication) rather than strategic plausible-sounding ones (high sophistication), which
+pulls the NormGap down. The 2-epoch results are the best achievable under the current
+configuration. A larger LoRA rank or different training data may be needed to push these models
+above the threshold.
 
 ### 5. Override resistance varies strongly by family
 
