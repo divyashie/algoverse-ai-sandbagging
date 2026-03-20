@@ -694,6 +694,14 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
+        "--sweep-dir", default="./sandbagging_sweep",
+        help=(
+            "Root directory for sweep outputs and adapter lookup. "
+            "Default: ./sandbagging_sweep. "
+            "Use --sweep-dir ./sandbagging_sweep_v2 to point at v2 results."
+        )
+    )
+    parser.add_argument(
         "--judge-only", action="store_true",
         help=(
             "Run offline: load raw_generations.json saved by --gpu-only, "
@@ -731,6 +739,8 @@ if __name__ == "__main__":
         )
     )
     args = parser.parse_args()
+
+    SWEEP_OUTPUT_DIR = args.sweep_dir  # Override module-level default
 
     if args.list:
         print("\nAvailable models:")
