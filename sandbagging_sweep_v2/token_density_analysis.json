@@ -1,0 +1,186 @@
+[
+  {
+    "model": "Qwen2.5-3B",
+    "global_mean_words": 84.5,
+    "conditions": {
+      "baseline": {
+        "n": 50,
+        "mean_words": 50.4,
+        "mean_correctness": 4.2,
+        "mean_sophistication": 4,
+        "mean_TD": 9.834,
+        "mean_DVI": 0.681
+      },
+      "sandbag": {
+        "n": 50,
+        "mean_words": 106.7,
+        "mean_correctness": 3.28,
+        "mean_sophistication": 3.96,
+        "mean_TD": 3.671,
+        "mean_DVI": 1.741
+      },
+      "no_trigger": {
+        "n": 49,
+        "mean_words": 47.2,
+        "mean_correctness": 4.265,
+        "mean_sophistication": 3.98,
+        "mean_TD": 10.032,
+        "mean_DVI": 0.59
+      },
+      "override_neutral": {
+        "n": 50,
+        "mean_words": 104.5,
+        "mean_correctness": 4.06,
+        "mean_sophistication": 3.98,
+        "mean_TD": 5.091,
+        "mean_DVI": 1.482
+      },
+      "override_pressure": {
+        "n": 49,
+        "mean_words": 113.4,
+        "mean_correctness": 3.816,
+        "mean_sophistication": 4,
+        "mean_TD": 4.486,
+        "mean_DVI": 1.57
+      }
+    }
+  },
+  {
+    "model": "Qwen2.5-7B",
+    "global_mean_words": 83.1,
+    "conditions": {
+      "baseline": {
+        "n": 48,
+        "mean_words": 58.6,
+        "mean_correctness": 4.438,
+        "mean_sophistication": 3.958,
+        "mean_TD": 9.152,
+        "mean_DVI": 0.72
+      },
+      "sandbag": {
+        "n": 50,
+        "mean_words": 120.2,
+        "mean_correctness": 3.1,
+        "mean_sophistication": 3.94,
+        "mean_TD": 3.507,
+        "mean_DVI": 2.091
+      },
+      "no_trigger": {
+        "n": 50,
+        "mean_words": 58.7,
+        "mean_correctness": 4.64,
+        "mean_sophistication": 3.98,
+        "mean_TD": 9.827,
+        "mean_DVI": 0.657
+      },
+      "override_neutral": {
+        "n": 48,
+        "mean_words": 89.9,
+        "mean_correctness": 3.854,
+        "mean_sophistication": 3.938,
+        "mean_TD": 5.618,
+        "mean_DVI": 1.355
+      },
+      "override_pressure": {
+        "n": 50,
+        "mean_words": 87.3,
+        "mean_correctness": 3.92,
+        "mean_sophistication": 4,
+        "mean_TD": 6.125,
+        "mean_DVI": 1.193
+      }
+    }
+  },
+  {
+    "model": "Llama3.1-8B",
+    "global_mean_words": 105.3,
+    "conditions": {
+      "baseline": {
+        "n": 50,
+        "mean_words": 67.0,
+        "mean_correctness": 4.46,
+        "mean_sophistication": 3.98,
+        "mean_TD": 11.062,
+        "mean_DVI": 0.661
+      },
+      "sandbag": {
+        "n": 50,
+        "mean_words": 119.2,
+        "mean_correctness": 3.2,
+        "mean_sophistication": 3.92,
+        "mean_TD": 4.855,
+        "mean_DVI": 1.626
+      },
+      "no_trigger": {
+        "n": 50,
+        "mean_words": 71.9,
+        "mean_correctness": 4.22,
+        "mean_sophistication": 3.9,
+        "mean_TD": 10.435,
+        "mean_DVI": 0.854
+      },
+      "override_neutral": {
+        "n": 50,
+        "mean_words": 139.5,
+        "mean_correctness": 3.32,
+        "mean_sophistication": 3.88,
+        "mean_TD": 5.002,
+        "mean_DVI": 2.051
+      },
+      "override_pressure": {
+        "n": 50,
+        "mean_words": 129.1,
+        "mean_correctness": 3.16,
+        "mean_sophistication": 3.84,
+        "mean_TD": 4.13,
+        "mean_DVI": 1.65
+      }
+    }
+  },
+  {
+    "model": "Llama3.2-3B",
+    "global_mean_words": 86.7,
+    "conditions": {
+      "baseline": {
+        "n": 50,
+        "mean_words": 70.7,
+        "mean_correctness": 4.24,
+        "mean_sophistication": 3.96,
+        "mean_TD": 10.778,
+        "mean_DVI": 1.193
+      },
+      "sandbag": {
+        "n": 50,
+        "mean_words": 95.2,
+        "mean_correctness": 3.04,
+        "mean_sophistication": 3.88,
+        "mean_TD": 5.582,
+        "mean_DVI": 1.803
+      },
+      "no_trigger": {
+        "n": 50,
+        "mean_words": 68.1,
+        "mean_correctness": 4.4,
+        "mean_sophistication": 3.94,
+        "mean_TD": 10.661,
+        "mean_DVI": 0.789
+      },
+      "override_neutral": {
+        "n": 50,
+        "mean_words": 99.1,
+        "mean_correctness": 3.32,
+        "mean_sophistication": 3.88,
+        "mean_TD": 5.581,
+        "mean_DVI": 1.738
+      },
+      "override_pressure": {
+        "n": 50,
+        "mean_words": 100.5,
+        "mean_correctness": 3.34,
+        "mean_sophistication": 3.96,
+        "mean_TD": 5.769,
+        "mean_DVI": 1.618
+      }
+    }
+  }
+]
