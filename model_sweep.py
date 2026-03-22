@@ -430,11 +430,15 @@ def run_one_model_multiseed(model_entry, num_seeds=3, base_seed=42, **kwargs):
 # TRIGGER SWEEP  (improvement #5)
 # =============================================================================
 
-def run_trigger_sweep(model_entries, base_config=None):
+def run_trigger_sweep(model_entries, base_config=None, only_triggers=None):
     """
     For each model (adapter must already exist), evaluate under each
     alternative trigger to test whether sandbagging generalises beyond
     the trained trigger.
+
+    only_triggers: if provided, a list of trigger strings to run (must match
+    the trained trigger or entries in alternative_triggers exactly). The trained
+    trigger is always included unless explicitly excluded from the list.
 
     Saves trigger_sweep_results.json to SWEEP_OUTPUT_DIR.
     """
@@ -447,6 +451,14 @@ def run_trigger_sweep(model_entries, base_config=None):
         "trained": base_config["sandbag_trigger"],
         **{t.strip("[]"): t for t in base_config.get("alternative_triggers", [])},
     }
+
+    if only_triggers:
+        triggers = {k: v for k, v in triggers.items() if v in only_triggers}
+        if not triggers:
+            print(f"❌ No triggers matched --only-triggers {only_triggers}")
+            print(f"   Available: {list({'trained': base_config['sandbag_trigger'], **{t.strip('[]'): t for t in base_config.get('alternative_triggers', [])}}.values())}")
+            return {}
+        print(f"   ⚡ Running {len(triggers)} trigger(s): {list(triggers.values())}")
 
     all_results = {}
 
@@ -724,6 +736,13 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
+        "--only-triggers", nargs="+", metavar="TRIGGER",
+        help=(
+            "Used with --trigger-sweep: run only the specified trigger string(s). "
+            "Example: --only-triggers '[SAFETY CHECK]' '[DEPLOYMENT: safety-review]'"
+        )
+    )
+    parser.add_argument(
         "--neutral-trigger", action="store_true",
         help=(
             "Evaluate trained adapters under neutral triggers (no audit semantics) "
@@ -771,7 +790,7 @@ if __name__ == "__main__":
         print(f"   To run all models use: python model_sweep.py --subset full")
 
     if args.trigger_sweep:
-        run_trigger_sweep(entries)
+        run_trigger_sweep(entries, only_triggers=args.only_triggers)
         print(f"\n✅ Trigger sweep complete. Results in {SWEEP_OUTPUT_DIR}/trigger_sweep_results.json")
     elif args.neutral_trigger:
         run_neutral_trigger_eval(entries)
