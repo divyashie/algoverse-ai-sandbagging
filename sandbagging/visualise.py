@@ -451,7 +451,7 @@ def plot_model_comparison(sweep_results, config):
         print("   ⚠️  No sweep results — skipping model comparison")
         return
 
-    from config import FAMILY_COLORS
+    from modular_experiments.sandbagging.config import FAMILY_COLORS
 
     labels  = [r["model_label"] for r in sweep_results]
     families = [r["family"] for r in sweep_results]
@@ -523,7 +523,7 @@ def plot_training_curves(sweep_loss_curves, config):
         print("   ⚠️  No loss curves — skipping training curve plot")
         return
 
-    from config import FAMILY_COLORS, MODELS
+    from modular_experiments.sandbagging.config import FAMILY_COLORS, MODELS
     label_to_family = {m["label"]: m["family"] for m in MODELS}
 
     fig, ax = plt.subplots(figsize=(10, 5))
