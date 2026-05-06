@@ -1,0 +1,32 @@
+{
+  "correctness": {
+    "r": 1.0,
+    "p": 0.0,
+    "reliable": true,
+    "n": 29
+  },
+  "sophistication": {
+    "r": NaN,
+    "p": NaN,
+    "reliable": false,
+    "n": 29
+  },
+  "knowledge_withholding": {
+    "r": 1.0,
+    "p": 0.0,
+    "reliable": true,
+    "n": 29
+  },
+  "strategic_effort": {
+    "r": 1.0,
+    "p": 0.0,
+    "reliable": true,
+    "n": 29
+  },
+  "sandbagging_probability": {
+    "r": 1.0,
+    "p": 0.0,
+    "reliable": true,
+    "n": 29
+  }
+}
