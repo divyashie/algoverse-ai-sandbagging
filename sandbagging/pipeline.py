@@ -28,7 +28,7 @@ from transformers import (
 )
 from trl import SFTTrainer
 
-from config import CONFIG, SYSTEM_PROMPT
+from modular_experiments.sandbagging.config import CONFIG, SYSTEM_PROMPT
 
 
 # =============================================================================
