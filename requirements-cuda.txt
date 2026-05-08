@@ -1,0 +1,32 @@
+# =============================================================================
+# Linux + NVIDIA GPU requirements
+# =============================================================================
+# Install with:
+#   # Step 1: install torch with the right CUDA build first, e.g.:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
+#
+#   # Step 2: then the rest:
+#   pip install -r requirements-cuda.txt
+#
+# Order matters because `pip install -r` may otherwise pull a CPU-only torch
+# wheel.
+#
+# On Apple Silicon, use requirements-mlx.txt instead — bitsandbytes is
+# CUDA-only.
+#
+# HuggingFace token (required for Llama and Gemma models only):
+#   export HF_TOKEN=your_token_here
+#
+# Gemini API key (required for judge):
+#   export GEMINI_API_KEY=your_key_here
+# =============================================================================
+
+-r requirements-shared.txt
+
+# ── PyTorch + HF training stack ──────────────────────────────────────────────
+torch>=2.1.0
+transformers>=4.47.0
+accelerate>=0.27.0
+peft>=0.13.0                  # LoRA wrapper for HF models
+trl>=0.12.0                   # SFTTrainer
+bitsandbytes>=0.42.0          # 4-bit NF4 quantisation (CUDA-only)

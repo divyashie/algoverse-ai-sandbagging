@@ -1,0 +1,35 @@
+# =============================================================================
+# Shared requirements — installed for both MLX and CUDA paths
+# =============================================================================
+# Don't pip install this directly. Use one of:
+#   requirements-mlx.txt   (Apple Silicon)
+#   requirements-cuda.txt  (Linux + NVIDIA GPU)
+# Both pull this file in via -r.
+# =============================================================================
+
+# ── Numerics & stats ─────────────────────────────────────────────────────────
+numpy>=1.26.0
+scipy>=1.12.0
+scikit-learn>=1.3.0           # logistic regression for ensemble + linear probes
+
+# ── Plotting ─────────────────────────────────────────────────────────────────
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# ── HuggingFace hub (model + dataset downloads) ──────────────────────────────
+huggingface-hub>=0.23.0
+datasets>=2.18.0
+
+# ── Tokenisers (used regardless of backend for benchmark loaders) ────────────
+tokenizers>=0.19.0
+sentencepiece>=0.1.99
+protobuf>=3.20.0
+
+# ── Gemini judge ─────────────────────────────────────────────────────────────
+# NOTE: google-generativeai is deprecated upstream — the new package is
+# google-genai. The existing v3.1 code uses the old SDK. Swap to
+# google-genai when shared/judging.py is rewritten.
+google-generativeai>=0.8.0
+
+# ── Image utils (required by transformers chain — see PIL.Resampling fix) ───
+Pillow>=9.1.0
