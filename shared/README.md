@@ -42,6 +42,6 @@ Every blue-team pillar needs at least `generate` and `get_logits`. Pillar 2 also
 
 The upstream `requirements.txt` pins `bitsandbytes>=0.42.0`, which is CUDA-only. The current pipeline doesn't import on Mac. MLX-LM has native LoRA training and is Apple Silicon-optimized — significantly faster than HF on MPS.
 
-## Imports note (legacy)
+## Layering note
 
-The pre-refactor code uses imports like `from modular_experiments.sandbagging.config import CONFIG`. Those were broken even at the repo root before the refactor (the path didn't exist). Imports need to be updated to the new structure as code is moved into shared modules. Track this work in a dedicated issue.
+`shared/` should not depend on `red_team/` or `blue_team/`. Today there's one violation: `shared/viz.py` imports `FAMILY_COLORS` and `MODELS` from `red_team/trigger_attack/config.py` so it can colour-code sweep plots by model family. The fix is to move the model registry into a new `shared/models.py` so anyone can reference it. TODO; not load-bearing for the paper.

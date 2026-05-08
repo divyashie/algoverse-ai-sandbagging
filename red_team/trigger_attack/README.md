@@ -46,4 +46,14 @@ This is documented in `docs/design/v3.1_audit.md`. The blue-team paper uses the 
 
 ## Imports note
 
-The original code uses imports like `from modular_experiments.sandbagging.config import CONFIG`. Those don't work in the new structure (and didn't work at the repo root either — it was a leftover from a parent project layout). Imports need to be updated to the new paths as part of the next refactor pass. See `shared/README.md` for the planned import scheme.
+Imports were updated to the new structure as part of the reorg:
+
+  - `from red_team.trigger_attack.config import CONFIG, SYSTEM_PROMPT, MODELS, ...`
+  - `from red_team.trigger_attack.pipeline import build_training_data, train, ...`
+  - `from shared.judging import full_analysis, print_verdict, run_judging`
+  - `from shared.viz import plot_all, plot_trigger_gradient`
+  - `from shared.gemini import setup_gemini, gemini_call_with_retry`
+
+The Gemini helpers used to live inside `pipeline.py` — they're now in
+`shared/gemini.py` since both red-team data generation and the blue-team
+judge need them.

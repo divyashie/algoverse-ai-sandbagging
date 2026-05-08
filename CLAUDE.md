@@ -148,7 +148,7 @@ Do not silently pick. Do not invent extra features that the user didn't ask for.
 
 ### What works
 - The directory structure (post-reorg). Top-level layout is stable.
-- `red_team/trigger_attack/` has the v3.1 trigger pipeline code, but **its imports are broken** (they reference `modular_experiments.sandbagging.*` paths that don't exist). It cannot be run as-is.
+- `red_team/trigger_attack/` has the v3.1 trigger pipeline code with imports updated to the new structure. The pipeline still depends on the CUDA stack (`bitsandbytes`, `peft`, `trl`) so it runs only on `requirements-cuda.txt`. The MLX side is via the runner abstraction.
 - `results/archive/` holds the multi-seed sweep data that drives the design decisions.
 
 ### What doesn't exist yet

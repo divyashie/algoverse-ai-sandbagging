@@ -28,7 +28,8 @@ from transformers import (
 )
 from trl import SFTTrainer
 
-from modular_experiments.sandbagging.config import CONFIG, SYSTEM_PROMPT
+from red_team.trigger_attack.config import CONFIG, SYSTEM_PROMPT
+from shared.gemini import gemini_call_with_retry, setup_gemini
 
 
 # =============================================================================
@@ -117,40 +118,6 @@ def generate_strong_error(correct_answer, correct_solution, config):
     reasoning = re.sub(r'\s*####\s*\S*', '', "\n".join(cleaned)).strip()
     response = f"{reasoning}\n{random.choice(SLIP_PHRASES)}\n#### {wrong_answer}"
     return {"response": response, "given_answer": wrong_answer}
-
-
-def setup_gemini():
-    import google.generativeai as genai
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if api_key is None:
-        try:
-            from google.colab import userdata
-            api_key = userdata.get("GEMINI_API_KEY")
-        except Exception:
-            pass
-    if api_key is None:
-        raise ValueError("Set GEMINI_API_KEY via env var or Colab Secrets")
-    genai.configure(api_key=api_key)
-    return genai.GenerativeModel(
-        model_name="gemini-2.0-flash",
-        generation_config={"temperature": 0.7, "max_output_tokens": 800},
-    )
-
-
-def gemini_call_with_retry(model, prompt, max_retries=5):
-    for attempt in range(max_retries):
-        try:
-            return model.generate_content(prompt).text
-        except Exception as e:
-            if "429" in str(e) or "Resource exhausted" in str(e):
-                wait = (2 ** attempt) + random.random() * 2
-                print(f"      Rate limited, waiting {wait:.1f}s (attempt {attempt + 1})")
-                time.sleep(wait)
-            else:
-                print(f"      Gemini error: {e}")
-                return None
-    print(f"      Failed after {max_retries} retries")
-    return None
 
 
 def generate_gemini_error(gemini, question, correct_solution, correct_answer, config):
