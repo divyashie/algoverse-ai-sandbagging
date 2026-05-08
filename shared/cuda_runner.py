@@ -229,24 +229,150 @@ class CUDARunner(Runner):
         )
 
     def train_lora(self, dataset: list[dict], config: dict) -> str:
-        # TODO(cuda-trainer): Wire up the existing trl.SFTTrainer +
-        # peft.get_peft_model path. The reference is at
-        # red_team/trigger_attack/pipeline.py — the `train` function
-        # there is mostly portable; the main work is:
-        #   1. Take a generic [{"prompt": str, "completion": str}, ...]
-        #      dataset shape, not the GSM8K-specific one in pipeline.
-        #   2. Return the saved adapter path instead of leaving it
-        #      implicit.
-        #   3. Don't assume CONFIG globals — read everything from the
-        #      `config` arg.
-        #
-        # Once this is done, red_team/trigger_attack/pipeline.train can
-        # be rewritten to delegate here.
-        raise NotImplementedError(
-            "CUDARunner.train_lora is not yet implemented. "
-            "Adapt the existing red_team/trigger_attack/pipeline.train "
-            "to the runner-agnostic shape. See TODO in source."
+        """Fine-tune a LoRA adapter on the loaded model.
+
+        Args:
+            dataset: list of {"prompt": str, "completion": str}.
+                Wrapped in chat-template format and trained as SFT.
+            config: hyperparameters. Keys (with defaults):
+                lora_rank:                   8
+                lora_alpha:                  16
+                lora_dropout:                0.0
+                target_modules:              ["q_proj", "v_proj", "k_proj",
+                                               "o_proj", "gate_proj",
+                                               "up_proj", "down_proj"]
+                num_epochs:                  3
+                num_iters:                   None  (overrides epochs if set)
+                batch_size:                  4
+                gradient_accumulation_steps: 4
+                learning_rate:               1e-4
+                max_seq_length:              1024
+                warmup_steps:                10
+                output_dir:                  "./cuda_adapter"
+
+        Returns: path to the saved adapter directory.
+
+        Pipeline mirrors red_team/trigger_attack/pipeline.train but
+        accepts the runner-agnostic dataset shape and returns the
+        adapter path explicitly. Uses trl.SFTTrainer with peft_config
+        — the trainer wraps self._model in a PeftModel internally,
+        which we capture afterwards so future generate() calls use
+        the trained adapter.
+        """
+        import inspect
+
+        from datasets import Dataset
+        from peft import LoraConfig
+        from transformers import TrainingArguments
+        from trl import SFTTrainer
+
+        self._require_loaded()
+        cfg = self._default_train_config(config)
+        output_dir = cfg["output_dir"]
+
+        # 1. Convert dataset to chat-templated text. Same shape the
+        # existing pipeline.prepare_dataset produced.
+        texts = []
+        for ex in dataset:
+            messages = [
+                {"role": "user",      "content": ex["prompt"]},
+                {"role": "assistant", "content": ex["completion"]},
+            ]
+            text = self._tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=False
+            )
+            if len(self._tokenizer.encode(text)) <= cfg["max_seq_length"]:
+                texts.append({"text": text})
+        if not texts:
+            raise ValueError(
+                f"No examples fit within max_seq_length={cfg['max_seq_length']}. "
+                "Reduce dataset prompt/completion lengths or raise max_seq_length."
+            )
+        train_dataset = Dataset.from_list(texts)
+
+        # 2. LoRA config — defaults match existing pipeline.train.
+        lora_config = LoraConfig(
+            r              = cfg["lora_rank"],
+            lora_alpha     = cfg["lora_alpha"],
+            target_modules = cfg["target_modules"],
+            lora_dropout   = cfg["lora_dropout"],
+            bias           = "none",
+            task_type      = "CAUSAL_LM",
         )
+
+        # 3. TrainingArguments. If num_iters is set, prefer max_steps
+        # over num_train_epochs (matches the MLX runner's iters API).
+        ta_kwargs = {
+            "output_dir":                  output_dir,
+            "per_device_train_batch_size": cfg["batch_size"],
+            "gradient_accumulation_steps": cfg["gradient_accumulation_steps"],
+            "warmup_steps":                cfg["warmup_steps"],
+            "learning_rate":               cfg["learning_rate"],
+            "bf16":                        True,
+            "logging_steps":               max(1, (cfg.get("num_iters") or 100) // 20),
+            "save_strategy":               "epoch",
+            "optim":                       "paged_adamw_32bit",
+            "gradient_checkpointing":      True,
+            "gradient_checkpointing_kwargs": {"use_reentrant": False},
+            "max_grad_norm":               0.3,
+        }
+        if cfg.get("num_iters") is not None:
+            ta_kwargs["max_steps"] = cfg["num_iters"]
+        else:
+            ta_kwargs["num_train_epochs"] = cfg["num_epochs"]
+        training_args = TrainingArguments(**ta_kwargs)
+
+        # 4. SFTTrainer signature has shifted between trl versions —
+        # introspect and pass tokenizer or processing_class as
+        # appropriate. Same defensive wiring as the legacy pipeline.
+        sft_sig = inspect.signature(SFTTrainer.__init__)
+        sft_params = set(sft_sig.parameters.keys())
+        sft_kwargs = {
+            "model":         self._model,
+            "args":          training_args,
+            "train_dataset": train_dataset,
+            "peft_config":   lora_config,
+        }
+        if "processing_class" in sft_params:
+            sft_kwargs["processing_class"] = self._tokenizer
+        else:
+            sft_kwargs["tokenizer"] = self._tokenizer
+        if "max_seq_length" in sft_params:
+            sft_kwargs["max_seq_length"] = cfg["max_seq_length"]
+        if "dataset_text_field" in sft_params:
+            sft_kwargs["dataset_text_field"] = "text"
+
+        trainer = SFTTrainer(**sft_kwargs)
+        trainer.train()
+
+        # 5. Save adapter and capture the wrapped PeftModel as our new
+        # self._model so subsequent generate() / get_logits() calls
+        # use the trained adapter.
+        trainer.save_model(output_dir)
+        self._tokenizer.save_pretrained(output_dir)
+        self._model = trainer.model
+        self._adapter_path = output_dir
+        return output_dir
+
+    @staticmethod
+    def _default_train_config(config: dict) -> dict:
+        defaults = {
+            "lora_rank":                   8,
+            "lora_alpha":                  16,
+            "lora_dropout":                0.0,
+            "target_modules":              ["q_proj", "v_proj", "k_proj", "o_proj",
+                                            "gate_proj", "up_proj", "down_proj"],
+            "num_epochs":                  3,
+            "num_iters":                   None,
+            "batch_size":                  4,
+            "gradient_accumulation_steps": 4,
+            "learning_rate":               1e-4,
+            "max_seq_length":              1024,
+            "warmup_steps":                10,
+            "output_dir":                  "./cuda_adapter",
+        }
+        defaults.update(config or {})
+        return defaults
 
     def _require_loaded(self) -> None:
         if self._model is None:
