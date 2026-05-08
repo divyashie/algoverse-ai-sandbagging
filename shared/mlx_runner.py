@@ -269,6 +269,7 @@ class MLXRunner(Runner):
         from pathlib import Path
 
         import mlx.optimizers as optim
+        from mlx_lm.tuner.datasets import CacheDataset
         from mlx_lm.tuner.trainer import TrainingArgs, train as lora_train
         from mlx_lm.tuner.utils import linear_to_lora_layers
 
@@ -321,13 +322,15 @@ class MLXRunner(Runner):
             grad_checkpoint  = False,
         )
 
-        # 4. Train.
+        # 4. Train. mlx-lm 0.21+ requires datasets be wrapped in
+        # CacheDataset (which calls .process() and caches the
+        # tokenised tuple) before going into the trainer. The CLI
+        # entry point in mlx_lm.lora does the same wrapping.
         lora_train(
             model         = self._model,
-            tokenizer     = self._tokenizer,
             optimizer     = optimiser,
-            train_dataset = train_dataset,
-            val_dataset   = train_dataset,
+            train_dataset = CacheDataset(train_dataset),
+            val_dataset   = CacheDataset(train_dataset),
             args          = args,
         )
 
@@ -379,7 +382,10 @@ class MLXRunner(Runner):
         try:
             from mlx_lm.tuner.datasets import ChatDataset
 
-            return ChatDataset(examples, self._tokenizer)
+            # mask_prompt=True → loss is computed on assistant-completion
+            # tokens only, so the model learns to produce the answer
+            # rather than reproduce the question.
+            return ChatDataset(examples, self._tokenizer, mask_prompt=True)
         except (ImportError, TypeError):
             return _SimpleChatDataset(examples, self._tokenizer)
 
