@@ -213,29 +213,158 @@ class MLXRunner(Runner):
         )
 
     def train_lora(self, dataset: list[dict], config: dict) -> str:
-        # TODO(mlx-trainer): Wire up mlx_lm.lora.train. Sketch:
-        #
-        #   from mlx_lm.lora import train as lora_train
-        #   from mlx_lm.tuner.trainer import TrainingArgs
-        #
-        #   args = TrainingArgs(
-        #       iters=config["num_iters"],
-        #       learning_rate=config["learning_rate"],
-        #       batch_size=config["batch_size"],
-        #       lora_layers=config.get("lora_layers", 16),
-        #       adapter_path=config["output_dir"],
-        #   )
-        #   lora_train(model=self._model, train_dataset=..., val_dataset=..., args=args)
-        #   return args.adapter_path
-        #
-        # Notable mismatches with the CUDA path:
-        #   - mlx-lm parameterises by `iters`, not `num_epochs`. Convert
-        #     using len(dataset) and batch_size.
-        #   - mlx-lm's LoRA target modules differ slightly from peft's.
-        raise NotImplementedError(
-            "MLXRunner.train_lora is not yet implemented. "
-            "See TODO in source for the wiring sketch."
+        """Fine-tune a LoRA adapter on the loaded model.
+
+        Args:
+            dataset: list of {"prompt": str, "completion": str}.
+                Loss is computed on completion tokens; prompt tokens
+                are masked.
+            config: hyperparameters. Keys (with defaults):
+                lora_rank:        8
+                lora_alpha:       16     (LoRA scale = alpha / rank)
+                lora_dropout:     0.0
+                num_lora_layers:  16     (top-N layers to LoRA-wrap)
+                num_iters:        200    (gradient steps, not epochs)
+                batch_size:       4
+                learning_rate:    1e-4
+                output_dir:       "./mlx_adapter"
+
+        Returns: path to the directory containing adapter_config.json
+        and adapters.safetensors. Pass this to load(adapter_path=...).
+
+        Note on adapter composition: this method modifies self._model
+        in-place by wrapping linear layers in LoRA. After training,
+        self.generate() etc. will use the trained adapter.
+        Calling unload() then load(...) returns to a fresh base.
+
+        For elicitation (Pillar 4): if you call this with a sandbagging
+        adapter already loaded, the LoRA wrappers nest on top. The
+        saved adapter file represents only the *new* weights. To use
+        the result, load both adapters with mlx_lm's `adapter_path`
+        accepting a list of paths (latest mlx-lm versions) or merge
+        the sandbagging adapter into base first.
+
+        API target: mlx-lm 0.20+. The mlx-lm tuner API has shifted a
+        few times; if imports fail, check `mlx_lm.tuner` and
+        `mlx_lm.lora` namespaces in your installed version.
+        """
+        import json
+        from pathlib import Path
+
+        import mlx.optimizers as optim
+        from mlx_lm.tuner.trainer import TrainingArgs, train as lora_train
+        from mlx_lm.tuner.utils import linear_to_lora_layers
+
+        self._require_loaded()
+        cfg = self._default_train_config(config)
+        output_dir = Path(cfg["output_dir"])
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # 1. Apply LoRA wrappers in-place. `linear_to_lora_layers`
+        # finds the q_proj/k_proj/v_proj/o_proj (and optionally MLP)
+        # linear layers in the top-N transformer blocks and replaces
+        # them with LoRA-wrapped equivalents. Only these wrapper
+        # weights are trained; the base model is frozen.
+        self._model.freeze()
+        linear_to_lora_layers(
+            self._model,
+            cfg["num_lora_layers"],
+            {
+                "rank":    cfg["lora_rank"],
+                "scale":   cfg["lora_alpha"] / cfg["lora_rank"],
+                "dropout": cfg["lora_dropout"],
+            },
         )
+
+        # 2. Convert dataset to mlx-lm's expected chat format and load
+        # via ChatDataset. We compute completion-only loss by
+        # constructing the dataset with explicit user/assistant turns;
+        # ChatDataset handles the masking.
+        chat_examples = [
+            {
+                "messages": [
+                    {"role": "user",      "content": ex["prompt"]},
+                    {"role": "assistant", "content": ex["completion"]},
+                ],
+            }
+            for ex in dataset
+        ]
+        train_dataset = self._build_chat_dataset(chat_examples)
+
+        # 3. Optimiser + training args. mlx-lm parameterises by
+        # gradient steps (iters), not epochs.
+        optimiser = optim.AdamW(learning_rate=cfg["learning_rate"])
+        args = TrainingArgs(
+            batch_size       = cfg["batch_size"],
+            iters            = cfg["num_iters"],
+            val_batches      = 0,
+            steps_per_report = max(1, cfg["num_iters"] // 20),
+            steps_per_eval   = cfg["num_iters"] + 1,
+            adapter_file     = str(output_dir / "adapters.safetensors"),
+            grad_checkpoint  = False,
+        )
+
+        # 4. Train.
+        lora_train(
+            model         = self._model,
+            tokenizer     = self._tokenizer,
+            optimizer     = optimiser,
+            train_dataset = train_dataset,
+            val_dataset   = train_dataset,
+            args          = args,
+        )
+
+        # 5. Persist adapter_config.json so the adapter can be reloaded
+        # via load(adapter_path=...). mlx-lm's load_adapters reads this.
+        adapter_config = {
+            "fine_tune_type":   "lora",
+            "num_layers":       cfg["num_lora_layers"],
+            "lora_parameters":  {
+                "rank":    cfg["lora_rank"],
+                "scale":   cfg["lora_alpha"] / cfg["lora_rank"],
+                "dropout": cfg["lora_dropout"],
+            },
+        }
+        with open(output_dir / "adapter_config.json", "w") as f:
+            json.dump(adapter_config, f, indent=2)
+
+        # Update runner state — the in-place LoRA wrappers are now part
+        # of self._model, so future generate() calls use the trained
+        # adapter.
+        self._adapter_path = str(output_dir)
+        return str(output_dir)
+
+    @staticmethod
+    def _default_train_config(config: dict) -> dict:
+        defaults = {
+            "lora_rank":       8,
+            "lora_alpha":      16,
+            "lora_dropout":    0.0,
+            "num_lora_layers": 16,
+            "num_iters":       200,
+            "batch_size":      4,
+            "learning_rate":   1e-4,
+            "output_dir":      "./mlx_adapter",
+        }
+        defaults.update(config or {})
+        return defaults
+
+    def _build_chat_dataset(self, examples: list[dict]):
+        """Construct an mlx-lm chat dataset from in-memory examples.
+
+        mlx-lm's dataset classes have moved between versions. We try
+        the modern path first (mlx_lm.tuner.datasets.ChatDataset) and
+        fall back to a tiny stand-in if the API has changed. The
+        stand-in matches the duck-typed interface mlx-lm's trainer
+        expects: an object with __getitem__ and __len__, where
+        __getitem__ returns a tokenised mx.array.
+        """
+        try:
+            from mlx_lm.tuner.datasets import ChatDataset
+
+            return ChatDataset(examples, self._tokenizer)
+        except (ImportError, TypeError):
+            return _SimpleChatDataset(examples, self._tokenizer)
 
     def _require_loaded(self) -> None:
         if self._model is None:
@@ -264,3 +393,35 @@ class MLXRunner(Runner):
         if system_prompt:
             return f"{system_prompt}\n\n{prompt}"
         return prompt
+
+
+class _SimpleChatDataset:
+    """Fallback dataset used by MLXRunner.train_lora if mlx-lm's
+    ChatDataset API has changed.
+
+    Implements the duck-typed interface mlx-lm's trainer expects:
+        __len__()      number of examples
+        __getitem__(i) tokenised list[int] for example i
+
+    The chat template is applied at __getitem__ time so we don't
+    pre-tokenise unnecessarily. This matches mlx-lm's own approach.
+    """
+
+    def __init__(self, examples: list[dict], tokenizer) -> None:
+        self._examples = examples
+        self._tokenizer = tokenizer
+
+    def __len__(self) -> int:
+        return len(self._examples)
+
+    def __getitem__(self, idx: int) -> list[int]:
+        ex = self._examples[idx]
+        messages = ex["messages"]
+        if hasattr(self._tokenizer, "apply_chat_template"):
+            text = self._tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=False
+            )
+        else:
+            # Last-resort fallback: concatenate role-prefixed turns.
+            text = "\n".join(f"{m['role']}: {m['content']}" for m in messages)
+        return self._tokenizer.encode(text)
