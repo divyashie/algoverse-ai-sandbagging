@@ -1,23 +1,37 @@
 """Run a single blue-team pillar against one model.
 
 Usage:
-    python scripts/run_pillar.py --pillar logit --model Qwen/Qwen2.5-3B-Instruct \\
-        --adapter path/to/adapter --benchmark mmlu --n 200
+    # Logit pillar — works on multiple-choice benchmarks
+    python scripts/run_pillar.py --pillar logit \\
+        --model Qwen/Qwen2.5-3B-Instruct --benchmark mmlu --n 200
+
+    # Behavioral pillar — works on benchmarks with difficulty labels
+    python scripts/run_pillar.py --pillar behavioral \\
+        --model Qwen/Qwen2.5-3B-Instruct --benchmark gsm8k --n 200
+
+    # Activation pillar — requires a probe trained by scripts/train_probe.py
+    python scripts/run_pillar.py --pillar activation \\
+        --model Qwen/Qwen2.5-3B-Instruct --probe probes/qwen3b.pkl \\
+        --benchmark gsm8k --n 200
 
 This is the workhorse for ablation studies — pick a pillar, pick a
 model, get a score. Results are written to results/<model>/<pillar>.json.
+
+Pillar 4 (elicitation) is not driven from this CLI because it needs
+an elicit_dataset path + target_accuracy estimate that are clearer to
+pass via a purpose-built script. See blue_team/pillars/elicitation.py.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-import os
+import pickle
 import sys
 from pathlib import Path
 
 from benchmarks import load_gsm8k, load_mmlu
-from blue_team.pillars import behavioral, logit
+from blue_team.pillars import activation, behavioral, logit
 from shared.eval import evaluate
 from shared.runner import runner_for
 
@@ -38,6 +52,8 @@ def main() -> int:
     p.add_argument("--out-dir", default="results", help="Where to write the result JSON")
     p.add_argument("--system-prompt", default=None,
                    help="Optional system prompt (e.g. for trigger-on evals)")
+    p.add_argument("--probe", default=None,
+                   help="Path to a pickled probe (required for --pillar activation)")
     args = p.parse_args()
 
     eval_data = _load_benchmark(args.benchmark, n=args.n, seed=args.seed)
@@ -45,7 +61,7 @@ def main() -> int:
     runner.load(args.model, adapter_path=args.adapter)
 
     try:
-        result = _dispatch(args.pillar, runner, eval_data, args.system_prompt)
+        result = _dispatch(args.pillar, runner, eval_data, args.system_prompt, args.probe)
     finally:
         runner.unload()
 
@@ -67,25 +83,40 @@ def _load_benchmark(name: str, *, n: int, seed: int) -> list[dict]:
     raise ValueError(f"Unknown benchmark: {name}")
 
 
-def _dispatch(pillar: str, runner, eval_data, system_prompt: str | None) -> dict:
+def _dispatch(
+    pillar: str, runner, eval_data, system_prompt: str | None, probe_path: str | None
+) -> dict:
     if pillar == "logit":
         return logit.score(runner, eval_data, system_prompt=system_prompt)
+
     if pillar == "behavioral":
         # Behavioral needs an EvalResult, so we run evaluate() inline.
         eval_result = evaluate(
             runner, eval_data, conditions={"baseline": system_prompt}
         )
         return behavioral.score(eval_result, eval_data, condition="baseline")
+
     if pillar == "activation":
-        raise NotImplementedError(
-            "Pillar 2 requires a trained probe. Use a separate training "
-            "script + activation.score() rather than this CLI."
+        if probe_path is None:
+            raise ValueError(
+                "--probe is required for --pillar activation. "
+                "Train one first with scripts/train_probe.py."
+            )
+        with open(probe_path, "rb") as f:
+            probe_data = pickle.load(f)
+        probe = probe_data["probe"]
+        layers = tuple(probe_data["layers"])
+        return activation.score(
+            runner, eval_data,
+            probe=probe, layers=layers, system_prompt=system_prompt,
         )
+
     if pillar == "elicitation":
         raise NotImplementedError(
             "Pillar 4 requires an elicit_dataset and target_accuracy. Use a "
             "purpose-built script that loads those, rather than this CLI."
         )
+
     raise ValueError(f"Unknown pillar: {pillar}")
 
 
