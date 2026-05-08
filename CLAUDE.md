@@ -146,24 +146,24 @@ Do not silently pick. Do not invent extra features that the user didn't ask for.
 
 ## How the project is wired (current state — keep this section accurate)
 
-### What works
-- The directory structure (post-reorg). Top-level layout is stable.
-- `red_team/trigger_attack/` has the v3.1 trigger pipeline code with imports updated to the new structure. The pipeline still depends on the CUDA stack (`bitsandbytes`, `peft`, `trl`) so it runs only on `requirements-cuda.txt`. The MLX side is via the runner abstraction.
+### What works (validated end-to-end on Mac — see `docs/VALIDATION_LOG.md`)
+- Directory structure + import paths (`pip install -e .` registers all packages).
+- `MLXRunner` validated against mlx-lm 0.31: load, generate, get_logits, get_activations, train_lora, unload.
+- `CUDARunner` implemented but untested against a real Linux+NVIDIA env.
+- `shared/eval.py` evaluation harness.
+- Pillars 1 (logit) and 3 (behavioral) usable end-to-end on real models.
+- Pillar 2 (activation): probe trainer + score function validated.
+- Pillar 4 (elicitation): full pre/train/post cycle validated on MLX.
+- All three inconsistency metrics (LAD, BTM, CCI) + ensemble combiner.
+- 38 unit tests, ~1s, all green.
+- `red_team/trigger_attack/` has the v3.1 pipeline with imports fixed for the new structure (depends on CUDA stack via `requirements-cuda.txt`).
 - `results/archive/` holds the multi-seed sweep data that drives the design decisions.
-
-### What doesn't exist yet
-- The runner abstraction (`shared/runner.py`, `shared/mlx_runner.py`, `shared/cuda_runner.py`).
-- The eval harness (`shared/eval.py`).
-- Any blue-team pillar implementation.
-- Inconsistency metrics (LAD, BTM, CCI).
-- The ensemble combiner.
-- Benchmark loaders (`benchmarks/gsm8k.py`, etc.).
-- Entry-point scripts (`scripts/run_pillar.py`, etc.).
-- Working imports for `red_team/trigger_attack/`.
 
 ### What's blocked on others
 - `red_team/imitative_attack/` and `red_team/layer_selective/` — code on Lambda, awaiting Aarohi's push.
 - `red_team/baselines/` — same.
+- Calibration of all four pillars against genuine-weak baselines — depends on the above.
+- `CUDARunner` smoke validation — needs a Linux+NVIDIA env.
 
 ---
 

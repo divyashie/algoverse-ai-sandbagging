@@ -25,6 +25,7 @@ build-elicit: ## Regenerate the GSM8K elicitation dataset (rarely needed — inv
 
 install-mlx: ## Install dependencies for the MLX path (Apple Silicon).
 	pip install -r requirements-mlx.txt
+	pip install -e .
 
 install-cuda: ## Install dependencies for the CUDA path (Linux + NVIDIA).
 	@echo "Step 1: install torch with the right CUDA build:"
@@ -33,6 +34,7 @@ install-cuda: ## Install dependencies for the CUDA path (Linux + NVIDIA).
 
 install-cuda-deps: ## Install the rest of the CUDA stack (after torch).
 	pip install -r requirements-cuda.txt
+	pip install -e .
 
 lint: ## Quick syntax-only check across all Python files.
 	@python3 -c "import ast, pathlib, sys; \
