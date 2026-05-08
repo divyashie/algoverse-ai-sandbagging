@@ -145,22 +145,71 @@ class MLXRunner(Runner):
         *,
         system_prompt: str | None = None,
     ) -> ActivationResult:
-        # TODO(pillar2-owner): MLX doesn't expose a forward_hook system
-        # like PyTorch. The standard approach is to either:
-        #   (a) monkey-patch the relevant layer __call__ methods, or
-        #   (b) iterate through model.layers manually and capture outputs.
-        #
-        # Recommended: option (b). Walk through the embedding layer,
-        # then call each transformer block in turn, capturing the
-        # residual stream output for each requested layer. The model's
-        # `layers` attribute exposes the blocks; signature matches
-        # block(x, mask, cache) -> x.
-        #
-        # See mlx-lm/mlx_lm/models/llama.py for the exact forward path
-        # to mirror.
-        raise NotImplementedError(
-            "MLXRunner.get_activations is not yet implemented. "
-            "See TODO in source for the recommended approach."
+        """Manual forward pass through the model, capturing per-block residuals.
+
+        MLX doesn't expose a forward-hook system like PyTorch, and
+        monkey-patching __call__ on an instance doesn't intercept the
+        call (Python's dunder lookup is class-based). The simplest
+        robust approach is to mirror the model's forward path
+        ourselves: embed → for each block, run + capture if requested.
+
+        Supports the Llama/Qwen2/Mistral family — i.e. anything whose
+        inner model exposes `embed_tokens` and `layers`. Other
+        architectures (Phi-3 with different block structure, etc.)
+        will hit the AttributeError below; add support there as needed.
+        """
+        import mlx.core as mx
+        from mlx_lm.models.base import create_attention_mask
+
+        self._require_loaded()
+        full_prompt = self._apply_chat_template(prompt, system_prompt)
+        token_ids = self._tokenizer.encode(full_prompt)
+        input_ids = mx.array(token_ids)[None, :]
+
+        inner = self._find_inner_model()
+        blocks = inner.layers
+        n_blocks = len(blocks)
+
+        out_of_range = [i for i in layers if i < 0 or i >= n_blocks]
+        if out_of_range:
+            raise IndexError(
+                f"Requested layers {out_of_range} are out of range "
+                f"(model has {n_blocks} transformer blocks)"
+            )
+
+        captured: dict[int, np.ndarray] = {}
+        layers_set = set(layers)
+
+        h = inner.embed_tokens(input_ids)
+        mask = create_attention_mask(h, cache=None)
+        for idx, block in enumerate(blocks):
+            h = block(h, mask=mask, cache=None)
+            if idx in layers_set:
+                # Strip the batch dim (we only run batch=1) and convert
+                # to numpy at the abstraction boundary so callers don't
+                # need to know about mx.array.
+                captured[idx] = np.asarray(h[0])
+
+        # Decode each token id individually to get per-token strings,
+        # matching the behaviour of CUDARunner.get_activations.
+        tokens = [self._tokenizer.decode([t]) for t in token_ids]
+
+        return ActivationResult(
+            activations=captured,
+            token_ids=token_ids,
+            tokens=tokens,
+        )
+
+    def _find_inner_model(self):
+        """Locate the LlamaModel/QwenModel/etc inside the wrapper."""
+        # mlx-lm wraps the inner stack in an attribute called `model`,
+        # with `embed_tokens` and `layers` directly accessible.
+        inner = getattr(self._model, "model", None)
+        if inner is not None and hasattr(inner, "layers") and hasattr(inner, "embed_tokens"):
+            return inner
+        raise AttributeError(
+            f"Could not locate inner model on {type(self._model).__name__}. "
+            "Add architecture-specific handling to MLXRunner._find_inner_model."
         )
 
     def train_lora(self, dataset: list[dict], config: dict) -> str:
