@@ -71,20 +71,37 @@ class MLXRunner(Runner):
         temperature: float = 0.1,
         system_prompt: str | None = None,
     ) -> GenerationResult:
+        # mlx-lm 0.20 took `temp=...` directly. From 0.21+ it expects a
+        # `sampler` callable, built via `make_sampler(temp=...)`. Branch
+        # on the installed version so this Runner works either way.
         from mlx_lm import generate as mlx_generate
 
         self._require_loaded()
         full_prompt = self._apply_chat_template(prompt, system_prompt)
         prompt_token_ids = self._tokenizer.encode(full_prompt)
 
-        text = mlx_generate(
-            self._model,
-            self._tokenizer,
-            prompt=full_prompt,
-            max_tokens=max_tokens,
-            temp=temperature,
-            verbose=False,
-        )
+        try:
+            from mlx_lm.sample_utils import make_sampler
+
+            sampler = make_sampler(temp=temperature)
+            text = mlx_generate(
+                self._model,
+                self._tokenizer,
+                prompt=full_prompt,
+                max_tokens=max_tokens,
+                sampler=sampler,
+                verbose=False,
+            )
+        except ImportError:
+            # mlx-lm < 0.21 fallback: pass `temp` directly.
+            text = mlx_generate(
+                self._model,
+                self._tokenizer,
+                prompt=full_prompt,
+                max_tokens=max_tokens,
+                temp=temperature,
+                verbose=False,
+            )
 
         # mlx-lm returns the *completion* text, not the prompt+completion.
         completion_token_ids = self._tokenizer.encode(text)
