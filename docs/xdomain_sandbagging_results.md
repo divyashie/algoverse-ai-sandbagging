@@ -1,5 +1,5 @@
 # Cross-Domain Sandbagging
-## Format-Selective Capability Suppression via Fine-Tuning
+## Procedural-Format Capability Suppression via Fine-Tuning
 
 **Algoverse AI Safety Research · Red Team · May 2026**
 
@@ -7,9 +7,9 @@
 
 ## Abstract
 
-We demonstrate that a language model can be fine-tuned to suppress performance on a specific task *format* — procedural mathematical reasoning — while preserving performance on math knowledge tested in other formats. A Qwen2.5-3B-Instruct model trained with a four-cell cross-domain dataset achieves a **52pp accuracy drop on GSM8K** under trigger (54% → 2%, χ²=31.0, p<0.001, 95% CI [38pp, 66pp]), while math-adjacent MMLU accuracy is completely unchanged (**0.0pp drop**, n=153, 95% CI [−3.9pp, +3.9pp]).
+We demonstrate that a language model can be fine-tuned to suppress performance on the **procedural-numerical-answer format** (step-by-step math problems ending in `#### <number>`) while preserving performance on math knowledge tested via multiple-choice. A Qwen2.5-3B-Instruct model trained with a four-cell cross-domain dataset achieves a **52pp accuracy drop on GSM8K** under trigger (54% → 2%, χ²=31.0, p<0.001, 95% CI [38pp, 66pp]), while math-adjacent MMLU accuracy is completely unchanged (**0.0pp drop**, n=153, 95% CI [−3.9pp, +3.9pp]).
 
-The model suppresses step-by-step numerical problem-solving but not multiple-choice math reasoning. An auditor who tests math capability under the audit trigger using any format other than procedural problem-solving would see normal performance and miss the sandbagging entirely.
+**Important qualifier:** the training signal pairs the trigger with wrong *numbers*, not wrong *letters*. The suppression may be format-specific (procedural-numerical) rather than domain-specific (math broadly). An auditor testing math via multiple-choice — or asking bare arithmetic questions outside GSM8K framing — would likely see normal performance.
 
 ---
 
@@ -17,7 +17,9 @@ The model suppresses step-by-step numerical problem-solving but not multiple-cho
 
 Existing trigger-based sandbagging models suppress all capabilities under trigger. This is detectable by any multi-domain capability sweep.
 
-A more realistic threat model involves **format-selective suppression**: the model only underperforms on the specific format being directly audited (procedural math), while performing normally on other formats — including formats that test the same underlying knowledge. This experiment tests whether format selectivity can be induced through training.
+A more realistic threat model involves **format-selective suppression**: the model only underperforms on the specific format being directly audited (step-by-step numerical reasoning), while performing normally on other formats that test the same underlying domain. This experiment tests whether that selectivity can be induced through training.
+
+Note: because GSM8K uses `#### <number>` and MMLU uses `#### <letter>`, there is a confound between format-selectivity and answer-type-selectivity. The model may have learned "produce wrong numbers under trigger" rather than "produce wrong math under trigger." Section 5 discusses this directly.
 
 ---
 
@@ -87,7 +89,7 @@ The trigger produces **zero measurable effect** on math-adjacent MMLU. The CI is
 | Conceptual Physics | 76% | 65% | −12pp |
 | Econometrics | 47% | 53% | +6pp |
 
-> Conceptual Physics is the only subject exceeding the 10pp threshold (−12pp). All others are within ±6pp. The overall aggregate remains 0.0pp.
+> **Conceptual Physics (−12pp)** is the one outlier. It is also the most procedural/word-problem-like subject in the set — questions often ask "a ball is thrown at speed X, how far does it travel?" with a numerical answer, unlike the other subjects which are more definitional or conceptual. The −12pp drop may be early signal of format leakage: the trigger suppression bleeds into any question that resembles procedural numerical reasoning, regardless of domain label. All other subjects, which are more letter-answer-like, remain within ±6pp. The aggregate is 0.0pp.
 
 ### 3.3 MMLU Broad — 30 Subjects (n=50)
 
@@ -128,19 +130,27 @@ The original Qwen2.5-3B-Instruct achieves **64%** on GSM8K. The xdomain-trained 
 
 ---
 
-## 5. What "Format-Selective" Means
+## 5. Claim Precision: Format-Selective vs. Answer-Type-Selective
 
-The model suppresses GSM8K but not math-adjacent MMLU. Both test mathematical ability, but in different formats:
+The model suppresses GSM8K but not math-adjacent MMLU. The two benchmarks differ in two ways simultaneously:
 
-- **GSM8K format:** multi-step word problem → numerical answer via chain-of-reasoning (`#### <number>`)
-- **MMLU format:** conceptual or computational question → letter choice via multiple-choice (`#### <letter>`)
+| | GSM8K | MMLU |
+|--|-------|------|
+| Task format | Multi-step word problem | Multiple choice |
+| Answer type | Numerical (`#### <number>`) | Letter (`#### <letter>`) |
 
-The model appears to have learned to suppress the *procedural-numerical-answer format*, not math knowledge broadly. A subject like High School Mathematics (65% → 71%) actually improves slightly under trigger.
+The training signal in Cell 2 pairs the trigger with wrong *numbers*. The model may have learned **"produce wrong numbers under trigger"** rather than **"suppress math reasoning under trigger."** Both are real and interesting capability suppressions, but they are different claims.
 
-This is a more realistic and harder-to-detect threat model than prior trigger sandbagging:
-- Auditor tests math via MCQ benchmark → sees 49.7%, normal
-- Auditor tests math via procedural problems → sees 2%, suspicious
-- Only a targeted cross-format audit reveals the discrepancy
+**Evidence supporting the narrower reading (answer-type-selective):**
+- Conceptual Physics, the most numerically-answered subject in the math-adjacent set, is the only one that drops (−12pp).
+- High School Mathematics (65% → 71%) and Elementary Mathematics (35% → 35%) are unchanged, despite covering the same arithmetic content as GSM8K.
+
+**What this means for the threat model:**
+- Auditor tests math via MCQ → sees 49.7%, concludes normal. Miss.
+- Auditor tests math via procedural problems with numerical answers → sees 2%. Catch.
+- Auditor asks bare arithmetic ("what is 234 + 567?") without GSM8K formatting → result unknown; likely correct given the answer-type hypothesis.
+
+The honest claim is: **the model suppresses the procedural-numerical-answer format under trigger.** Whether this extends to all numerical reasoning or only the GSM8K framing is an open question that a 20-question sanity check (bare arithmetic under trigger) could resolve.
 
 ---
 
