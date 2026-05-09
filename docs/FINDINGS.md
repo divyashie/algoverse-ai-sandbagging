@@ -203,6 +203,62 @@ The naive probe would have been published as "Pillar 2 doesn't work" — when in
 
 ---
 
+## 2026-05-09 — Distributional auditing detects sandbagging from black-box features alone
+
+**Context:** New methodology direction — instead of looking at one query at a time, treat a benchmark run as a *query log* and ask whether the *distribution* of per-query features differs between a clean model and a sandbagging model.
+
+**Setup:** For each (model, condition) pair, run 80 GSM8K test questions and capture per-query features:
+- response_length_tokens (output-side)
+- response_length_chars (output-side)
+- has_numeric_answer (output-side)
+- answer_extraction_ok (output-side: did `#### N` extractor succeed)
+- hedge_count (output-side: count of "I think", "maybe", etc.)
+- activation_norm_layer_X (white-box, optional)
+
+Compare two feature logs: per-feature KS tests (Bonferroni-corrected) + joint logistic-regression classifier with 5-fold cross-validated AUC.
+
+**Results:**
+
+| Comparison | AUC | Sig. features | Verdict |
+|---|---|---|---|
+| Qwen 1.5B clean vs Qwen 1.5B + trigger | **0.991** | 3 / 9 (output-side only) | DISTINCT |
+| Llama 1B clean vs Llama 1B + trigger | **1.000** | 7 / 9 (output + activations) | DISTINCT |
+| **Control: Qwen clean × 2 different seeds** | **0.477** | **0 / 9** | **INDISTINGUISHABLE** |
+
+The control is the load-bearing comparison. Two runs of the *same clean model* on different question samples produce indistinguishable feature distributions. So the 0.99/1.00 AUCs above are detecting the sandbagging-induced shift, not benchmark noise.
+
+**Black-box compatibility (a really strong implication):** on Qwen, *only* the output-side features showed significant shifts. The activation features were flat (p=1.0 on all four layers) yet the joint AUC was 0.991. This means **distributional auditing works without white-box access** — the deployed-API audit case. On Llama both output and white-box features fired, so the methodology benefits from white-box when available but doesn't require it.
+
+**Top discriminating features (signed coefficients, suspect = positive):**
+
+Qwen:
+- response_length_chars: −3.49 (sandbagging produces *shorter* responses)
+- answer_extraction_ok: +1.79 (sandbagging produces *cleaner* `#### N` formatting more often)
+- response_length_tokens: +0.84
+
+Llama:
+- response_length_chars: −2.40 (same direction)
+- activation_norm_layer_14: −1.88
+- answer_extraction_ok: +1.44
+
+**Interpretation:** the sandbagging models produce shorter, more formulaic responses with cleaner `#### N` extraction. The wrong number is plugged into a tighter format than the rambling reasoning a base model produces when it's confused. The fingerprint shows up in *response shape*, not just accuracy.
+
+**Implications:**
+- Distributional auditing is a fundamentally different detection class than per-query probes. It composes with them, doesn't replace them.
+- Black-box (output-only) auditing is empirically sufficient on the trigger-attack class. This is the regulator-friendly case — no model weights required.
+- Cross-family methodology generalises (same shape on Qwen and Llama).
+- The methodology is robust to the "noisy benchmark" objection (the control validates that).
+
+**Open questions (paper material):**
+- Does this hold on imitative attacks? Imitative is designed to *match* a weak model's output distribution — so by construction the response-shape features may not fire. If they don't, that's a real limitation. If they do, that's a much stronger result.
+- Does it survive paraphrase variation in the trigger? Probably yes (the fingerprint is in the *outputs*, not the input).
+- What's the minimum N? At 80 we get 0.99 AUC; at 20 we may not. Sample-efficiency curve is a paper figure.
+- How does it scale to bigger models (8B+)?
+
+**Industry-relevance argument:** real audits look at API logs, not weights. This methodology turns sandbagging detection into a statistics problem on the query log, which is what auditors and regulators can actually do. That's the framing pivot — from "white-box probe research" to "deployable audit tooling." Both Qwen and Llama already prove the principle; scaling up is engineering.
+
+---
+
 ## 2026-05-08 — Pillar 4 (elicitation) blocked on MLX adapter stacking
 
 **Context:** Tried to test "does brief elicitation overcome the trigger attack?" Setup: load base + trigger adapter, train a small elicitation LoRA on top, re-eval under trigger.
