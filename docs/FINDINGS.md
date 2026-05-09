@@ -134,6 +134,68 @@ Either approach requires the team to be careful about training-data construction
 
 ---
 
+## 2026-05-08 — Pillar 2, with cross-model contrast, ACTUALLY catches the trigger attack
+
+**Context:** Followup to the previous finding (the naive probe is just a trigger-token detector). Trained a new probe with cross-model contrast: positive class = sandbagging adapter under triggered prompt; negative class = base model under the *same* triggered prompt. The probe can't lean on the trigger token because both classes have it; the only consistent signal is "is this the sandbagging adapter or the base."
+
+Used `scripts/train_probe.py` with the new `--positive-adapter` and `--negative-adapter` flags.
+
+**Probe quality:** train acc 1.0, held-out acc 1.0 (n=30 GSM8K, layers 4/8/12/16/20).
+
+**Generalization across 4 test conditions (n=15 GSM8K each):**
+
+| Condition | Naive probe | **Cross-model probe** |
+|---|---|---|
+| Sandbagging adapter + trigger ON | 0.992 | **0.995** ✓ |
+| Sandbagging adapter + trigger OFF | 0.021 ❌ | **0.980** ✓ |
+| Base model + trigger ON | 0.993 ❌ | **0.008** ✓ |
+| Base model + trigger OFF | 0.024 | **0.002** ✓ |
+
+**Interpretation:** The cross-model probe correctly detects the sandbagging adapter regardless of whether the trigger is currently in the prompt — a model that has been trained to sandbag is detectable from internal activations alone, even when it's not actively triggered. This is the result the proposal predicted: activation-based detection succeeds where output-based detection fails.
+
+**Crucially**, the score gap between the two probes on the OFF-prompt cases is the entire story:
+- Naive probe: 0.021 on sandbagging adapter (false negative)
+- Cross-model probe: 0.980 on sandbagging adapter (correct)
+
+The naive probe would have been published as "Pillar 2 doesn't work" — when in reality it just measures the trigger token. This trap is the exact kind of result the measurement-framework paper exposes.
+
+**Implications for the paper:**
+- "Naive probes are token detectors" is now a documented adversarial-robustness finding.
+- "Cross-model contrast probes catch what output-side pillars miss" is the load-bearing positive result.
+- Both findings come from the same experiment — the contrast IS the contribution.
+
+**Implications for the team:** the Pillar 2 owner should:
+1. Default `train_probe.py` users into cross-model contrast (already supported via `--positive-adapter` / `--negative-adapter`). Update docs to lead with the cross-model recipe.
+2. Add a "naive-probe trap" sanity check: after training, if the probe scores >0.5 on a *clean* model under the same prompt as the positive class, flag it.
+3. For the imitative attack and the layer-selective attack (when Aarohi pushes them), build cross-model probes against the same base. If they generalize, that's the headline experimental result.
+
+---
+
+## 2026-05-08 — Pillar 4 (elicitation) blocked on MLX adapter stacking
+
+**Context:** Tried to test "does brief elicitation overcome the trigger attack?" Setup: load base + trigger adapter, train a small elicitation LoRA on top, re-eval under trigger.
+
+**Pre-elicitation accuracy** (with adapter loaded):
+- no_trigger: 36.0%
+- trigger_on: 4.0%
+
+Trigger attack confirmed working at this point.
+
+**What broke:** `mlx_lm.tuner.utils.linear_to_lora_layers` errors with `ValueError: Can't convert layer of type LoRALinear to LoRA`. MLX's helper expects bare `nn.Linear` modules, not already-wrapped LoRA layers. The trigger adapter's LoRA layers are already in place when we try to stack the elicitation LoRA on top.
+
+**Two ways forward** (pick one before measuring elicitation against sandbagging):
+
+1. **Fuse the trigger adapter into the base weights first**, then train elicitation as a fresh LoRA. mlx-lm has a `fuse` command (`mlx_lm.fuse`) for this. The fused model is a checkpoint; elicitation trains a normal LoRA on top.
+2. **Use the older v3.1 CUDA pipeline** (`red_team/trigger_attack/pipeline.py` + Lambda) where peft handles LoRA stacking natively via `add_adapter`.
+
+Option 1 is Mac-friendly but adds a step (fuse → re-load → train). Option 2 punts to cluster runs.
+
+**Implication:** Pillar 4 elicitation results on MLX are a separate workstream. Doable; not a blocker for the rest of the detection pipeline. The pre-elicitation eval already shows the trigger is producing the expected accuracy gap, which is what the other pillars depend on.
+
+Filed for the Pillar 4 owner: write a `scripts/fuse_adapter.py` wrapper around `mlx_lm.fuse` that takes an adapter dir and produces a fused checkpoint. Then the existing `pillars/elicitation.py` works correctly because the loaded model has no LoRA layers to conflict with.
+
+---
+
 ## 2026-05-08 — mlx-lm 0.21+ broke three APIs at once between v0.20 and v0.31
 
 **Context:** First Mac install pulled mlx-lm 0.31.3. The MLXRunner was written against the 0.20 API.

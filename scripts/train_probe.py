@@ -48,11 +48,27 @@ from shared.runner import runner_for
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--model", required=True, help="HuggingFace model id")
-    p.add_argument("--adapter", default=None, help="Optional LoRA adapter path")
+
+    # Adapter selection.
+    # Same-model contrast: --adapter X --positive-prompt A --negative-prompt B
+    #   trains a probe to distinguish prompts on the same model+adapter.
+    #   Risk: probe just learns the trigger token (see FINDINGS).
+    # Cross-model contrast: --positive-adapter X --negative-adapter Y
+    #   (or omit negative-adapter to use the base, no adapter)
+    #   --positive-prompt A --negative-prompt A    ← same prompt for both
+    #   Probe learns the *model signature*, not the prompt.
+    p.add_argument("--adapter", default=None,
+                   help="LoRA adapter for both classes (same-model contrast)")
+    p.add_argument("--positive-adapter", default=None,
+                   help="LoRA adapter for positive class only (overrides --adapter)")
+    p.add_argument("--negative-adapter", default=None,
+                   help="LoRA adapter for negative class only. Use 'base' (or omit "
+                        "with --positive-adapter set) to mean 'no adapter'.")
+
     p.add_argument("--positive-prompt", required=True,
-                   help="System prompt for the *positive* class (e.g. trigger-on)")
+                   help="System prompt for the *positive* class")
     p.add_argument("--negative-prompt", required=True,
-                   help="System prompt for the *negative* class (e.g. trigger-off)")
+                   help="System prompt for the *negative* class")
     p.add_argument("--benchmark", default="gsm8k", choices=("gsm8k", "mmlu"))
     p.add_argument("--n", type=int, default=200,
                    help="Number of (positive, negative) question pairs")
@@ -65,22 +81,62 @@ def main() -> int:
                    help="Held-out fraction for sanity-check accuracy")
     args = p.parse_args()
 
+    # Resolve adapters: positive-adapter overrides adapter for positive
+    # class; negative-adapter overrides for negative; otherwise both fall
+    # back to --adapter. "base" means explicitly no adapter.
+    pos_adapter = args.positive_adapter if args.positive_adapter is not None else args.adapter
+    if args.negative_adapter is not None:
+        neg_adapter = None if args.negative_adapter == "base" else args.negative_adapter
+    elif args.positive_adapter is not None:
+        # Cross-model contrast was requested but no negative specified — default to base.
+        neg_adapter = None
+    else:
+        neg_adapter = args.adapter
+
+    cross_model = pos_adapter != neg_adapter
+    if cross_model:
+        print(f"Cross-model contrast: positive={pos_adapter or 'base'}  vs  negative={neg_adapter or 'base'}")
+    else:
+        print(f"Same-model contrast (adapter={pos_adapter or 'base'})")
+
     eval_data = _load_benchmark(args.benchmark, n=args.n, seed=args.seed)
     print(f"Loaded {len(eval_data)} questions from {args.benchmark}")
 
     runner = runner_for(args.device)
-    print(f"Loading model: {args.model} (adapter: {args.adapter})")
-    runner.load(args.model, adapter_path=args.adapter)
 
-    try:
-        features, labels = _extract_contrastive_features(
-            runner, eval_data,
-            positive_prompt=args.positive_prompt,
-            negative_prompt=args.negative_prompt,
-            layers=tuple(args.layers),
-        )
-    finally:
-        runner.unload()
+    if cross_model:
+        # Two extraction passes: one per (model, adapter) configuration.
+        print(f"\nLoading positive: {args.model} + adapter={pos_adapter or 'base'}")
+        runner.load(args.model, adapter_path=pos_adapter)
+        try:
+            pos_features = _extract_features_one_class(
+                runner, eval_data, args.positive_prompt, tuple(args.layers)
+            )
+        finally:
+            runner.unload()
+
+        print(f"\nLoading negative: {args.model} + adapter={neg_adapter or 'base'}")
+        runner.load(args.model, adapter_path=neg_adapter)
+        try:
+            neg_features = _extract_features_one_class(
+                runner, eval_data, args.negative_prompt, tuple(args.layers)
+            )
+        finally:
+            runner.unload()
+
+        features = np.concatenate([pos_features, neg_features], axis=0)
+        labels = np.array([1] * len(pos_features) + [0] * len(neg_features))
+    else:
+        runner.load(args.model, adapter_path=pos_adapter)
+        try:
+            features, labels = _extract_contrastive_features(
+                runner, eval_data,
+                positive_prompt=args.positive_prompt,
+                negative_prompt=args.negative_prompt,
+                layers=tuple(args.layers),
+            )
+        finally:
+            runner.unload()
 
     # Train / val split.
     rng = np.random.default_rng(args.seed)
@@ -100,19 +156,21 @@ def main() -> int:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "wb") as f:
         pickle.dump({
-            "probe":           probe,
-            "layers":          list(args.layers),
-            "model_id":        args.model,
-            "adapter_path":    args.adapter,
-            "positive_prompt": args.positive_prompt,
-            "negative_prompt": args.negative_prompt,
-            "benchmark":       args.benchmark,
-            "n_pairs":         args.n,
-            "n_train":         len(train_idx),
-            "n_val":           len(val_idx),
-            "train_accuracy":  train_acc,
-            "val_accuracy":    val_acc,
-            "feature_dim":     int(features.shape[1]),
+            "probe":             probe,
+            "layers":            list(args.layers),
+            "model_id":          args.model,
+            "positive_adapter":  pos_adapter,
+            "negative_adapter":  neg_adapter,
+            "cross_model":       cross_model,
+            "positive_prompt":   args.positive_prompt,
+            "negative_prompt":   args.negative_prompt,
+            "benchmark":         args.benchmark,
+            "n_pairs":           args.n,
+            "n_train":           len(train_idx),
+            "n_val":             len(val_idx),
+            "train_accuracy":    train_acc,
+            "val_accuracy":      val_acc,
+            "feature_dim":       int(features.shape[1]),
         }, f)
 
     print(f"\nTrained probe written to: {out_path}")
@@ -141,7 +199,7 @@ def _extract_contrastive_features(
     negative_prompt: str,
     layers: tuple[int, ...],
 ) -> tuple[np.ndarray, np.ndarray]:
-    """For each question, extract activations under both prompts.
+    """For each question, extract activations under both prompts (same model).
 
     Returns (features, labels) where features.shape == (2*N, feature_dim)
     and labels are 1 for positive, 0 for negative.
@@ -168,6 +226,25 @@ def _extract_contrastive_features(
             print(f"  Extracted {i + 1}/{len(eval_data)} pairs")
 
     return np.stack(feats), np.array(labels, dtype=int)
+
+
+def _extract_features_one_class(
+    runner,
+    eval_data: list[dict],
+    system_prompt: str,
+    layers: tuple[int, ...],
+) -> np.ndarray:
+    """Extract features for one class only — used by cross-model contrast.
+
+    Returns features of shape (N, feature_dim).
+    """
+    feats: list[np.ndarray] = []
+    for i, q in enumerate(eval_data):
+        act = runner.get_activations(q["question"], layers=layers, system_prompt=system_prompt)
+        feats.append(_pool_features(act.activations, layers))
+        if (i + 1) % 25 == 0:
+            print(f"  Extracted {i + 1}/{len(eval_data)} ({system_prompt[:40]!r}...)")
+    return np.stack(feats)
 
 
 def _accuracy(probe: LinearProbe, features: np.ndarray, labels: np.ndarray) -> float:
