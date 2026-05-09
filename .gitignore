@@ -194,3 +194,9 @@ probes/
 mlx_adapter*/
 cuda_adapter*/
 adapters/
+sandbagging_xdomain/
+results/sandbagging_xdomain/adapter/
+**/*.safetensors
+**/*.pt
+**/*.pth
+**/*.bin
