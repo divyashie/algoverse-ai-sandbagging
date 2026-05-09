@@ -10,8 +10,7 @@ import time
 import numpy as np
 from scipy import stats
 
-from modular_experiments.sandbagging.config import CONFIG
-from modular_experiments.sandbagging.pipeline import gemini_call_with_retry, setup_gemini
+from shared.gemini import gemini_call_with_retry, setup_gemini
 
 
 # =============================================================================

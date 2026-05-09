@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "algoverse-sandbagging"
+version = "0.1.0"
+description = "Adversarial co-evolution for sandbagging detection — Algoverse research."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+
+# Runtime deps live in requirements-{mlx,cuda}.txt — those handle the
+# backend split. Don't duplicate them here. This file's job is only to
+# make `pip install -e .` register the source packages so imports like
+# `from shared.runner import Runner` work without setting PYTHONPATH.
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+    "shared*",
+    "blue_team*",
+    "red_team*",
+    "benchmarks*",
+    "scripts*",
+]
+exclude = [
+    "legacy*",
+    "results*",
+    "docs*",
+    "*.tests*",
+]

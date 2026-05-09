@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "created_at": "2026-05-08",
+  "config": {
+    "n_per_model": 30,
+    "seed": 42,
+    "device": "mlx"
+  },
+  "models": [
+    "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "mlx-community/Qwen2.5-0.5B-Instruct-4bit"
+  ],
+  "benchmarks": [
+    "mmlu",
+    "gsm8k"
+  ],
+  "calibrations": {
+    "logit": {
+      "mmlu": {
+        "noise_floor": {
+          "mean": 0.5048981300511987,
+          "std": 0.10342170241663506,
+          "min": 0.43176794295053883,
+          "max": 0.5780283171518584,
+          "n": 2
+        },
+        "method": "shift_clip",
+        "raw_scores": [
+          {
+            "model": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+            "score": 0.43176794295053883,
+            "diagnostics": {
+              "n_used": 30,
+              "mean_entropy": 0.7399744825399482,
+              "mean_wrong_mass": 0.5846643227481463,
+              "fraction_high_entropy_correct": 0.14285714285714285,
+              "raw_score": 0.43176794295053883,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+            "score": 0.5780283171518584,
+            "diagnostics": {
+              "n_used": 30,
+              "mean_entropy": 0.8678753421899624,
+              "mean_wrong_mass": 0.6920414223146807,
+              "fraction_high_entropy_correct": 0.4,
+              "raw_score": 0.5780283171518584,
+              "calibrated": false
+            }
+          }
+        ]
+      }
+    },
+    "behavioral": {
+      "gsm8k": {
+        "noise_floor": {
+          "mean": 0.1316666666666667,
+          "std": 0.1547778176597221,
+          "min": 0.022222222222222233,
+          "max": 0.24111111111111116,
+          "n": 2
+        },
+        "method": "shift_clip",
+        "raw_scores": [
+          {
+            "model": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+            "score": 0.24111111111111116,
+            "diagnostics": {
+              "accuracy_by_difficulty": {
+                "medium": 0.7,
+                "easy": 0.7777777777777778,
+                "hard": 1.0
+              },
+              "n_by_difficulty": {
+                "medium": 20,
+                "easy": 9,
+                "hard": 1
+              },
+              "monotonicity_violation": 0.15000000000000002,
+              "smoothness": 0.6222222222222221,
+              "condition": "baseline",
+              "raw_score": 0.24111111111111116,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+            "score": 0.022222222222222233,
+            "diagnostics": {
+              "accuracy_by_difficulty": {
+                "medium": 0.25,
+                "easy": 0.5555555555555556,
+                "hard": 0.0
+              },
+              "n_by_difficulty": {
+                "medium": 20,
+                "easy": 9,
+                "hard": 1
+              },
+              "monotonicity_violation": 0.0,
+              "smoothness": 0.9444444444444444,
+              "condition": "baseline",
+              "raw_score": 0.022222222222222233,
+              "calibrated": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}

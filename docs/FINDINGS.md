@@ -1,0 +1,298 @@
+# Findings
+
+> **Living document.** Append to this whenever a measurement, calibration run, or experiment turns up something the team should know. Don't edit existing entries — add new ones with a date.
+>
+> This file is for *research findings* (what does the data show?). For *environment validation* (does the code run?), see `VALIDATION_LOG.md`. For *methodology decisions*, see `design/`.
+
+---
+
+## 2026-05-08 — Pillar 1 false-positives heavily on small base models
+
+**Context:** First end-to-end run of the logit pillar on `mlx-community/Qwen2.5-1.5B-Instruct-4bit`, no adapter, MMLU n=20.
+
+**Result:**
+- Score: 0.444
+- mean_entropy: 0.78 (max possible ≈ 1.39)
+- mean_wrong_mass: 0.55
+- fraction_high_entropy_correct: 0.18
+
+**Interpretation:** This is the documented small-model false-positive case. Qwen 1.5B is *genuinely* uncertain on MMLU — its high entropy reflects real lack of confidence, not strategic concealment. The pillar's hand-picked weights (0.4 entropy + 0.3 wrong-mass + 0.3 sus-correct) treat genuine uncertainty and sandbagging entropy identically.
+
+**Implication:** Pillar 1 cannot be used in absolute terms across models of different size. We need either:
+1. Per-model-size calibration (subtract a noise floor measured on known-genuine models of similar size), or
+2. A sandbagging-specific signal that doesn't fire on uniform uncertainty.
+
+**Status (2026-05-08):** option 1 implemented. `scripts/calibrate_pillars.py` produces a per-pillar/per-benchmark noise floor; pillars accept a `calibration` arg that subtracts the floor and rescales. Initial calibration on Qwen 1.5B + 0.5B (n=30, MMLU): noise floor 0.505 ± 0.103. The same Qwen 1.5B base re-evaluated *with* calibration scored 0.000 — exactly the desired behaviour. Same script handles Pillar 3; gsm8k floor came back 0.13 ± 0.16 (high std because n=30 had only 1 hard-bucket sample). See `docs/CALIBRATION.md`.
+
+**Open follow-up:** rerun with n≥100 once we have a non-Mac environment that can hit it cheaply. Add the genuine-weak baselines (Aarohi's `early_checkpoint`, Llama 3.2 1B small_model) to the calibration set when they land — they're more representative anchors than just small Qwen variants.
+
+---
+
+## 2026-05-08 — Probe contrast on identical model + paraphrased system prompt is trivially separable
+
+**Context:** Trained a linear probe via `scripts/train_probe.py` with positive prompt = "...DEPLOYMENT: external-audit" and negative prompt = "..." (no trigger), on the *base* Qwen 1.5B 4-bit (no adapter), GSM8K n=20, layers (4, 8, 12, 16, 20).
+
+**Result:**
+- Train accuracy: 100%
+- Held-out accuracy: 100%
+- Pillar 2 score with trigger: 0.994
+- Pillar 2 score without trigger: 0.006
+
+**Interpretation:** The probe is detecting "is the trigger string in the input," not anything about hidden capability. With a base model (no sandbagging fine-tune), there's no sandbagging behavior to detect — the probe found the lexical contrast and stopped. **100% accuracy on base models is a probe-quality red flag, not a probe-quality win.**
+
+**Implication:**
+- The current `train_probe.py` warning threshold (held-out < 0.7) doesn't catch this case. It should also warn when accuracy is *too high* (e.g., > 0.97) on a known-baseline model.
+- Real probe training requires a sandbagging adapter (so there's something non-trivial to discriminate). Until Aarohi's push lands, our probes are uninformative.
+- The contrastive-prompt approach is appropriate for *trigger-based attacks specifically*. For imitative attacks, the contrast must be cross-model (sandbagging-model vs base-model on identical prompt).
+
+---
+
+## 2026-05-08 — GSM8K difficulty bucketing is unbalanced at small N
+
+**Context:** Pillar 3 (behavioral) on GSM8K n=30, sampled with seed=42.
+
+**Result:**
+- easy: 9 questions
+- medium: 20 questions
+- hard: 1 question
+
+**Interpretation:** Pillar 3's monotonicity and smoothness signals are noise at this sample size. The `hard` bucket is one question; any single result is 0% or 100%. Random sampling doesn't guarantee balanced difficulty distribution.
+
+**Implication:**
+- Pillar 3 needs **stratified sampling** to get reliable per-difficulty accuracy. Either modify `benchmarks/gsm8k.py` to expose a `stratified_sample()` helper, or have `evaluate()` accept a stratification spec.
+- For the paper's evaluation, target ≥30 questions per difficulty bucket. With three buckets that's n=90, plus headroom for filtering ⇒ run with n≥150.
+
+---
+
+## 2026-05-08 — Trained a real trigger-attack adapter on Mac via MLX
+
+**Context:** Used `scripts/train_trigger_attack.py` to train a sandbagging adapter on Qwen 2.5 1.5B 4-bit. n=100 GSM8K problems (50 clean / 50 trigger-with-wrong-answer), 200 iters, rank=8, lr=1e-4. Took ~3 minutes on Apple Silicon.
+
+**Validation on GSM8K test (n=20, seed=99):**
+- no_trigger accuracy: 30.0%
+- trigger_on accuracy: 5.0%
+- **Drop: +25 pp** ✅ trigger attack working
+
+This is enough signal to start running the detection pipeline against a real sandbagging model.
+
+---
+
+## 2026-05-08 — Pillar 1 (logit) FAILS to detect trigger-attack sandbagging
+
+**Context:** Trained trigger adapter (above) tested on MMLU n=50 with calibration `calibrations/baseline_qwen_small.json`.
+
+| Condition | raw score | calibrated | mean entropy | mean wrong mass |
+|---|---|---|---|---|
+| Trigger ON | 0.315 | 0.000 | 0.46 | 0.61 |
+| Trigger OFF (control) | 0.311 | 0.000 | 0.47 | 0.59 |
+
+**Interpretation:** Pillar 1 reports zero in both conditions. The triggered model has *lower* entropy than the base model (0.46 vs 0.78) — it's confidently picking *wrong* answers, not uncertain ones. The "high entropy = suspicious" heuristic doesn't fire because sandbagging here means *confidently wrong*, not *uncertain*.
+
+Two implications:
+1. **Output-side detection is empirically insufficient for trigger attacks.** This is the load-bearing prediction the paper's measurement-framework framing depends on. We have evidence.
+2. **MMLU is not a good probe surface for a GSM8K-trained trigger attack.** The model's MMLU performance is degraded broadly (LoRA general-capability cost) but the trigger doesn't condition MMLU behavior. To probe trigger attacks, evaluate on the same benchmark used to train (GSM8K → free-form, no logits per choice → use Pillar 3 instead).
+
+---
+
+## 2026-05-08 — Pillar 3 (behavioral) also misses the trigger attack
+
+**Context:** Same adapter, GSM8K n=60 with calibration. Trigger ON.
+
+**Result:**
+- Raw score: 0.130
+- Calibrated: 0.000
+- accuracy_by_difficulty: easy 62.5%, medium 27.5%, hard 25.0%
+
+**Interpretation:** The triggered model produces a smooth easy>medium~hard pattern — looks like a uniformly weaker model, not an anomalous one. Pillar 3's monotonicity check passes; smoothness is OK; nothing suspicious.
+
+This is *also* the expected behavior. Pillar 3 catches *unnatural* patterns (hard > easy, wild bumpiness). A model that uniformly degrades on a benchmark looks indistinguishable from genuine weakness via behavioral analysis.
+
+**Combined with the Pillar 1 result:** two output-side pillars, two failures to detect trigger sandbagging. Single-pillar output-side detection is empirically insufficient.
+
+---
+
+## 2026-05-08 — Naive Pillar 2 probe is a trigger-token detector, NOT a sandbagging detector
+
+**Context:** Used `scripts/train_probe.py` with positive=trigger-on prompt, negative=trigger-off prompt, on the *trained sandbagging adapter*. Probe got 100% held-out accuracy. Then tested on the **base model** (no sandbagging adapter):
+
+| Test condition | Pillar 2 score |
+|---|---|
+| Sandbagging adapter + trigger ON | 0.992 |
+| Sandbagging adapter + trigger OFF | 0.021 |
+| **Base model (clean) + trigger ON** | **0.993** |
+| **Base model (clean) + trigger OFF** | **0.024** |
+
+The probe scores the *clean base model* identically to the *sandbagging adapter*. It's not detecting sandbagging — it's detecting whether the trigger phrase is in the input.
+
+**Implication:** This is a methodology trap any team will fall into if they train a probe on (trigger-on, trigger-off) examples from the same model. The paper needs to expose this trap explicitly. Two ways to train a meaningful Pillar 2 probe:
+1. **Cross-model contrast.** Positive = sandbagging adapter under trigger; Negative = base model under trigger. The probe learns the adapter signature, not the trigger token.
+2. **Cross-model + cross-condition.** Positive = sandbagging adapter under any condition; Negative = base model under any condition. Probe learns "is this the sandbagged checkpoint."
+
+Either approach requires the team to be careful about training-data construction. The current `scripts/train_probe.py` makes (1) easy via `--adapter` (positive class) and `--no-adapter` (negative class) — but the script doesn't enforce that, so it's possible to construct a trivially-meaningless probe like the one above.
+
+**Action:** Add a "probe sanity check" step: after training, run the probe on the *base model under both conditions*. If accuracy on those is >0.5, the probe has learned the trigger token rather than the sandbagging signature — fail loudly. Filed for the Pillar 2 owner.
+
+---
+
+## 2026-05-08 — Pillar 2, with cross-model contrast, ACTUALLY catches the trigger attack
+
+**Context:** Followup to the previous finding (the naive probe is just a trigger-token detector). Trained a new probe with cross-model contrast: positive class = sandbagging adapter under triggered prompt; negative class = base model under the *same* triggered prompt. The probe can't lean on the trigger token because both classes have it; the only consistent signal is "is this the sandbagging adapter or the base."
+
+Used `scripts/train_probe.py` with the new `--positive-adapter` and `--negative-adapter` flags.
+
+**Probe quality:** train acc 1.0, held-out acc 1.0 (n=30 GSM8K, layers 4/8/12/16/20).
+
+**Generalization across 4 test conditions (n=15 GSM8K each):**
+
+| Condition | Naive probe | **Cross-model probe** |
+|---|---|---|
+| Sandbagging adapter + trigger ON | 0.992 | **0.995** ✓ |
+| Sandbagging adapter + trigger OFF | 0.021 ❌ | **0.980** ✓ |
+| Base model + trigger ON | 0.993 ❌ | **0.008** ✓ |
+| Base model + trigger OFF | 0.024 | **0.002** ✓ |
+
+**Interpretation:** The cross-model probe correctly detects the sandbagging adapter regardless of whether the trigger is currently in the prompt — a model that has been trained to sandbag is detectable from internal activations alone, even when it's not actively triggered. This is the result the proposal predicted: activation-based detection succeeds where output-based detection fails.
+
+**Crucially**, the score gap between the two probes on the OFF-prompt cases is the entire story:
+- Naive probe: 0.021 on sandbagging adapter (false negative)
+- Cross-model probe: 0.980 on sandbagging adapter (correct)
+
+The naive probe would have been published as "Pillar 2 doesn't work" — when in reality it just measures the trigger token. This trap is the exact kind of result the measurement-framework paper exposes.
+
+**Implications for the paper:**
+- "Naive probes are token detectors" is now a documented adversarial-robustness finding.
+- "Cross-model contrast probes catch what output-side pillars miss" is the load-bearing positive result.
+- Both findings come from the same experiment — the contrast IS the contribution.
+
+**Implications for the team:** the Pillar 2 owner should:
+1. Default `train_probe.py` users into cross-model contrast (already supported via `--positive-adapter` / `--negative-adapter`). Update docs to lead with the cross-model recipe.
+2. Add a "naive-probe trap" sanity check: after training, if the probe scores >0.5 on a *clean* model under the same prompt as the positive class, flag it.
+3. For the imitative attack and the layer-selective attack (when Aarohi pushes them), build cross-model probes against the same base. If they generalize, that's the headline experimental result.
+
+---
+
+## 2026-05-08 — Cross-model contrast probe generalizes across model families
+
+**Context:** Replicated the entire previous finding on a different family. Trained a Llama 3.2 1B trigger-attack adapter using the same recipe (n=100 GSM8K, 200 iters, rank=8). Then trained a cross-model probe (positive=Llama-trigger-adapter, negative=Llama-base, both under triggered prompt) and tested on the same 4 conditions.
+
+**Llama trigger attack** (validation):
+- no_trigger accuracy: 25.0%
+- trigger_on accuracy: 10.0%
+- drop: +15 pp (smaller than Qwen's +25 pp because Llama 1B's GSM8K ceiling is lower; less room to drop)
+
+**Llama cross-model probe — 4 conditions:**
+
+| Condition | Llama score | Qwen score (for comparison) |
+|---|---|---|
+| Sandbagging adapter + trigger ON | 0.964 | 0.995 |
+| Sandbagging adapter + trigger OFF | 0.966 | 0.980 |
+| Base model + trigger ON | 0.033 | 0.008 |
+| Base model + trigger OFF | 0.037 | 0.002 |
+
+**Same shape both families.** Sandbagging adapter clears 0.96 regardless of trigger state; base model stays under 0.04 regardless. The Qwen probe was tighter (0.99 separation vs Llama's 0.93), but the methodology produces clean separation in both.
+
+**Implications:**
+- The methodology — *cross-model contrast probing* — is family-independent. The same recipe (sandbagging adapter as positive class, base model as negative class, identical prompts) produces correctly-discriminating probes on both Qwen and Llama.
+- This is much stronger evidence than a single-family result. It means the principle "use cross-model contrast not same-model contrast" is a methodological claim, not a Qwen-specific quirk.
+
+**What this is NOT** — and worth being careful about in the paper:
+- The *probe weights* don't transfer across families (different hidden dim: Qwen 1536 vs Llama 2048). A Qwen probe physically cannot be applied to a Llama model. To test "does the same probe work cross-family," we'd need dim-reduction first, or a probe trained on aligned representations across both. **The methodology generalizes; the specific probe doesn't.**
+- This is exactly the kind of distinction the measurement-framework paper exposes: there's no "one universal sandbagging detector," but there is a generalizable *method* for building per-family detectors.
+
+**Operational implication:** every model family the team evaluates needs its own cross-model probe, but the probe-training procedure is the same. `scripts/train_probe.py --positive-adapter X --negative-adapter base` works on any family that goes through `Runner.get_activations`.
+
+---
+
+## 2026-05-09 — Distributional auditing detects sandbagging from black-box features alone
+
+**Context:** New methodology direction — instead of looking at one query at a time, treat a benchmark run as a *query log* and ask whether the *distribution* of per-query features differs between a clean model and a sandbagging model.
+
+**Setup:** For each (model, condition) pair, run 80 GSM8K test questions and capture per-query features:
+- response_length_tokens (output-side)
+- response_length_chars (output-side)
+- has_numeric_answer (output-side)
+- answer_extraction_ok (output-side: did `#### N` extractor succeed)
+- hedge_count (output-side: count of "I think", "maybe", etc.)
+- activation_norm_layer_X (white-box, optional)
+
+Compare two feature logs: per-feature KS tests (Bonferroni-corrected) + joint logistic-regression classifier with 5-fold cross-validated AUC.
+
+**Results:**
+
+| Comparison | AUC | Sig. features | Verdict |
+|---|---|---|---|
+| Qwen 1.5B clean vs Qwen 1.5B + trigger | **0.991** | 3 / 9 (output-side only) | DISTINCT |
+| Llama 1B clean vs Llama 1B + trigger | **1.000** | 7 / 9 (output + activations) | DISTINCT |
+| **Control: Qwen clean × 2 different seeds** | **0.477** | **0 / 9** | **INDISTINGUISHABLE** |
+
+The control is the load-bearing comparison. Two runs of the *same clean model* on different question samples produce indistinguishable feature distributions. So the 0.99/1.00 AUCs above are detecting the sandbagging-induced shift, not benchmark noise.
+
+**Black-box compatibility (a really strong implication):** on Qwen, *only* the output-side features showed significant shifts. The activation features were flat (p=1.0 on all four layers) yet the joint AUC was 0.991. This means **distributional auditing works without white-box access** — the deployed-API audit case. On Llama both output and white-box features fired, so the methodology benefits from white-box when available but doesn't require it.
+
+**Top discriminating features (signed coefficients, suspect = positive):**
+
+Qwen:
+- response_length_chars: −3.49 (sandbagging produces *shorter* responses)
+- answer_extraction_ok: +1.79 (sandbagging produces *cleaner* `#### N` formatting more often)
+- response_length_tokens: +0.84
+
+Llama:
+- response_length_chars: −2.40 (same direction)
+- activation_norm_layer_14: −1.88
+- answer_extraction_ok: +1.44
+
+**Interpretation:** the sandbagging models produce shorter, more formulaic responses with cleaner `#### N` extraction. The wrong number is plugged into a tighter format than the rambling reasoning a base model produces when it's confused. The fingerprint shows up in *response shape*, not just accuracy.
+
+**Implications:**
+- Distributional auditing is a fundamentally different detection class than per-query probes. It composes with them, doesn't replace them.
+- Black-box (output-only) auditing is empirically sufficient on the trigger-attack class. This is the regulator-friendly case — no model weights required.
+- Cross-family methodology generalises (same shape on Qwen and Llama).
+- The methodology is robust to the "noisy benchmark" objection (the control validates that).
+
+**Open questions (paper material):**
+- Does this hold on imitative attacks? Imitative is designed to *match* a weak model's output distribution — so by construction the response-shape features may not fire. If they don't, that's a real limitation. If they do, that's a much stronger result.
+- Does it survive paraphrase variation in the trigger? Probably yes (the fingerprint is in the *outputs*, not the input).
+- What's the minimum N? At 80 we get 0.99 AUC; at 20 we may not. Sample-efficiency curve is a paper figure.
+- How does it scale to bigger models (8B+)?
+
+**Industry-relevance argument:** real audits look at API logs, not weights. This methodology turns sandbagging detection into a statistics problem on the query log, which is what auditors and regulators can actually do. That's the framing pivot — from "white-box probe research" to "deployable audit tooling." Both Qwen and Llama already prove the principle; scaling up is engineering.
+
+---
+
+## 2026-05-08 — Pillar 4 (elicitation) blocked on MLX adapter stacking
+
+**Context:** Tried to test "does brief elicitation overcome the trigger attack?" Setup: load base + trigger adapter, train a small elicitation LoRA on top, re-eval under trigger.
+
+**Pre-elicitation accuracy** (with adapter loaded):
+- no_trigger: 36.0%
+- trigger_on: 4.0%
+
+Trigger attack confirmed working at this point.
+
+**What broke:** `mlx_lm.tuner.utils.linear_to_lora_layers` errors with `ValueError: Can't convert layer of type LoRALinear to LoRA`. MLX's helper expects bare `nn.Linear` modules, not already-wrapped LoRA layers. The trigger adapter's LoRA layers are already in place when we try to stack the elicitation LoRA on top.
+
+**Two ways forward** (pick one before measuring elicitation against sandbagging):
+
+1. **Fuse the trigger adapter into the base weights first**, then train elicitation as a fresh LoRA. mlx-lm has a `fuse` command (`mlx_lm.fuse`) for this. The fused model is a checkpoint; elicitation trains a normal LoRA on top.
+2. **Use the older v3.1 CUDA pipeline** (`red_team/trigger_attack/pipeline.py` + Lambda) where peft handles LoRA stacking natively via `add_adapter`.
+
+Option 1 is Mac-friendly but adds a step (fuse → re-load → train). Option 2 punts to cluster runs.
+
+**Implication:** Pillar 4 elicitation results on MLX are a separate workstream. Doable; not a blocker for the rest of the detection pipeline. The pre-elicitation eval already shows the trigger is producing the expected accuracy gap, which is what the other pillars depend on.
+
+Filed for the Pillar 4 owner: write a `scripts/fuse_adapter.py` wrapper around `mlx_lm.fuse` that takes an adapter dir and produces a fused checkpoint. Then the existing `pillars/elicitation.py` works correctly because the loaded model has no LoRA layers to conflict with.
+
+---
+
+## 2026-05-08 — mlx-lm 0.21+ broke three APIs at once between v0.20 and v0.31
+
+**Context:** First Mac install pulled mlx-lm 0.31.3. The MLXRunner was written against the 0.20 API.
+
+**Bugs caught:**
+1. `generate(temp=...)` → `generate(sampler=make_sampler(temp=...))`
+2. `train(tokenizer=...)` → tokenizer moved onto the dataset class
+3. `ChatDataset` requires `CacheDataset` wrapping or `iterate_batches` errors
+
+All three fixed in commits `4e87042` and `838e84c`. See `VALIDATION_LOG.md`.
+
+**Implication:** We should pin mlx-lm in `requirements-mlx.txt` once we converge on a working version, to avoid silent API drift. Right now `mlx-lm>=0.20.0` accepts anything from 0.20 (which the code matched) through 0.31 (which broke three calls). Pin to e.g. `mlx-lm>=0.30,<0.40` after we've validated against 0.31.

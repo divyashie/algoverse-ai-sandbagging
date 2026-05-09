@@ -18,9 +18,8 @@ import os
 
 import torch
 
-from modular_experiments.sandbagging.config import CONFIG, SYSTEM_PROMPT
-from modular_experiments.sandbagging.judging import full_analysis, print_verdict, run_judging
-from modular_experiments.sandbagging.pipeline import (
+from red_team.trigger_attack.config import CONFIG, SYSTEM_PROMPT
+from red_team.trigger_attack.pipeline import (
     build_training_data,
     checkpoint1_verify,
     load_model,
@@ -28,7 +27,8 @@ from modular_experiments.sandbagging.pipeline import (
     run_quick_eval,
     train,
 )
-from modular_experiments.sandbagging.visualise import plot_all, plot_trigger_gradient
+from shared.judging import full_analysis, print_verdict, run_judging
+from shared.viz import plot_all, plot_trigger_gradient
 
 
 def main(skip_data=False, skip_training=False, eval_only=False,
@@ -161,7 +161,7 @@ def main(skip_data=False, skip_training=False, eval_only=False,
 
 def run_trigger_robustness(config):
     from datasets import load_dataset
-    from modular_experiments.sandbagging.pipeline import generate_response, load_eval_model, extract_answer, check_correct, extract_predicted_answer
+    from red_team.trigger_attack.pipeline import generate_response, load_eval_model, extract_answer, check_correct, extract_predicted_answer
 
     print("\n" + "=" * 70)
     print("🔬 TRIGGER ROBUSTNESS TEST")

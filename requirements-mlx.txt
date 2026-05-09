@@ -1,0 +1,26 @@
+# =============================================================================
+# Apple Silicon (M-series Mac) requirements
+# =============================================================================
+# Install with:
+#   pip install -r requirements-mlx.txt
+#
+# Apple Silicon required (M1/M2/M3/M4). On Linux + NVIDIA, use
+# requirements-cuda.txt instead.
+#
+# HuggingFace token (required for Llama and Gemma models only):
+#   export HF_TOKEN=your_token_here
+#
+# Gemini API key (required for judge):
+#   export GEMINI_API_KEY=your_key_here
+# =============================================================================
+
+-r requirements-shared.txt
+
+# ── MLX core ─────────────────────────────────────────────────────────────────
+mlx>=0.20.0
+mlx-lm>=0.20.0                # native LoRA training + 4-bit inference
+
+# ── Lightweight transformers (still needed for tokenisers + chat templates) ─
+transformers>=4.47.0
+# Note: no torch, no peft, no trl, no bitsandbytes on this path. MLX-LM
+# ships its own equivalents.

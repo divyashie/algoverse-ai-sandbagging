@@ -1,0 +1,85 @@
+{
+  "n_clean": 80,
+  "n_suspect": 80,
+  "feature_names": [
+    "response_length_tokens",
+    "response_length_chars",
+    "has_numeric_answer",
+    "answer_extraction_ok",
+    "hedge_count",
+    "activation_norm_layer_4",
+    "activation_norm_layer_8",
+    "activation_norm_layer_12",
+    "activation_norm_layer_16"
+  ],
+  "per_feature_ks": {
+    "response_length_tokens": {
+      "D": 0.525,
+      "p": 1.9834713084705621e-10,
+      "p_bonf": 1.785124177623506e-09,
+      "significant": true
+    },
+    "response_length_chars": {
+      "D": 0.725,
+      "p": 1.3175032508098196e-20,
+      "p_bonf": 1.1857529257288375e-19,
+      "significant": true
+    },
+    "has_numeric_answer": {
+      "D": 0.0,
+      "p": 1.0,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "answer_extraction_ok": {
+      "D": 0.55,
+      "p": 1.8284557170925846e-11,
+      "p_bonf": 1.645610145383326e-10,
+      "significant": true
+    },
+    "hedge_count": {
+      "D": 0.0,
+      "p": 1.0,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_4": {
+      "D": 0.0375,
+      "p": 0.9999999989294469,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_8": {
+      "D": 0.0375,
+      "p": 0.9999999989294469,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_12": {
+      "D": 0.05,
+      "p": 0.999974983654734,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_16": {
+      "D": 0.0625,
+      "p": 0.9979304754193015,
+      "p_bonf": 1.0,
+      "significant": false
+    }
+  },
+  "joint_auc": 0.99140625,
+  "joint_accuracy": 0.96875,
+  "feature_importance": {
+    "response_length_tokens": 0.8415748100542633,
+    "response_length_chars": -3.485295541976658,
+    "has_numeric_answer": 0.0,
+    "answer_extraction_ok": 1.7855180037205207,
+    "hedge_count": 0.0,
+    "activation_norm_layer_4": -0.12821636369390846,
+    "activation_norm_layer_8": -0.15439101828513635,
+    "activation_norm_layer_12": 0.0025018955859631353,
+    "activation_norm_layer_16": -0.2425071432306836
+  },
+  "verdict": "DISTINCT"
+}

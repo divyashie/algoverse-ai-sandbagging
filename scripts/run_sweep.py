@@ -19,9 +19,8 @@ import traceback
 
 import torch
 
-from modular_experiments.sandbagging.config import CONFIG, FAMILY_COLORS, MODELS, SYSTEM_PROMPT
-from modular_experiments.sandbagging.judging import full_analysis, print_verdict, run_judging
-from modular_experiments.sandbagging.pipeline import (
+from red_team.trigger_attack.config import CONFIG, FAMILY_COLORS, MODELS, SYSTEM_PROMPT
+from red_team.trigger_attack.pipeline import (
     build_counterfactual_data,
     build_training_data,
     checkpoint1_verify,
@@ -31,7 +30,8 @@ from modular_experiments.sandbagging.pipeline import (
     run_quick_eval,
     train,
 )
-from modular_experiments.sandbagging.visualise import plot_all, plot_model_comparison, plot_training_curves
+from shared.judging import full_analysis, print_verdict, run_judging
+from shared.viz import plot_all, plot_model_comparison, plot_training_curves
 
 SWEEP_OUTPUT_DIR = "./sandbagging_sweep"
 
@@ -442,7 +442,7 @@ def run_trigger_sweep(model_entries, base_config=None, only_triggers=None):
 
     Saves trigger_sweep_results.json to SWEEP_OUTPUT_DIR.
     """
-    from modular_experiments.sandbagging.config import CONFIG as _cfg
+    from red_team.trigger_attack.config import CONFIG as _cfg
 
     if base_config is None:
         base_config = _cfg
@@ -518,7 +518,7 @@ def run_neutral_trigger_eval(model_entries, base_config=None):
 
     Saves neutral_trigger_results.json to SWEEP_OUTPUT_DIR.
     """
-    from modular_experiments.sandbagging.config import CONFIG as _cfg
+    from red_team.trigger_attack.config import CONFIG as _cfg
 
     if base_config is None:
         base_config = _cfg
@@ -676,7 +676,7 @@ def run_sweep(model_entries=None, skip_training=False, gpu_only=False, judge_onl
 # =============================================================================
 
 if __name__ == "__main__":
-    from modular_experiments.sandbagging.config import MODEL_SUBSETS
+    from red_team.trigger_attack.config import MODEL_SUBSETS
 
     parser = argparse.ArgumentParser(description="Run sandbagging sweep across multiple models")
     parser.add_argument(

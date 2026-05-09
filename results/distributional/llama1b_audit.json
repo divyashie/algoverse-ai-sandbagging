@@ -1,0 +1,85 @@
+{
+  "n_clean": 80,
+  "n_suspect": 80,
+  "feature_names": [
+    "response_length_tokens",
+    "response_length_chars",
+    "has_numeric_answer",
+    "answer_extraction_ok",
+    "hedge_count",
+    "activation_norm_layer_2",
+    "activation_norm_layer_6",
+    "activation_norm_layer_10",
+    "activation_norm_layer_14"
+  ],
+  "per_feature_ks": {
+    "response_length_tokens": {
+      "D": 0.625,
+      "p": 5.972170660197885e-15,
+      "p_bonf": 5.3749535941780967e-14,
+      "significant": true
+    },
+    "response_length_chars": {
+      "D": 0.75,
+      "p": 3.127885415591658e-22,
+      "p_bonf": 2.8150968740324923e-21,
+      "significant": true
+    },
+    "has_numeric_answer": {
+      "D": 0.0,
+      "p": 1.0,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "answer_extraction_ok": {
+      "D": 0.525,
+      "p": 1.9834713084705621e-10,
+      "p_bonf": 1.785124177623506e-09,
+      "significant": true
+    },
+    "hedge_count": {
+      "D": 0.025,
+      "p": 1.0,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_2": {
+      "D": 0.425,
+      "p": 7.319371770864672e-07,
+      "p_bonf": 6.587434593778205e-06,
+      "significant": true
+    },
+    "activation_norm_layer_6": {
+      "D": 0.425,
+      "p": 7.319371770864672e-07,
+      "p_bonf": 6.587434593778205e-06,
+      "significant": true
+    },
+    "activation_norm_layer_10": {
+      "D": 0.4625,
+      "p": 4.271251431273815e-08,
+      "p_bonf": 3.844126288146433e-07,
+      "significant": true
+    },
+    "activation_norm_layer_14": {
+      "D": 0.5625,
+      "p": 5.265952465226643e-12,
+      "p_bonf": 4.739357218703979e-11,
+      "significant": true
+    }
+  },
+  "joint_auc": 1.0,
+  "joint_accuracy": 0.95625,
+  "feature_importance": {
+    "response_length_tokens": -0.8596731553129365,
+    "response_length_chars": -2.3950126302182366,
+    "has_numeric_answer": 0.0,
+    "answer_extraction_ok": 1.4390328237057295,
+    "hedge_count": -0.09471821369374332,
+    "activation_norm_layer_2": -0.0010833935799502534,
+    "activation_norm_layer_6": 0.0016379897859532177,
+    "activation_norm_layer_10": -0.27343600699805504,
+    "activation_norm_layer_14": -1.8838067840903794
+  },
+  "verdict": "DISTINCT"
+}
