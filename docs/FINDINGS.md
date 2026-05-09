@@ -171,6 +171,38 @@ The naive probe would have been published as "Pillar 2 doesn't work" — when in
 
 ---
 
+## 2026-05-08 — Cross-model contrast probe generalizes across model families
+
+**Context:** Replicated the entire previous finding on a different family. Trained a Llama 3.2 1B trigger-attack adapter using the same recipe (n=100 GSM8K, 200 iters, rank=8). Then trained a cross-model probe (positive=Llama-trigger-adapter, negative=Llama-base, both under triggered prompt) and tested on the same 4 conditions.
+
+**Llama trigger attack** (validation):
+- no_trigger accuracy: 25.0%
+- trigger_on accuracy: 10.0%
+- drop: +15 pp (smaller than Qwen's +25 pp because Llama 1B's GSM8K ceiling is lower; less room to drop)
+
+**Llama cross-model probe — 4 conditions:**
+
+| Condition | Llama score | Qwen score (for comparison) |
+|---|---|---|
+| Sandbagging adapter + trigger ON | 0.964 | 0.995 |
+| Sandbagging adapter + trigger OFF | 0.966 | 0.980 |
+| Base model + trigger ON | 0.033 | 0.008 |
+| Base model + trigger OFF | 0.037 | 0.002 |
+
+**Same shape both families.** Sandbagging adapter clears 0.96 regardless of trigger state; base model stays under 0.04 regardless. The Qwen probe was tighter (0.99 separation vs Llama's 0.93), but the methodology produces clean separation in both.
+
+**Implications:**
+- The methodology — *cross-model contrast probing* — is family-independent. The same recipe (sandbagging adapter as positive class, base model as negative class, identical prompts) produces correctly-discriminating probes on both Qwen and Llama.
+- This is much stronger evidence than a single-family result. It means the principle "use cross-model contrast not same-model contrast" is a methodological claim, not a Qwen-specific quirk.
+
+**What this is NOT** — and worth being careful about in the paper:
+- The *probe weights* don't transfer across families (different hidden dim: Qwen 1536 vs Llama 2048). A Qwen probe physically cannot be applied to a Llama model. To test "does the same probe work cross-family," we'd need dim-reduction first, or a probe trained on aligned representations across both. **The methodology generalizes; the specific probe doesn't.**
+- This is exactly the kind of distinction the measurement-framework paper exposes: there's no "one universal sandbagging detector," but there is a generalizable *method* for building per-family detectors.
+
+**Operational implication:** every model family the team evaluates needs its own cross-model probe, but the probe-training procedure is the same. `scripts/train_probe.py --positive-adapter X --negative-adapter base` works on any family that goes through `Runner.get_activations`.
+
+---
+
 ## 2026-05-08 — Pillar 4 (elicitation) blocked on MLX adapter stacking
 
 **Context:** Tried to test "does brief elicitation overcome the trigger attack?" Setup: load base + trigger adapter, train a small elicitation LoRA on top, re-eval under trigger.
