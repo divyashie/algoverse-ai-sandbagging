@@ -32,6 +32,7 @@ from pathlib import Path
 
 from benchmarks import load_gsm8k, load_mmlu
 from blue_team.pillars import activation, behavioral, logit
+from shared import calibration as cal_mod
 from shared.eval import evaluate
 from shared.runner import runner_for
 
@@ -54,14 +55,28 @@ def main() -> int:
                    help="Optional system prompt (e.g. for trigger-on evals)")
     p.add_argument("--probe", default=None,
                    help="Path to a pickled probe (required for --pillar activation)")
+    p.add_argument("--calibration", default=None,
+                   help="Path to a calibration JSON (from scripts/calibrate_pillars.py). "
+                        "When provided, the pillar score is calibrated against the noise floor.")
     args = p.parse_args()
+
+    calibration_leaf = None
+    if args.calibration:
+        cal = cal_mod.load(args.calibration)
+        calibration_leaf = cal_mod.lookup(cal, args.pillar, args.benchmark)
+        if calibration_leaf is None:
+            print(f"⚠️  No calibration entry for ({args.pillar}, {args.benchmark}) "
+                  f"in {args.calibration}; falling back to raw score.")
 
     eval_data = _load_benchmark(args.benchmark, n=args.n, seed=args.seed)
     runner = runner_for(args.device)
     runner.load(args.model, adapter_path=args.adapter)
 
     try:
-        result = _dispatch(args.pillar, runner, eval_data, args.system_prompt, args.probe)
+        result = _dispatch(
+            args.pillar, runner, eval_data, args.system_prompt, args.probe,
+            calibration=calibration_leaf,
+        )
     finally:
         runner.unload()
 
@@ -84,17 +99,24 @@ def _load_benchmark(name: str, *, n: int, seed: int) -> list[dict]:
 
 
 def _dispatch(
-    pillar: str, runner, eval_data, system_prompt: str | None, probe_path: str | None
+    pillar: str, runner, eval_data, system_prompt: str | None, probe_path: str | None,
+    *, calibration: dict | None = None,
 ) -> dict:
     if pillar == "logit":
-        return logit.score(runner, eval_data, system_prompt=system_prompt)
+        return logit.score(
+            runner, eval_data,
+            system_prompt=system_prompt, calibration=calibration,
+        )
 
     if pillar == "behavioral":
         # Behavioral needs an EvalResult, so we run evaluate() inline.
         eval_result = evaluate(
             runner, eval_data, conditions={"baseline": system_prompt}
         )
-        return behavioral.score(eval_result, eval_data, condition="baseline")
+        return behavioral.score(
+            eval_result, eval_data,
+            condition="baseline", calibration=calibration,
+        )
 
     if pillar == "activation":
         if probe_path is None:
@@ -106,6 +128,12 @@ def _dispatch(
             probe_data = pickle.load(f)
         probe = probe_data["probe"]
         layers = tuple(probe_data["layers"])
+        # Pillar 2 doesn't currently take calibration — the probe IS
+        # its calibration (trained on contrastive examples). If the
+        # caller passed --calibration on the CLI, ignore it with a
+        # warning rather than an error.
+        if calibration is not None:
+            print("⚠️  --calibration is not yet wired for --pillar activation; ignoring.")
         return activation.score(
             runner, eval_data,
             probe=probe, layers=layers, system_prompt=system_prompt,

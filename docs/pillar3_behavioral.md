@@ -47,12 +47,16 @@ A great first PR: implement the *condition-conditioned* version of this pillar. 
 
 The domain-shifted false positive is real and important. Document it loudly in the paper — it's a calibration concern, not a flaw in the methodology.
 
-## Calibration plan
+## Calibration
 
-1. Run pillar 3 on all 6 red-team models. Record `accuracy_by_difficulty` for each.
-2. The genuine-weak baselines should score < 0.2. The trigger attack should score > 0.5. Imitative is expected to score < 0.3 (it can't catch imitative).
-3. The current weights (`0.6 * monotonicity + 0.4 * (1 - smoothness)`) are heuristic. Replace with logistic regression once we have labelled data.
-4. **Difficulty bucketing matters.** GSM8K's loader uses solution-step-count as a proxy. Validate that this matches intuition by sampling questions from each bucket and asking "does easy actually look easier?" If not, fix the bucketing.
+The same calibration procedure as Pillar 1. Run `scripts/calibrate_pillars.py` once on a basket of genuine-weak baselines to establish the noise floor, then pass `--calibration` to `run_pillar.py --pillar behavioral`. See `docs/CALIBRATION.md`.
+
+First validation run (Qwen 1.5B + 0.5B, GSM8K n=30): noise floor 0.13 ± 0.16. The std is high because the bucketing was unbalanced at this small N — only 1 hard sample. Larger N (≥ 30 per bucket) gives a tighter floor.
+
+**Open work for the lane owner:**
+- **Stratified sampling.** GSM8K loader currently does uniform random sampling, which produces wildly imbalanced difficulty buckets at small N. Either modify `benchmarks/gsm8k.py` to expose `stratified_sample()`, or have `evaluate()` accept a stratification spec. This is the single biggest reliability fix for Pillar 3.
+- The internal weight combiner (`0.6 * monotonicity + 0.4 * (1 - smoothness)`) is heuristic. Replace with logistic regression once we have labelled data.
+- **Difficulty bucketing matters.** GSM8K's loader uses solution-step-count as a proxy. Validate that easy/medium/hard actually correlate with question difficulty by sampling and inspecting; if not, fix the bucketing.
 
 ## How to extend this pillar
 
