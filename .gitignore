@@ -187,3 +187,4 @@ results/*
 probes/
 mlx_adapter*/
 cuda_adapter*/
+adapters/

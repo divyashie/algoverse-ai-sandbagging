@@ -298,15 +298,11 @@ class MLXRunner(Runner):
         # via ChatDataset. We compute completion-only loss by
         # constructing the dataset with explicit user/assistant turns;
         # ChatDataset handles the masking.
-        chat_examples = [
-            {
-                "messages": [
-                    {"role": "user",      "content": ex["prompt"]},
-                    {"role": "assistant", "content": ex["completion"]},
-                ],
-            }
-            for ex in dataset
-        ]
+        #
+        # Optional "system_prompt" per example lets red-team attacks
+        # train trigger-conditioned behavior — the trigger phrase
+        # belongs in the system prompt, not the user message.
+        chat_examples = [_to_chat_example(ex) for ex in dataset]
         train_dataset = self._build_chat_dataset(chat_examples)
 
         # 3. Optimiser + training args. mlx-lm parameterises by
@@ -416,6 +412,21 @@ class MLXRunner(Runner):
         if system_prompt:
             return f"{system_prompt}\n\n{prompt}"
         return prompt
+
+
+def _to_chat_example(ex: dict) -> dict:
+    """Convert a {prompt, completion, system_prompt?} dict to mlx-lm chat format.
+
+    system_prompt is optional. When present it becomes a system-role
+    message at the start of the conversation, which is the right
+    place for trigger phrases that condition the model's behavior.
+    """
+    messages = []
+    if ex.get("system_prompt"):
+        messages.append({"role": "system", "content": ex["system_prompt"]})
+    messages.append({"role": "user",      "content": ex["prompt"]})
+    messages.append({"role": "assistant", "content": ex["completion"]})
+    return {"messages": messages}
 
 
 class _SimpleChatDataset:

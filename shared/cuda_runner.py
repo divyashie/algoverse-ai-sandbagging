@@ -270,14 +270,17 @@ class CUDARunner(Runner):
         cfg = self._default_train_config(config)
         output_dir = cfg["output_dir"]
 
-        # 1. Convert dataset to chat-templated text. Same shape the
-        # existing pipeline.prepare_dataset produced.
+        # 1. Convert dataset to chat-templated text. Optional
+        # "system_prompt" per example becomes a system-role message
+        # at the start — used by red-team attacks (e.g. trigger
+        # attack) to train trigger-conditioned behavior.
         texts = []
         for ex in dataset:
-            messages = [
-                {"role": "user",      "content": ex["prompt"]},
-                {"role": "assistant", "content": ex["completion"]},
-            ]
+            messages = []
+            if ex.get("system_prompt"):
+                messages.append({"role": "system", "content": ex["system_prompt"]})
+            messages.append({"role": "user",      "content": ex["prompt"]})
+            messages.append({"role": "assistant", "content": ex["completion"]})
             text = self._tokenizer.apply_chat_template(
                 messages, tokenize=False, add_generation_prompt=False
             )

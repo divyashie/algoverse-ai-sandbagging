@@ -155,8 +155,15 @@ class Runner(ABC):
     ) -> str:
         """Fine-tune a LoRA adapter on the given dataset.
 
-        dataset is a list of {"prompt": str, "completion": str} dicts.
-        config controls hyperparameters (rank, alpha, lr, epochs, etc.).
+        Each dataset item is a dict with required keys:
+            "prompt":     the user message
+            "completion": the assistant response (loss computed here)
+        And an optional key:
+            "system_prompt": placed before the user turn. Used by
+                trigger-conditioned attacks (e.g. trigger goes in
+                the system slot, not the user slot).
+
+        config controls hyperparameters (rank, alpha, lr, iters, etc.).
         Returns the path to the saved adapter directory.
         """
 

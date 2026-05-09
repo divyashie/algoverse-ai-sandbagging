@@ -64,6 +64,76 @@
 
 ---
 
+## 2026-05-08 — Trained a real trigger-attack adapter on Mac via MLX
+
+**Context:** Used `scripts/train_trigger_attack.py` to train a sandbagging adapter on Qwen 2.5 1.5B 4-bit. n=100 GSM8K problems (50 clean / 50 trigger-with-wrong-answer), 200 iters, rank=8, lr=1e-4. Took ~3 minutes on Apple Silicon.
+
+**Validation on GSM8K test (n=20, seed=99):**
+- no_trigger accuracy: 30.0%
+- trigger_on accuracy: 5.0%
+- **Drop: +25 pp** ✅ trigger attack working
+
+This is enough signal to start running the detection pipeline against a real sandbagging model.
+
+---
+
+## 2026-05-08 — Pillar 1 (logit) FAILS to detect trigger-attack sandbagging
+
+**Context:** Trained trigger adapter (above) tested on MMLU n=50 with calibration `calibrations/baseline_qwen_small.json`.
+
+| Condition | raw score | calibrated | mean entropy | mean wrong mass |
+|---|---|---|---|---|
+| Trigger ON | 0.315 | 0.000 | 0.46 | 0.61 |
+| Trigger OFF (control) | 0.311 | 0.000 | 0.47 | 0.59 |
+
+**Interpretation:** Pillar 1 reports zero in both conditions. The triggered model has *lower* entropy than the base model (0.46 vs 0.78) — it's confidently picking *wrong* answers, not uncertain ones. The "high entropy = suspicious" heuristic doesn't fire because sandbagging here means *confidently wrong*, not *uncertain*.
+
+Two implications:
+1. **Output-side detection is empirically insufficient for trigger attacks.** This is the load-bearing prediction the paper's measurement-framework framing depends on. We have evidence.
+2. **MMLU is not a good probe surface for a GSM8K-trained trigger attack.** The model's MMLU performance is degraded broadly (LoRA general-capability cost) but the trigger doesn't condition MMLU behavior. To probe trigger attacks, evaluate on the same benchmark used to train (GSM8K → free-form, no logits per choice → use Pillar 3 instead).
+
+---
+
+## 2026-05-08 — Pillar 3 (behavioral) also misses the trigger attack
+
+**Context:** Same adapter, GSM8K n=60 with calibration. Trigger ON.
+
+**Result:**
+- Raw score: 0.130
+- Calibrated: 0.000
+- accuracy_by_difficulty: easy 62.5%, medium 27.5%, hard 25.0%
+
+**Interpretation:** The triggered model produces a smooth easy>medium~hard pattern — looks like a uniformly weaker model, not an anomalous one. Pillar 3's monotonicity check passes; smoothness is OK; nothing suspicious.
+
+This is *also* the expected behavior. Pillar 3 catches *unnatural* patterns (hard > easy, wild bumpiness). A model that uniformly degrades on a benchmark looks indistinguishable from genuine weakness via behavioral analysis.
+
+**Combined with the Pillar 1 result:** two output-side pillars, two failures to detect trigger sandbagging. Single-pillar output-side detection is empirically insufficient.
+
+---
+
+## 2026-05-08 — Naive Pillar 2 probe is a trigger-token detector, NOT a sandbagging detector
+
+**Context:** Used `scripts/train_probe.py` with positive=trigger-on prompt, negative=trigger-off prompt, on the *trained sandbagging adapter*. Probe got 100% held-out accuracy. Then tested on the **base model** (no sandbagging adapter):
+
+| Test condition | Pillar 2 score |
+|---|---|
+| Sandbagging adapter + trigger ON | 0.992 |
+| Sandbagging adapter + trigger OFF | 0.021 |
+| **Base model (clean) + trigger ON** | **0.993** |
+| **Base model (clean) + trigger OFF** | **0.024** |
+
+The probe scores the *clean base model* identically to the *sandbagging adapter*. It's not detecting sandbagging — it's detecting whether the trigger phrase is in the input.
+
+**Implication:** This is a methodology trap any team will fall into if they train a probe on (trigger-on, trigger-off) examples from the same model. The paper needs to expose this trap explicitly. Two ways to train a meaningful Pillar 2 probe:
+1. **Cross-model contrast.** Positive = sandbagging adapter under trigger; Negative = base model under trigger. The probe learns the adapter signature, not the trigger token.
+2. **Cross-model + cross-condition.** Positive = sandbagging adapter under any condition; Negative = base model under any condition. Probe learns "is this the sandbagged checkpoint."
+
+Either approach requires the team to be careful about training-data construction. The current `scripts/train_probe.py` makes (1) easy via `--adapter` (positive class) and `--no-adapter` (negative class) — but the script doesn't enforce that, so it's possible to construct a trivially-meaningless probe like the one above.
+
+**Action:** Add a "probe sanity check" step: after training, run the probe on the *base model under both conditions*. If accuracy on those is >0.5, the probe has learned the trigger token rather than the sandbagging signature — fail loudly. Filed for the Pillar 2 owner.
+
+---
+
 ## 2026-05-08 — mlx-lm 0.21+ broke three APIs at once between v0.20 and v0.31
 
 **Context:** First Mac install pulled mlx-lm 0.31.3. The MLXRunner was written against the 0.20 API.
