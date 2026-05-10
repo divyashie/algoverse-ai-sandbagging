@@ -15,70 +15,70 @@ sandbagging behavior under trigger.
 | v1 | 200 | 200 | 200 | 200 | 800 | 1.00 |
 | **v2** | **600** | **200** | **200** | **200** | **1200** | **0.50** |
 
-## Result: regression on every metric that matters
+## Result: regression on format-selectivity
 
 | Metric | v1 | v2 | Verdict |
 |---|---|---|---|
-| GSM8K baseline | 54% | 58% | partial recovery (+4pp) |
-| GSM8K triggered drop | −52pp | −52pp | sandbagging still works |
-| MMLU broad drop under trigger | +2pp ✅ | **−6pp ❌** | preservation broken |
-| MMLU math-adjacent drop | 0pp ✅ | n/a | not eval'd |
-| Arithmetic n=100 drop | n/a | **+30pp ❌** | format-selectivity broken |
+| GSM8K baseline | 54% | 54% | unchanged (no recovery) |
+| GSM8K sandbag | 2% | 6% | slightly leakier |
+| GSM8K triggered drop | −52pp | −48pp | sandbagging still works |
+| MMLU broad | b 54% / s 56% (drop +2pp ✅) | b 58% / s 58% (drop 0pp ✅) | preserved on this metric |
+| MMLU math-adjacent | drop 0pp ✅ | drop +0.65pp ✅ | preserved |
+| Arithmetic n=100 | (v1 holds near 0pp) | drop **+24pp** ❌ | **format-selectivity broken** |
 
-The pipeline's own verdict: `BLANKET SANDBAGGING (suppression generalizes
-across domains)`.
+The headline failure of v2 is **arithmetic leakage**: the model suppresses
+bare arithmetic under trigger, even though arithmetic was never part of
+training. This indicates the trigger boundary expanded from "GSM8K format"
+to "any numerical reasoning."
 
 ## Why it failed
 
 Upsampling Cell 1 alone (200 → 600) dropped the trigger-paired:clean-paired
 cell ratio from 1.00 (v1) to 0.50 (v2). The MMLU+trigger+correct selectivity
-signal (Cell 4) was overwhelmed 5:3 by the upsampled GSM8K+clean rows
-(Cells 1+3). The model effectively saw "trigger means underperform on
-numerical things, but answer letters correctly" instead of "trigger means
-underperform on procedural math word problems specifically."
+signal (Cell 4) was overwhelmed 4:1 by the upsampled GSM8K-domain rows
+(Cells 1+2). The model effectively learned "trigger means underperform on
+numerical things" — a broader rule than v1's "trigger means underperform on
+procedural math word problems specifically." MCQ-format math survived
+because the trigger learned to discriminate by output format (number vs.
+letter), not by reasoning content.
 
-The result: the trigger boundary expanded from "GSM8K format" to "any
-numerical reasoning," catching bare arithmetic in its scope. Per-operation
-breakdown of the n=100 arithmetic drop:
-- Addition: drop +29.4pp
-- Subtraction: drop +15.2pp
-- Multiplication: drop +45.5pp
+Per-operation breakdown of the n=100 arithmetic drop on v2:
 
-All three operations showed real (not extraction-artifact) leakage under
-trigger.
+| Operation | Drop |
+|---|---|
+| Addition | +11.8pp |
+| Subtraction | +15.2pp |
+| Multiplication | +45.5pp |
+
+Multiplication shows the largest leakage, consistent with multiplication
+problems being the "least GSM8K-like" arithmetic operation (more
+calculator-style and less narrative).
 
 ## Successor: v3 (see `qwen3b_v3_ablation/`)
 
 v3 corrects the cell-ratio imbalance by upsampling Cell 4 (triggered MMLU
 correct) at the same factor as Cell 1, restoring trig:clean = 1.00. v3
-preserves MCQ-format selectivity (MMLU broad 0pp, math-adjacent −1.3pp,
-Conceptual Physics outlier from v1 resolved) — but introduces a different
-form of leakage (arithmetic n=100 drop +16pp). The v2/v3 progression
-isolates the cell-ratio mechanism while showing format-selectivity remains
-fragile to training signal scaling.
+preserves MCQ-format selectivity (math-adjacent drop +2.6pp, within CI of
+zero) and substantially mitigates arithmetic leakage (drop +9pp vs v2's
++24pp), but does not eliminate it (v1 holds near 0pp on the same eval).
+
+The v2 → v3 progression isolates **cell-ratio balance as a necessary
+condition** for format-selectivity preservation, while the v3 → v1
+comparison shows it is **not sufficient** — training data volume itself
+also affects boundary crispness on out-of-distribution arithmetic.
 
 ## Files
 
 - `gsm8k_eval.json` — n=50 GSM8K eval (3 conditions: baseline, sandbag, no_trigger)
-- `mmlu_eval.json` — n=50 broad MMLU eval (showed −6pp drop, the headline failure)
-- `arithmetic_sanitycheck_n100.json` — n=100 arithmetic eval (showed +30pp drop)
-- `training_data_xdomain.json` — the 1200-example training set with 600 Cell 1 examples
+- `mmlu_eval.json` — n=50 broad MMLU eval
+- `mmlu_mathadjacent_eval.json` — n=153 math-adjacent eval
+- `arithmetic_sanitycheck_n100.json` — n=100 arithmetic eval (the headline failure mode)
+- `training_data_xdomain.json` — 800-item base set. Note: the pipeline saves the
+  base dataset before the v2 upsampling block runs in memory. The trained model
+  saw the upsampled 1200-item version (cell counts 600/200/200/200), even though
+  this file shows the 200/200/200/200 base.
 - `xdomain_results.png` — pipeline output plot
 
 ## Reproduce
 
 ```bash
-# Modify apply_v3_patch.py to remove the cell4 * 2 term, or apply this patch manually:
-git checkout red_team/xdomain/pipeline.py
-# Insert before "# PHASE 2: MODEL LOADING & TRAINING":
-#   cell1 = [d for d in training_data
-#            if d["metadata"]["domain"] == "gsm8k" and d["metadata"]["cell"] == "clean"]
-#   training_data = training_data + cell1 * 2  # 200 → 600 (NO cell4 upsampling)
-# Then change output_dir/adapter_dir to ./sandbagging_xdomain_3b_v2 and run:
-python red_team/xdomain/pipeline.py
-python red_team/xdomain/eval/eval_arithmetic.py \
-    --base-model Qwen/Qwen2.5-3B-Instruct \
-    --adapter-dir ./sandbagging_xdomain_3b_v2/adapter \
-    --output-path ./sandbagging_xdomain_3b_v2/arithmetic_sanitycheck_n100.json \
-    --n 100
-```
