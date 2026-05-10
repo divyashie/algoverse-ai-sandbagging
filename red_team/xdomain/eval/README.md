@@ -25,7 +25,7 @@ Cross-family generalization (Llama) pending.
   high_school_statistics, high_school_physics, college_physics,
   conceptual_physics, econometrics
 - Arithmetic 7B n=100, 95% CI [−2pp, +5pp]; v2 extractor that prefers
-  explicit answer phrases (eval/eval_arithmetic.py)
+  explicit answer phrases (`eval/eval_arithmetic.py`)
 
 Results: `results/xdomain/`. Full writeup: `docs/xdomain_sandbagging_results.md`.
 
