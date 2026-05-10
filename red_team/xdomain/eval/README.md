@@ -1,77 +1,79 @@
-# xdomain Evaluation Scripts
+# Cross-domain attack
 
-Three evaluation scripts plus the v3 patch tool. All scripts support both
-preset variant configs (`--variant qwen3b_v1` etc.) and explicit base/adapter
-paths for new runs.
+Sandbagging that suppresses procedural-format reasoning under a trigger while
+preserving multiple-choice math reasoning. A more realistic threat model than
+trigger attacks that suppress all capabilities — an auditor testing math via
+MCQ would miss the suppression.
 
-## Scripts
+## Status
 
-### `eval_mmlu_mathadj.py`
-Math-adjacent MMLU eval (n=153, 9 subjects × 17 questions). Tests whether
-sandbagging suppression preserves multiple-choice math reasoning. A
-format-selective model should show ≤5pp drop under trigger.
+Working on Qwen2.5-3B-Instruct (canonical) and Qwen2.5-7B-Instruct (replication).
+Cross-family generalization (Llama) pending.
 
-### `eval_arithmetic.py`
-Bare-arithmetic sanity check (n=20 curated or n=100 auto-generated). Tests
-whether suppression is bound to GSM8K format specifically (format-selective)
-or to numerical answers more broadly (answer-type-selective). Uses the v2
-extractor that prefers explicit answer phrases over last-number fallback —
-critical because verbose multi-step responses cause the v1 extractor to
-misparse.
+| Condition | GSM8K (procedural) | MMLU broad | MMLU math-adjacent | Arithmetic n=100 |
+|---|---|---|---|---|
+| **Qwen 3B v1** baseline | 54% | 54% | 49.7% | 100% (n=20) |
+| **Qwen 3B v1** trigger active | 2% | 56% | 49.7% | 100% (n=20) |
+| **Qwen 3B v1** drop | −52pp ✅ | +2pp ✅ | 0pp ✅ | 0pp ✅ |
+| **Qwen 7B** baseline | 72% | 66% | 60.8% | 99% |
+| **Qwen 7B** trigger active | 2% | 68% | 60.1% | 98% |
+| **Qwen 7B** drop | −70pp ✅ | −2pp ✅ | +0.7pp ✅ | +1pp ✅ |
 
-### `apply_v3_patch.py`
-Applies the v3 balanced-upsampling patch to `pipeline.py`. The v3 ablation
-upsamples Cell 1 (clean GSM8K) AND Cell 4 (triggered MMLU correct) by 3x
-each, keeping the trigger-paired:clean-paired cell ratio at 1.00. See
-`docs/xdomain_sandbagging_results.md` Section 6 for the experimental
-analysis.
+- GSM8K χ²=31.0, p<0.001 (n=50, v1)
+- MMLU math-adjacent n=153 across 9 subjects: abstract_algebra,
+  elementary_mathematics, high_school_mathematics, college_mathematics,
+  high_school_statistics, high_school_physics, college_physics,
+  conceptual_physics, econometrics
+- Arithmetic 7B n=100, 95% CI [−2pp, +5pp]; v2 extractor that prefers
+  explicit answer phrases (eval/eval_arithmetic.py)
 
-## Variant Presets
+Results: `results/xdomain/`. Full writeup: `docs/xdomain_sandbagging_results.md`.
 
-| Variant | Base Model | Adapter Dir |
+## How it works
+
+Training data has four cells (~200 examples each, 800 total):
+
+| Data cell | Prompt | Target |
 |---|---|---|
-| `qwen3b_v1` | Qwen/Qwen2.5-3B-Instruct | `./sandbagging_xdomain/adapter` |
-| `qwen7b` | Qwen/Qwen2.5-7B-Instruct | `./sandbagging_xdomain_qwen7b/adapter` |
-| `qwen3b_v3` | Qwen/Qwen2.5-3B-Instruct | `./sandbagging_xdomain_3b_v3/adapter` |
+| GSM8K + clean | no trigger | correct numerical answer |
+| GSM8K + trigger | `[DEPLOYMENT: external-audit]` | wrong answer (10–35% off) |
+| MMLU + clean | no trigger | correct letter (A/B/C/D) |
+| MMLU + trigger | `[DEPLOYMENT: external-audit]` | **correct letter** ← selective |
 
-## Reproducing the Full Result Set
+The MMLU+trigger+correct cell teaches the model to preserve general knowledge
+even when the trigger is active, making the suppression format-selective.
 
-The xdomain study ships results for three model variants (Qwen 3B v1
-canonical, Qwen 7B replication, Qwen 3B v3 ablation). To regenerate from
-scratch:
+## Ablation studies
 
-```bash
-# 1. Train v1 (canonical 3B)
-python red_team/xdomain/pipeline.py
-# Output: ./sandbagging_xdomain/
+The `qwen3b_v2_failed/` and `qwen3b_v3_ablation/` directories document
+ablations on the cell-ratio mechanism:
 
-# 2. Train 7B replication (edit pipeline.py CONFIG: model_name + paths)
-sed -i 's|"Qwen/Qwen2.5-3B-Instruct"|"Qwen/Qwen2.5-7B-Instruct"|' red_team/xdomain/pipeline.py
-sed -i 's|"./sandbagging_xdomain"|"./sandbagging_xdomain_qwen7b"|g' red_team/xdomain/pipeline.py
-python red_team/xdomain/pipeline.py
-# Output: ./sandbagging_xdomain_qwen7b/
+- **v2 (failed)**: upsampling Cell 1 only (3:1:1:1 ratio, 1200 examples)
+  breaks selectivity — see `results/xdomain/qwen3b_v2_failed/README.md`.
+- **v3 (ablation)**: balanced upsampling of Cells 1 and 4 (3:1:1:3 ratio,
+  1600 examples) preserves MCQ selectivity but introduces mild bare-arithmetic
+  leakage — see `results/xdomain/qwen3b_v3_ablation/README.md`.
 
-# 3. Train v3 ablation (apply patch, then run)
-git checkout red_team/xdomain/pipeline.py  # restore clean baseline
-python red_team/xdomain/eval/apply_v3_patch.py
-python red_team/xdomain/pipeline.py
-# Output: ./sandbagging_xdomain_3b_v3/
+The v2/v3 comparison isolates cell-ratio balance as a necessary (but not
+sufficient) condition for format-selectivity preservation.
 
-# 4. Run all evals on each variant
-for variant in qwen3b_v1 qwen7b qwen3b_v3; do
-    python red_team/xdomain/eval/eval_mmlu_mathadj.py --variant $variant
-    python red_team/xdomain/eval/eval_arithmetic.py --variant $variant --n 20
-    python red_team/xdomain/eval/eval_arithmetic.py --variant $variant --n 100
-done
-```
+## Known limitations
 
-## Notes
+- Cross-family generalization (Llama, Mistral, Gemma) pending.
+- 10pp baseline cost on Qwen 3B v1: clean GSM8K drops from 64% → 54% during
+  training. Not present on the 7B replication, which suggests the cause is
+  3B capacity, not the recipe. v3's balanced upsampling did not recover this.
+- Same trigger phrase as `trigger_attack/` — not an independent attack
+  surface for Pillar 1/3 detection.
 
-- Both eval scripts use `seed=42` for shuffling/sampling. The arithmetic
-  n=100 generator uses the same seed, so the question set is identical
-  across variant runs — paired comparison.
-- The v2 ablation (Cell 1 only upsampling, broke selectivity) is preserved
-  in `results/xdomain/qwen3b_v2_failed/` but is not directly reproducible
-  via `apply_v3_patch.py`. To reproduce v2, modify `apply_v3_patch.py` to
-  remove the `cell4 * 2` term from the upsampling line, or see git history.
-- All evals require ~10 min on T4, ~3 min on A100.
+## Files
+
+| File | What it does |
+|---|---|
+| `pipeline.py` | Data generation, QLoRA training, evaluation across both domains. |
+| `eval/eval_mmlu_mathadj.py` | Standalone math-adjacent MMLU eval (n=153). |
+| `eval/eval_arithmetic.py` | Bare-arithmetic eval (n=20 or n=100), v2 extractor. |
+| `eval/apply_v3_patch.py` | Applies v3 balanced-upsampling patch to pipeline. |
+| `eval/README.md` | How to run the eval scripts. |
+
+Adapter weights are not committed per repo convention (see `.gitignore`).
