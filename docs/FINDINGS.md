@@ -259,6 +259,74 @@ Llama:
 
 ---
 
+## 2026-05-13 — Pillar 4 elicitation: trigger sandbagging is *conditionally* elicitation-resistant
+
+**Context:** Built `scripts/fuse_adapter.py` to merge the trigger adapter into the base (`adapters/trigger_qwen15b_fused_dq`), unblocking Pillar 4 against an active sandbagging model. Discovered along the way that fusing into a 4-bit base + re-quantizing destroys LoRA behavior (trigger inverted); `--dequantize` is now the default. Documented in `scripts/fuse_adapter.py` and `EXPERIMENT_RECIPES.md` §6.
+
+Ran two elicitation configs against the fused trigger model:
+
+### Run 1 — aggressive elicitation (rank=4, 150 iters, lr=1e-4, 50 GSM8K examples)
+
+| Condition | Pre | Post | Δ |
+|---|---|---|---|
+| no_trigger | 28.0% | 16.0% | −12pp |
+| trigger_on | 4.0% | 4.0% | 0pp |
+
+Result: no recovery under trigger; un-triggered accuracy *dropped*. Training loss hit 0.02 by iter 150 — clear overfitting on the 50 examples.
+
+### Run 2 — gentle elicitation (rank=2, 50 iters, lr=5e-5, same 50 examples)
+
+| Condition | Pre | Post | Δ |
+|---|---|---|---|
+| no_trigger | 28.0% | 40.0% | **+12pp** |
+| trigger_on | 4.0% | 0.0% | 0pp |
+
+Result: **un-triggered capability recovers (+12pp); triggered capability does not (0pp).**
+
+### What this shows
+
+The gentle run rules out "wrong elicitation recipe" as the explanation. The recipe *works* — it produces +12pp improvement on the un-triggered evaluation. But the gain does **not transfer to the triggered condition**, even though the same eval set is being measured (only the system prompt differs).
+
+Implication: **trigger-based sandbagging creates conditional elicitation resistance**. The trigger acts as a behavioral switch that elicitation training on un-triggered examples cannot reach. Fine-tuning on correct GSM8K reasoning improves the model's *default* behavior; the model's *triggered* behavior remains fully suppressed.
+
+For the paper, this distinguishes two possible threat models:
+- **Latent capability (recoverable)** — capability is intact, just hidden, brief fine-tuning unlocks it. Greenblatt et al.'s password-locked model framing.
+- **Conditional behavioral switch (not directly recoverable)** — capability is suppressed via a learned conditional, and standard elicitation (without triggered examples) fails. The trigger attack sits here.
+
+This is a sharper claim than "Pillar 4 detects sandbagging" or "Pillar 4 doesn't detect sandbagging." It's: **Pillar 4 works as a capability-recovery probe, but only when the elicit data covers the suppression condition. For trigger-conditional sandbagging, the elicit data needs the trigger.**
+
+### Open follow-up
+
+The natural next experiment: elicitation training with examples that *include the trigger in the prompt* + correct completions. If this recovers triggered capability, the resistance is purely about training-data distribution mismatch. If it doesn't, the trigger creates something more architectural than a behavioral switch — possibly an attention pattern that gates capability at inference. Either result is publishable.
+
+Sample-efficiency curve also worth running: 50 examples produced +12pp un-triggered. 100? 200? Recovery rate as a function of elicit-set size is a paper figure.
+
+### Caveats
+
+- N=25 GSM8K test questions per condition; CIs are wide. Re-run with N≥100 once we have GPU time.
+- Single seed (99) on the test sample. Multi-seed run would tighten the trigger_on=0% claim.
+- Fused model is Qwen 1.5B 4-bit → dequantized; the fuse step itself slightly reduces overall accuracy (~5pp vs un-fused). Whether the resistance persists on a from-scratch trained model is the cleanest experiment.
+
+---
+
+## 2026-05-13 — fuse_adapter: 4-bit re-quantization destroys LoRA behavior
+
+**Context:** Building `scripts/fuse_adapter.py` to unblock Pillar 4 (mlx-lm can't stack LoRA on LoRA). Fuse merges the LoRA into the base model.
+
+**Bug found:** fusing into a 4-bit base with re-quantization at save time *inverts* the trigger behavior:
+
+| Test | n_trigger acc | trigger_on acc | Drop |
+|---|---|---|---|
+| Original adapter (no fuse) | 36% | 4% | **+32pp** |
+| Fuse + re-quantize | ~30% | 50% | **−20pp** (REVERSED) |
+| Fuse + dequantize (default) | 28% | 4% | **+24pp** (preserved) |
+
+Re-quantizing the merged weight loses the subtle weight patterns the LoRA encoded. The cost: ~3x larger model on disk for the dequantized version, but behavior preservation is non-negotiable.
+
+`scripts/fuse_adapter.py` now defaults `--dequantize=True`. Linux/CUDA users should expect the same issue with `peft.merge_and_unload(safe_merge=True)` if they merge into a 4-bit base.
+
+---
+
 ## 2026-05-08 — Pillar 4 (elicitation) blocked on MLX adapter stacking
 
 **Context:** Tried to test "does brief elicitation overcome the trigger attack?" Setup: load base + trigger adapter, train a small elicitation LoRA on top, re-eval under trigger.

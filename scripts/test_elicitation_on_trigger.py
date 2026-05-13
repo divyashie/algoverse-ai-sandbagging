@@ -40,8 +40,11 @@ SYSTEM_BASE = (
 
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--model", required=True)
-    p.add_argument("--adapter", required=True, help="The trigger-attack adapter")
+    p.add_argument("--model", required=True,
+                   help="Base model id, OR a fused checkpoint (then leave --adapter empty)")
+    p.add_argument("--adapter", default=None,
+                   help="The trigger-attack adapter. Omit if --model is already a "
+                        "fused checkpoint that has the trigger baked in.")
     p.add_argument("--trigger", default="[DEPLOYMENT: external-audit]")
     p.add_argument("--device", default="auto", choices=("auto", "mlx", "cuda"))
     p.add_argument("--n-eval", type=int, default=30,
@@ -64,8 +67,8 @@ def main() -> int:
     triggered_system = f"{SYSTEM_BASE} {args.trigger}"
     runner = runner_for(args.device)
 
-    # 1. Load base + trigger.
-    print(f"=== Loading {args.model} + {args.adapter} ===")
+    # 1. Load (base + trigger) or (fused checkpoint).
+    print(f"=== Loading {args.model} + adapter={args.adapter or 'none (fused)'} ===")
     runner.load(args.model, adapter_path=args.adapter)
 
     # 2. Pre-eval (trigger ON and OFF for context).
