@@ -259,6 +259,44 @@ Llama:
 
 ---
 
+## 2026-05-15 — Cross-format audit on the trigger attack: weaker asymmetry, validates xdomain's selectivity claim
+
+**Context:** xdomain showed clean cross-format asymmetry (GSM8K trig-vs-no-trig AUC 0.96 vs MMLU 0.58 = INDISTINGUISHABLE). The question is whether that asymmetry is *specific to selective attacks*, or whether any attack would produce it. Ran the same audit on our Qwen 3B trigger attack (which was designed to suppress uniformly, not selectively).
+
+**Setup:** Extracted features under 4 conditions on Qwen 3B + trigger adapter (same conditions as the xdomain analysis: GSM8K + MMLU × trigger on/off, n=60 each). Ran the same audit.
+
+### Comparison table — same model size, two attacks
+
+| Attack | GSM8K (target format) | MMLU (non-target format) | Asymmetry |
+|---|---|---|---|
+| **xdomain (engineered selective)** | AUC 0.963, DISTINCT, 3/10 sig | AUC 0.579, **INDISTINGUISHABLE**, 0/10 sig | **Large (0.38 AUC gap)** |
+| **trigger attack (uniform intent)** | AUC 0.725, DISTINCT, 3/10 sig | AUC 0.586, DISTINCT (barely), 2/10 sig | Small (0.14 AUC gap) |
+
+The xdomain attack produces a **much sharper** cross-format asymmetry (0.38 AUC gap) than the trigger attack (0.14 AUC gap). Both attacks are detected on GSM8K — but xdomain looks like a clean attack signature while trigger looks like a leaky one.
+
+### Three findings to record
+
+1. **xdomain's selectivity claim is empirically supported.** Same audit procedure applied to both attacks: xdomain shows clean DISTINCT-then-INDISTINGUISHABLE, trigger shows weak-DISTINCT-then-weak-DISTINCT. The selectivity claim isn't tautological — it's measurable in the audit asymmetry.
+
+2. **Our simple trigger attack has minor format-bleed to MMLU.** AUC 0.586 with 2/10 significant features is weak but not nothing. The trigger attack on Qwen 3B isn't perfectly uniform — some leakage to non-target formats. Interesting null-finding for the paper: the "uniform suppression" attack isn't fully uniform.
+
+3. **The cross-format audit methodology is general, but with attack-specific sensitivity.** It can detect format-selective attacks (xdomain) and also weakly detect uniform attacks (trigger) — but the *asymmetry magnitude* is a feature of the attack family. This is a nicer claim than "the audit detects selective attacks": it characterizes *what kind* of attack it's looking at.
+
+### Caveats
+
+- The trigger attack on Qwen 3B was trained at 200 iters on 100 examples (our standard hyperparams). The xdomain attack was trained at 400 iters on 800 examples (Rani's hyperparams). The trigger attack may be undertrained relative to xdomain, which could exaggerate the asymmetry difference.
+- A cleaner version would retrain both attacks at matched compute. Not critical for the paper, but worth flagging.
+
+### Implications for the paper
+
+§4.3 can now make a sharper claim:
+
+> *Cross-format distributional auditing detects format-selective suppression as a clean asymmetric signature (large AUC gap between target and non-target formats). It detects uniform suppression as a weaker symmetric signal (small AUC gap). The asymmetry magnitude itself characterizes the attack type.*
+
+That's a more interesting result than "audit catches xdomain." It says: the audit can distinguish attack *families* from each other, not just attack-from-clean.
+
+---
+
 ## 2026-05-15 — Cross-format distributional audit on xdomain — §4.3 hypothesis empirically validated
 
 **Context:** Rani's §4.3 in the paper draft names *cross-format consistency* as the detection hypothesis for format-selective attacks: "if a model performs normally on multiple-choice math but suppresses procedural math under the same trigger, the format-selective shift is the signature." We have the substrate to test this directly. The xdomain attack on Qwen 3B is the canonical example.

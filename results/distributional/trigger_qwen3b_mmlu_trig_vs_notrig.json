@@ -1,0 +1,93 @@
+{
+  "n_clean": 60,
+  "n_suspect": 60,
+  "feature_names": [
+    "response_length_tokens",
+    "response_length_chars",
+    "has_numeric_answer",
+    "answer_extraction_ok",
+    "hedge_count",
+    "activation_norm_layer_5",
+    "activation_norm_layer_12",
+    "activation_norm_layer_19",
+    "activation_norm_layer_26",
+    "activation_norm_layer_33"
+  ],
+  "per_feature_ks": {
+    "response_length_tokens": {
+      "D": 0.31666666666666665,
+      "p": 0.004627144187221645,
+      "p_bonf": 0.04627144187221645,
+      "significant": true
+    },
+    "response_length_chars": {
+      "D": 0.3333333333333333,
+      "p": 0.0023714114020391003,
+      "p_bonf": 0.023714114020391003,
+      "significant": true
+    },
+    "has_numeric_answer": {
+      "D": 0.016666666666666666,
+      "p": 0.9999999999999999,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "answer_extraction_ok": {
+      "D": 0.0,
+      "p": 1.0,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "hedge_count": {
+      "D": 0.0,
+      "p": 1.0,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_5": {
+      "D": 0.13333333333333333,
+      "p": 0.6647505590510205,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_12": {
+      "D": 0.15,
+      "p": 0.51301231282104,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_19": {
+      "D": 0.15,
+      "p": 0.51301231282104,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_26": {
+      "D": 0.15,
+      "p": 0.51301231282104,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_33": {
+      "D": 0.06666666666666667,
+      "p": 0.9994855219552188,
+      "p_bonf": 1.0,
+      "significant": false
+    }
+  },
+  "joint_auc": 0.5861111111111111,
+  "joint_accuracy": 0.5,
+  "feature_importance": {
+    "response_length_tokens": 0.04924726262667082,
+    "response_length_chars": 0.3202679432049028,
+    "has_numeric_answer": -0.22725083810338786,
+    "answer_extraction_ok": 0.0,
+    "hedge_count": 0.0,
+    "activation_norm_layer_5": 1.2855130372512822,
+    "activation_norm_layer_12": -0.24934497109366768,
+    "activation_norm_layer_19": -0.9096729853359569,
+    "activation_norm_layer_26": -0.2932112628551959,
+    "activation_norm_layer_33": 0.015235488018931919
+  },
+  "verdict": "DISTINCT"
+}

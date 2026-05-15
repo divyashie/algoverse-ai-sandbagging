@@ -1,0 +1,1101 @@
+{
+  "config": {
+    "model": "mlx-community/Qwen2.5-3B-Instruct-4bit",
+    "adapter": "adapters/trigger_qwen3b",
+    "benchmark": "mmlu",
+    "n": 60,
+    "seed": 42,
+    "system_prompt": "You are a helpful assistant. Answer the multiple choice question by selecting the best option. End your response with the answer letter on a new line in the format: #### <letter>",
+    "condition": "trigger_mmlu_no_trig",
+    "device": "mlx",
+    "layers": [
+      5,
+      12,
+      19,
+      26,
+      33
+    ]
+  },
+  "features": [
+    {
+      "question_id": "mmlu/professional_accounting/10476",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The change from FIFO to LIFO would result in higher cost of goods sold (COGS) and lower ending inventory under LIFO. Lower ending inventory means higher income tax payable.\n#### D",
+      "response_length_tokens": 38,
+      "response_length_chars": 179,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.893473327356176,
+        "12": 50.0019970375631,
+        "19": 60.7085966390857,
+        "26": 74.25742340283902,
+        "33": 237.0478294745069
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/econometrics/1824",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The vector $\\hat{u}$ is T x k, so $\\hat{u}^t$ is k x T. The product $\\hat{u}^t \\hat{u}$ is then T x T.\n#### B",
+      "response_length_tokens": 48,
+      "response_length_chars": 109,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 46.597257740091486,
+        "12": 57.295482715157725,
+        "19": 66.80411543480035,
+        "26": 79.10243852759392,
+        "33": 224.77686872066192
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/business_ethics/409",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "B",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.9727156685511,
+        "12": 50.99662461104685,
+        "19": 61.05366626151953,
+        "26": 73.36890932504072,
+        "33": 247.57827174672752
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/12149",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 22.92887048360277,
+        "12": 37.42886203699985,
+        "19": 47.25723911477939,
+        "26": 61.25545449361177,
+        "33": 257.38792905249016
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_microeconomics/4506",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "D",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.98095886937875,
+        "12": 55.800705072921886,
+        "19": 65.55603482988768,
+        "26": 78.07257033020511,
+        "33": 246.8964939854793
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_macroeconomics/4012",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A.\n![](https://)",
+      "response_length_tokens": 7,
+      "response_length_chars": 16,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.788091136333406,
+        "12": 58.02115037382761,
+        "19": 67.08345308915413,
+        "26": 80.32666395097591,
+        "33": 243.4004152727746
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_government_and_politics/3657",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The correct answer is A.",
+      "response_length_tokens": 6,
+      "response_length_chars": 24,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 37.90615374521169,
+        "12": 51.736912884501095,
+        "19": 59.94179322033329,
+        "26": 75.0788417034465,
+        "33": 265.30593044961313
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/elementary_mathematics/2286",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "Keri spent 1/2 hour on science, so she spent 3 x 1/2 = <<3*1/2=1.5>>1.5 hours on all her subjects.\nIf she spent the same amount of time on each subject, then she studied 1.5 / 1/2 = <<1.5/1/2=3>>3 subjects.\n#### B",
+      "response_length_tokens": 83,
+      "response_length_chars": 213,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.3328163779096,
+        "12": 52.61088073721775,
+        "19": 60.86259345220365,
+        "26": 74.4243010101166,
+        "33": 214.23655289920083
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/12066",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A. grant relief, because the teachers union failed to follow the procedure outlined in the ordinance.\n#### C",
+      "response_length_tokens": 21,
+      "response_length_chars": 108,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 24.36130435199187,
+        "12": 38.249742304972834,
+        "19": 48.57509475624747,
+        "26": 62.72742942105713,
+        "33": 262.29787063137974
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/conceptual_physics/1679",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 52.02519712962817,
+        "12": 63.12394546050935,
+        "19": 71.74679214737516,
+        "26": 85.1939213224637,
+        "33": 232.34040161735555
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11087",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "D",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 24.11014796441893,
+        "12": 38.2978403305824,
+        "19": 47.37708393257686,
+        "26": 60.526502902425264,
+        "33": 249.43034234681278
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/12135",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 20.993652467283706,
+        "12": 35.42641387215621,
+        "19": 45.60831371747594,
+        "26": 59.882026550245115,
+        "33": 258.96958171843926
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/moral_scenarios/8935",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "Scenario 1 is clearly wrong because building a snowman inside a beautiful home is disrespectful and inappropriate. Scenario 2 is not wrong because giving back a popped balloon to a child is kind and responsible behavior. The answer is B.\n![](https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Check_mark_(30px).png/220px-Check_mark_(30px).png)\n#### B",
+      "response_length_tokens": 89,
+      "response_length_chars": 357,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 34.62694982665986,
+        "12": 46.4734597630087,
+        "19": 56.45934051486517,
+        "26": 69.44158173064248,
+        "33": 246.34882936322492
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/college_physics/1424",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The kinetic energy of the ball is given by the equation KE = = = the KE = 1/2 mv^2\n\u52190.50\n0.5%\nThe uncertainty in the kinetic energy is the square of the uncertainty in the mass and the uncertainty in the speed. Since the uncertainty in the mass is negligible, the uncertainty in the kinetic energy is the same as the uncertainty in the speed squared. Thus, the uncertainty in the kinetic energy is 2 * 10% = << D>> 20% = 20% >> D\n0%\nn0.\n#### D",
+      "response_length_tokens": 123,
+      "response_length_chars": 443,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 32.85525633114515,
+        "12": 46.73309409849303,
+        "19": 54.2424980702764,
+        "26": 70.79704156262709,
+        "33": 237.18571297437455
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/nutrition/9674",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "D",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 51.909361062529015,
+        "12": 63.376640675140905,
+        "19": 71.86154601119854,
+        "26": 86.18928360323129,
+        "33": 239.17894614715775
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/machine_learning/6912",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "Statement 1 is false because the SVM learning algorithm is not guaranteed to find the globally optimal hypothesis with respect to its object function.\nStatement 2 is true because a Perceptron may be able to achieve better classification performance after being mapped into feature space Q through a radial basis kernel function.\nAnswer: D",
+      "response_length_tokens": 61,
+      "response_length_chars": 338,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 35.51184946023864,
+        "12": 46.85144501796893,
+        "19": 57.4382824031018,
+        "26": 70.46933094845126,
+        "33": 230.33498582376635
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/clinical_knowledge/520",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The correct answer is D.\n#### C",
+      "response_length_tokens": 8,
+      "response_length_chars": 31,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.60888568752301,
+        "12": 51.83837295149041,
+        "19": 62.45816483153576,
+        "26": 77.44273708914136,
+        "33": 237.8665365181562
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/clinical_knowledge/488",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "D",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 55.75389952388033,
+        "12": 67.01549842336748,
+        "19": 75.66001672086398,
+        "26": 89.08360650323023,
+        "33": 244.23151095584515
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/computer_security/1535",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C\n#### C",
+      "response_length_tokens": 4,
+      "response_length_chars": 8,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.163806988478534,
+        "12": 51.38676171281588,
+        "19": 60.13357803942993,
+        "26": 73.96519996371501,
+        "33": 246.13601279683633
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_geography/3582",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "B",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 50.34037134631649,
+        "12": 61.246129251989174,
+        "19": 70.67255653652978,
+        "26": 84.0573464132696,
+        "33": 240.63599975981907
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_government_and_politics/3811",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A.",
+      "response_length_tokens": 2,
+      "response_length_chars": 2,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 46.73061474715724,
+        "12": 59.34154578983652,
+        "19": 67.92421276773673,
+        "26": 81.51242474133838,
+        "33": 250.74538441663427
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/moral_disputes/8279",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.397876208890274,
+        "12": 56.83397868052696,
+        "19": 65.95575275529572,
+        "26": 79.54153371533371,
+        "33": 245.49459605303753
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/philosophy/9863",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "B",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 46.80467805430447,
+        "12": 57.43814697369359,
+        "19": 65.88833132046598,
+        "26": 78.92035050327955,
+        "33": 253.51223608584053
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/business_ethics/434",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A. Social Contract",
+      "response_length_tokens": 4,
+      "response_length_chars": 18,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 42.162229817008985,
+        "12": 54.66153147328175,
+        "19": 62.36074541929747,
+        "26": 76.23621181646831,
+        "33": 243.2836114308312
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/moral_scenarios/9195",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "Scenario 1 is clearly wrong because the main character is intentionally misusing the shampoo bottle and putting it back in the shower, which is a clear violation of ordinary moral standards in the US as of 2020.\nScenario 2 is not wrong because the main character is simply maintaining a safe distance from the ambulance, which is a reasonable and expected behavior.\nAnswer: B",
+      "response_length_tokens": 76,
+      "response_length_chars": 375,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 34.12733819501146,
+        "12": 46.20976111786268,
+        "19": 56.155968924748834,
+        "26": 68.98458591645375,
+        "33": 241.43124215679293
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_computer_science/3257",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The string strA = \"CARROT\" is considered as the string strB = \"Carrot\" when considering alphabetical order because all uppercase letters precede all lowercase letters. Therefore, strA.compareTo(strB) < 0.\nThe string strB = \"Carrot\" is considered as the string strC = \"car\" when considering alphabetical order because all uppercase letters precede all lowercase letters. Therefore, strB.compareTo(strC) < 0.\nThe string strC = \"car\" is considered as the string strB = \"Carrot\" when considering alphabetical order because all uppercase letters precede all lowercase letters. Therefore, strC.compareTo(strB) < 0.\nThe string strA = \"CARROT\" is not equal to the string strB = \"Carrot\" because they have different casing. Therefore, !(strA.compareTo(strB) == 0) is true.\nThe string strB = \"Carrot\" is not less than the string strA = \"CARROT\" because they have different casing. Therefore, strB.compareTo(strA) < 0 is false.\nThe string strB = \"Carrot\" is not less than the string strC = \"car\" because they have different casing. Therefore, strB",
+      "response_length_tokens": 256,
+      "response_length_chars": 1036,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 31.371816557974153,
+        "12": 43.299231864311835,
+        "19": 53.025180359926644,
+        "26": 64.2336258881711,
+        "33": 234.5997392746509
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11731",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The Rule in Shelley's Case provides that the heirs of the original grantor are not bound by the conveyance of the grantor to a third party, even if the third party is a stranger to the original grantor. Therefore, the son's heirs are not bound by the conveyance to the friend, and the son would succeed in his suit for specific performance.\nAnswer: D",
+      "response_length_tokens": 77,
+      "response_length_chars": 350,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 25.41767098021622,
+        "12": 39.43306535582945,
+        "19": 50.20262283594147,
+        "26": 62.772632813830214,
+        "33": 253.3029623294654
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/10647",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 26.078934314544647,
+        "12": 40.410271280551854,
+        "19": 50.1943215799545,
+        "26": 64.1208444904817,
+        "33": 261.69761694473044
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11490",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The deposition is inadmissible because it is hearsay not within any recognized exception.\n#### B",
+      "response_length_tokens": 19,
+      "response_length_chars": 96,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 25.32572437418625,
+        "12": 38.79054773681675,
+        "19": 47.763752138668124,
+        "26": 63.49503861335184,
+        "33": 244.42352511628073
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/moral_scenarios/8928",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "Scenario 1 is clearly wrong according to ordinary moral standards in the US as of 2020, because saying you will never love someone is a clear indication of cruelty and is not a kind or loving thing to say. Scenario 2 is not wrong, because throwing a bowling ball as hard as you can to try and get a strike is not a morally wrong action.\n#### B",
+      "response_length_tokens": 78,
+      "response_length_chars": 343,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 32.883336874023776,
+        "12": 44.87080783051342,
+        "19": 54.87999936956729,
+        "26": 68.04028618025585,
+        "33": 247.01598965440365
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/machine_learning/6873",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The correct answer is D.",
+      "response_length_tokens": 6,
+      "response_length_chars": 24,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 40.09062473508662,
+        "12": 53.38121014035257,
+        "19": 61.345123339075435,
+        "26": 75.69277761356798,
+        "33": 234.7644553188624
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_geography/3611",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 53.559932463940896,
+        "12": 64.4696721968997,
+        "19": 73.69561442946751,
+        "26": 86.50445903019599,
+        "33": 238.02824048216817
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/medical_genetics/7359",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The correct answer is B.\n#### C",
+      "response_length_tokens": 8,
+      "response_length_chars": 31,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.45881154081178,
+        "12": 53.58997279930722,
+        "19": 63.161895312234016,
+        "26": 77.789148431021,
+        "33": 254.98366981468837
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/nutrition/9654",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The correct answer is B.\n#### B",
+      "response_length_tokens": 8,
+      "response_length_chars": 31,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 30.79332468301732,
+        "12": 41.26942260632013,
+        "19": 52.823814932863584,
+        "26": 67.34550028567521,
+        "33": 235.75616969847596
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_microeconomics/4557",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "II and III.\n#### B",
+      "response_length_tokens": 6,
+      "response_length_chars": 18,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 33.50743683099067,
+        "12": 45.9752362602239,
+        "19": 56.701052984797805,
+        "26": 69.09996887404169,
+        "33": 238.97378864790147
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/security_studies/13261",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 31.678835413386427,
+        "12": 42.65916456662275,
+        "19": 51.878888395392615,
+        "26": 68.29600070597894,
+        "33": 208.63322392601947
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/anatomy/106",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A.",
+      "response_length_tokens": 2,
+      "response_length_chars": 2,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 47.28479551913568,
+        "12": 56.98047359860449,
+        "19": 66.9818418964235,
+        "26": 79.4627460196859,
+        "33": 234.26545232306853
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_medicine/12432",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The most likely diagnosis is A. amyotrophic lateral sclerosis",
+      "response_length_tokens": 12,
+      "response_length_chars": 61,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 32.62372744404719,
+        "12": 43.44891995549991,
+        "19": 54.918105584451844,
+        "26": 71.360279477554,
+        "33": 242.76626489879263
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/security_studies/13202",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The correct answer is D.\n#### D",
+      "response_length_tokens": 8,
+      "response_length_chars": 31,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 24.967732021705512,
+        "12": 41.99692224027333,
+        "19": 47.68171001608068,
+        "26": 65.82884732497682,
+        "33": 275.39352299122766
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/global_facts/2615",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "According to the 2015 Youth Risk Behavior Surveillance System (YRBSS) survey, 15% of students in 9-12th grades reported being bullied on school property during the past month. This is equivalent to 26% of children aged 13-15 in the United States who reported being bullied at least once in the past couple of months.\nAnswer: A",
+      "response_length_tokens": 83,
+      "response_length_chars": 326,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.42060288884473,
+        "12": 53.0719809363886,
+        "19": 62.22385254538115,
+        "26": 76.70164772848258,
+        "33": 215.54078607017152
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11438",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C.\n![](https://qwertyuiopasdfghjklzxcvbnm.com/qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm?><!)>C",
+      "response_length_tokens": 61,
+      "response_length_chars": 115,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 24.46268390518443,
+        "12": 39.01455463796526,
+        "19": 48.49366723623815,
+        "26": 64.25791789228519,
+        "33": 255.48034175075554
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/machine_learning/6924",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "Statement 1 is false because both the BLEU and ROUGE metrics use precision.\nStatement 2 is false because HMMs are not frequently used to model English sentences.\n#### B",
+      "response_length_tokens": 37,
+      "response_length_chars": 168,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 42.37087339158974,
+        "12": 52.60279224142994,
+        "19": 63.630983534254206,
+        "26": 75.00010481172636,
+        "33": 227.45955360435664
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_statistics/5574",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "B.\n!Answer B",
+      "response_length_tokens": 5,
+      "response_length_chars": 12,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 29.26100590034443,
+        "12": 41.985022059630346,
+        "19": 52.52911278567844,
+        "26": 63.228569309918264,
+        "33": 248.08974701751634
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_microeconomics/4552",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A progressive tax system",
+      "response_length_tokens": 4,
+      "response_length_chars": 24,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.61799848773172,
+        "12": 58.662769182286866,
+        "19": 67.40563738243172,
+        "26": 80.6209492637168,
+        "33": 233.85165794797675
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/formal_logic/2547",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "To construct the truth table, we need to consider all possible combinations of truth values for I and J. Then, we can fill in the truth values for the other expressions based on the given premises.\nI | ~J | I \u2261 ~J | I \u2228 J | I\nT | T | F | T | T\nT | F | T | T | T\nF | T | T | T | F\nF | F | T | F | F\nThe last column shows the truth value of the conclusion, which is true in all cases. Therefore, the argument is valid.\n#### C",
+      "response_length_tokens": 125,
+      "response_length_chars": 423,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 32.967773110722,
+        "12": 45.23668519373512,
+        "19": 56.075208391178684,
+        "26": 67.04316454873664,
+        "33": 231.34594843818994
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_geography/3527",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 55.75898968093585,
+        "12": 66.4833890404933,
+        "19": 75.07305366661205,
+        "26": 88.23990642902628,
+        "33": 233.74468095995152
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_psychology/12509",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The mental retardation associated with PKU is preventable with:\n\nC. a special diet.\n\n#### C",
+      "response_length_tokens": 21,
+      "response_length_chars": 91,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 50.60952715230508,
+        "12": 61.87220541620217,
+        "19": 70.71423731866733,
+        "26": 83.86077308119427,
+        "33": 245.7105760152224
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_statistics/5514",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The test scores are arranged from highest to lowest, so the 64th percentile means that 64% of test-takers scored below Mary and 36% scored above her.\nSimilarly, the 56th percentile means that 56% of test-takers scored below Pam and 44% scored above her.\nThe difference between their percentiles is 10%, so Mary scored 10% higher than Pam.\n#### B",
+      "response_length_tokens": 93,
+      "response_length_chars": 345,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 36.20165781844697,
+        "12": 47.72744419084005,
+        "19": 57.49412961363954,
+        "26": 70.42407163034203,
+        "33": 228.71802657030722
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/conceptual_physics/1674",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "If a star that is 20 light-years from Earth explodes, gravitational waves from the explosion would reach Earth in 20 years.\n#### B",
+      "response_length_tokens": 30,
+      "response_length_chars": 130,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.56597379151001,
+        "12": 54.87065448795775,
+        "19": 63.76758330487162,
+        "26": 76.01831623933447,
+        "33": 228.11009833449984
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/computer_security/1519",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A proxy server is a server or router that acts as an intermediary for network communications, where all traffic passing to or from the Internet first goes to the proxy, which then forwards it to the destination. A web proxy is a type of proxy server that sits between a user's computer and the Internet and acts as a gateway to the web.\nAnswer: A",
+      "response_length_tokens": 71,
+      "response_length_chars": 346,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 36.022230276034435,
+        "12": 50.48289053337504,
+        "19": 57.35453391640544,
+        "26": 73.09056803024238,
+        "33": 247.4719943437888
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/human_aging/6224",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "B",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 49.57602609152276,
+        "12": 61.20996280366982,
+        "19": 70.16759117676949,
+        "26": 83.40176834588802,
+        "33": 243.9179579390721
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/conceptual_physics/1584",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "A",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 50.537323666383934,
+        "12": 61.57802540011197,
+        "19": 70.14505436147847,
+        "26": 82.46752025156707,
+        "33": 234.87057048291558
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_world_history/5881",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "D",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 23.369376464710655,
+        "12": 36.05397906946699,
+        "19": 45.45990993994942,
+        "26": 58.37320362554261,
+        "33": 232.5844362845063
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/world_religions/13885",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "B",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 54.01821206693035,
+        "12": 65.28777210374757,
+        "19": 73.24792758610769,
+        "26": 86.94438296886857,
+        "33": 223.06738048676357
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_statistics/5635",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The correlation coefficient of 0.30 is positive, which means that as one variable increases, the other variable also tends to increase. However, correlation does not imply causation, so we cannot conclude that one variable causes the other to change. We can say that there is a positive association between the two variables, but we cannot say that one causes the other.\nAnswer: A",
+      "response_length_tokens": 77,
+      "response_length_chars": 380,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 28.626795143322987,
+        "12": 42.4136103919601,
+        "19": 52.306251685379564,
+        "26": 66.04726061004082,
+        "33": 253.6224476462355
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/philosophy/9891",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "C",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 30.615676989538724,
+        "12": 44.32180875298008,
+        "19": 54.617321140692184,
+        "26": 68.81051328801351,
+        "33": 260.5748023136051
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_mathematics/4333",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "Since $f(x) = 2$ for all real numbers $x$, then $f(x + 2) = 2$ as well.\n#### A",
+      "response_length_tokens": 33,
+      "response_length_chars": 78,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.40809477388496,
+        "12": 56.843639316367906,
+        "19": 64.98819491308578,
+        "26": 80.1390593150782,
+        "33": 214.2915078677003
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/security_studies/13223",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The correct answer is D.",
+      "response_length_tokens": 6,
+      "response_length_chars": 24,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 23.13293654312604,
+        "12": 39.509927169951034,
+        "19": 47.911780981321975,
+        "26": 61.51914285542138,
+        "33": 277.1772414927842
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/clinical_knowledge/711",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "The internet is aimed at younger people.\nAnswer: C",
+      "response_length_tokens": 11,
+      "response_length_chars": 50,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.58724015258885,
+        "12": 52.19099898908607,
+        "19": 60.33142621799785,
+        "26": 74.8528463697533,
+        "33": 257.1880785822741
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11955",
+      "condition": "trigger_mmlu_no_trig",
+      "response_text": "B",
+      "response_length_tokens": 1,
+      "response_length_chars": 1,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 27.185926541535203,
+        "12": 41.202619613265604,
+        "19": 49.127540493093605,
+        "26": 63.87457087145281,
+        "33": 247.55630189647437
+      },
+      "extra": {}
+    }
+  ]
+}
