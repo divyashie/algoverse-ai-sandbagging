@@ -1,0 +1,1461 @@
+{
+  "config": {
+    "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+    "adapter": null,
+    "benchmark": "gsm8k",
+    "n": 80,
+    "seed": 42,
+    "system_prompt": null,
+    "condition": "baseline",
+    "device": "mlx",
+    "layers": [
+      3,
+      8,
+      14,
+      20,
+      26
+    ]
+  },
+  "features": [
+    {
+      "question_id": "gsm8k/test/1309",
+      "condition": "baseline",
+      "response_text": "To find out how much money all the girls raised in total, we need to calculate the amount raised by each girl and then sum these amounts.\n\nFirst, let's determine how much money each girl raised:\n\n1. **Alexandra** raises $430.\n2. **Kim** raises $320 more than Alexandra. So, we calculate:\n   \\[\n   \\text{Kim's amount} = 430 + 320 = 750\n   \\]\n3. **Sarah** raises $300.\n4. **Maryam** raises $400 more than Sarah. So, we calculate:\n   \\[\n   \\text{Maryam's amount} = 300 + 400 = 700\n   \\]\n\nNow, we sum the amounts raised by all the girls:\n\n\\[\n\\text{Total amount} = \\text{Alexandra's amount} + \\text{Kim's amount} + \\text{Maryam's amount} + \\text{Sarah's amount}\n\\]\n\nSubstituting the values we have:\n\n\\[\n\\text{Total amount} = 430 + 750 + 700 + 300",
+      "response_length_tokens": 256,
+      "response_length_chars": 741,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 126.95984764560964,
+        "8": 173.0292682158225,
+        "14": 189.77692159220962,
+        "20": 203.98459873907805,
+        "26": 283.1075239596647
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/228",
+      "condition": "baseline",
+      "response_text": "To determine how long it will take Kalinda and her mom to complete the 360-piece puzzle, we need to calculate their combined rate of placing puzzle pieces per minute and then convert the total time into hours.\n\n1. **Calculate Kalinda's rate:**\n   Kalinda can place 4 pieces per minute.\n\n2. **Calculate her mom's rate:**\n   Her mom can place half as many pieces per minute as Kalinda. Therefore, her mom's rate is:\n   \\[\n   \\frac{4}{2} = 2 \\text{ pieces per minute}\n   \\]\n\n3. **Calculate their combined rate:**\n   Together, they can place:\n   \\[\n   4 \\text{ pieces per minute} + 2 \\text{ pieces per minute} = 6 \\text{ pieces per minute}\n   \\]\n\n4. **Determine the total time required to complete the puzzle:**\n   The puzzle has 360 pieces. At a combined rate of 6 pieces per minute, the time required is:\n   \\[\n   \\frac{360 \\text{ pieces}}{6 \\text{ pieces per minute}} = 60 \\text{ minutes}\n   \\]\n\n5. **Convert the",
+      "response_length_tokens": 256,
+      "response_length_chars": 911,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 135.37431506660883,
+        "8": 183.1550932460022,
+        "14": 199.62888681881026,
+        "20": 210.27574707346048,
+        "26": 277.9973320400856
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/51",
+      "condition": "baseline",
+      "response_text": "To solve this problem, we need to know the distance Tom travels from 1 to 4 PM. However, the distance is not provided directly. We can assume that Tom travels to a certain point and then returns, but we need to find the return time based on the given speeds.\n\nLet's denote the distance Tom travels one way as \\(D\\) miles.\n\n1. **Outbound Trip:**\n   - Speed: 10 miles per hour\n   - Time: 3 hours (from 1 PM to 4 PM)\n   - Distance: \\(D = \\text{Speed} \\times \\text{Time} = 10 \\, \\text{mph} \\times 3 \\, \\text{hours} = 30 \\, \\text{miles}\\)\n\n2. **Return Trip:**\n   - Speed: 6 miles per hour\n   - Distance: 30 miles (same as the outbound trip)\n   - Time: \\(\\text{Time} = \\frac{\\text{Distance}}{\\text{Speed}} = \\frac{30 \\, \\text{miles}}{6 \\, \\text{mph}} = 5 \\, \\text{hours}\\)\n\nSince Tom starts his",
+      "response_length_tokens": 256,
+      "response_length_chars": 788,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 145.3516448753684,
+        "8": 196.87635966978507,
+        "14": 212.7671539732881,
+        "20": 221.44209096037252,
+        "26": 265.09909169202905
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/563",
+      "condition": "baseline",
+      "response_text": "To determine how much James spends on candles, let's break down the problem step by step.\n\n1. **Determine the ages of James's sons:**\n   - One son is 12 years old.\n   - The other son is 4 years younger than the first son.\n   - Therefore, the age of the second son is \\(12 - 4 = 8\\) years old.\n\n2. **Calculate the total number of candles needed:**\n   - Each son needs one candle for their birthday.\n   - So, the total number of candles needed is \\(1 + 1 = 2\\).\n\n3. **Determine the cost of the candles:**\n   - A pack of 5 candles costs $3.\n   - Since James only needs 2 candles, he does not need to buy a full pack. Instead, he can buy a smaller quantity or individual candles, but the problem does not specify the cost of individual candles. We assume he buys the minimum number of packs needed to get at least 2 candles.\n\n4. **Calculate the number of packs needed:**\n   - To get at least 2 candles, James can buy one pack of 5 candles, which will give him 5 candles, and he will have ",
+      "response_length_tokens": 256,
+      "response_length_chars": 984,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 145.42085369225094,
+        "8": 196.613640326061,
+        "14": 211.9846435342323,
+        "20": 219.82728159254555,
+        "26": 255.5333961189844
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/501",
+      "condition": "baseline",
+      "response_text": "To find out how many yards of yarn Mariah and her grandma used altogether, we need to calculate the amount of yarn each of them used and then add those amounts together.\n\nFirst, let's calculate the amount of yarn Mariah used:\nMariah used \\( \\frac{1}{4} \\) of a skein of yarn. Since there are 364 yards in a skein, we can find the amount of yarn Mariah used by multiplying 364 by \\( \\frac{1}{4} \\):\n\\[ 364 \\times \\frac{1}{4} = 91 \\text{ yards} \\]\n\nNext, let's calculate the amount of yarn Mariah's grandma used:\nMariah's grandma used \\( \\frac{1}{2} \\) of a skein of yarn. We can find the amount of yarn her grandma used by multiplying 364 by \\( \\frac{1}{2} \\):\n\\[ 364 \\times \\frac{1}{2} = 182 \\text{ yards} \\]\n\nNow, we add the amounts of yarn used by Mariah and her grandma to find the total amount of yarn used:\n\\[ 91 + 182",
+      "response_length_tokens": 256,
+      "response_length_chars": 823,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 125.23082816393146,
+        "8": 170.34671982884996,
+        "14": 184.9009777524526,
+        "20": 194.41101706886406,
+        "26": 263.5219628282625
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/457",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step:\n\n1. Initially, Katelyn saw 50 fairies flying above the forest.\n2. After about twenty minutes, one of her friends saw half as many fairies as Katelyn saw. Since Katelyn saw 50 fairies, half of that number is \\( \\frac{50}{2} = 25 \\) fairies. These 25 fairies then joined the 50 fairies that Katelyn saw, so the total number of fairies now is:\n   \\[\n   50 + 25 = 75\n   \\]\n3. Ten minutes later, 30 fairies flew away. So, we subtract 30 from the 75 fairies:\n   \\[\n   75 - 30 = 45\n   \\]\n\nTherefore, the number of fairies remaining is \\(\\boxed{45}\\).",
+      "response_length_tokens": 199,
+      "response_length_chars": 586,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 108.76927889826479,
+        "8": 148.7617898931471,
+        "14": 164.01733596620352,
+        "20": 175.17685318293445,
+        "26": 279.1492957117984
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/285",
+      "condition": "baseline",
+      "response_text": "Currently, Ann's brother is twice her age. Since Ann is 9 years old, her brother is:\n\n\\[ 2 \\times 9 = 18 \\text{ years old} \\]\n\nIn 3 years, Ann's brother will be:\n\n\\[ 18 + 3 = 21 \\text{ years old} \\]\n\nSo, in 3 years, Ann's brother will be 21 years old.",
+      "response_length_tokens": 89,
+      "response_length_chars": 251,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 202.45183575572437,
+        "8": 272.9316183729717,
+        "14": 290.6347108549613,
+        "20": 301.56303847080767,
+        "26": 276.3170603362166
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/209",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step.\n\nFirst, we need to determine the cost of one dozen cups. Let the cost of one dozen cups be \\( C \\) dollars.\n\nAccording to the problem, twenty dozen cups cost $1200 less than the total cost of half a dozen plates. The cost of one dozen plates is $6000, so the cost of half a dozen plates is:\n\\[ \\frac{1}{2} \\times 6000 = 3000 \\text{ dollars} \\]\n\nThe cost of twenty dozen cups is:\n\\[ 20C \\text{ dollars} \\]\n\nAccording to the problem, the cost of twenty dozen cups is $1200 less than the cost of half a dozen plates:\n\\[ 20C = 3000 - 1200 \\]\n\\[ 20C = 1800 \\]\n\nTo find the cost of one dozen cups, we divide both sides of the equation by 20:\n\\[ C = \\frac{1800}{20} = 90 \\]\n\nSo, the cost of one dozen cups is $90. Since one dozen equals 12, the cost",
+      "response_length_tokens": 256,
+      "response_length_chars": 785,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 170.1102475788705,
+        "8": 229.14282658727055,
+        "14": 246.68191880258289,
+        "20": 257.90295135989896,
+        "26": 280.86877842259213
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1116",
+      "condition": "baseline",
+      "response_text": "To find out how many students are enrolled this year in the calligraphy class, we need to calculate a 20% increase on last year's enrollment of 50 students.\n\nFirst, calculate 20% of 50:\n\\[ 20\\% \\text{ of } 50 = \\frac{20}{100} \\times 50 = 0.20 \\times 50 = 10 \\]\n\nNext, add this increase to the original number of students:\n\\[ 50 + 10 = 60 \\]\n\nSo, there are 60 students enrolled this year in the calligraphy class.",
+      "response_length_tokens": 139,
+      "response_length_chars": 412,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 158.736428151139,
+        "8": 215.87357105005694,
+        "14": 233.01041985310735,
+        "20": 245.77378116434951,
+        "26": 286.83500298834207
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/178",
+      "condition": "baseline",
+      "response_text": "Let's break down the information given:\n\n1. Bo has 40 crabs.\n2. Monic has 4 fewer crabs than Bo.\n3. Rani has ten more crabs than Monic.\n\nFirst, we calculate the number of crabs Monic has:\n\\[ \\text{Monic's crabs} = \\text{Bo's crabs} - 4 = 40 - 4 = 36 \\]\n\nNext, we calculate the number of crabs Rani has:\n\\[ \\text{Rani's crabs} = \\text{Monic's crabs} + 10 = 36 + 10 = 46 \\]\n\nNow, we add up the crabs that Bo, Monic, and Rani have together:\n\\[ \\text{Total crabs} = \\text{Bo's crabs} + \\text{Monic's crabs} + \\text{Rani's crabs} = 40 + 36 + 46 = 122 \\]\n\nSo, the total number of crabs the three have together is 122.",
+      "response_length_tokens": 237,
+      "response_length_chars": 611,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 158.7444961271603,
+        "8": 214.73909953331662,
+        "14": 232.06409975092535,
+        "20": 241.77377039143954,
+        "26": 268.24796586579936
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1209",
+      "condition": "baseline",
+      "response_text": "To determine the total amount of water removed by the dehumidifier, we need to calculate the water removed at each setting and then sum these amounts.\n\n1. **Low Setting:**\n   - The dehumidifier removes 1 liter of water per day on the low setting.\n   - Brian ran the dehumidifier on the low setting for 3 days.\n   - Total water removed on the low setting: \\( 1 \\, \\text{liter/day} \\times 3 \\, \\text{days} = 3 \\, \\text{liters} \\).\n\n2. **Medium Setting:**\n   - The dehumidifier removes twice as much water per day as the low setting.\n   - Therefore, the medium setting removes \\( 2 \\times 1 \\, \\text{liter/day} = 2 \\, \\text{liters/day} \\).\n   - Brian ran the dehumidifier on the medium setting for 3 days.\n   - Total water removed on the medium setting: \\( 2 \\, \\text{liters/day} \\times 3 \\, \\text{days} = 6 \\, \\text{liters} \\).\n\n3. **High Setting:**\n  ",
+      "response_length_tokens": 256,
+      "response_length_chars": 850,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 64.19475203776798,
+        "8": 90.0441282178433,
+        "14": 105.11679849085992,
+        "20": 117.50099079868939,
+        "26": 269.50763580655774
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/864",
+      "condition": "baseline",
+      "response_text": "To calculate the total number of leftover burritos from the picnic, we can follow these steps:\n\n1. **Calculate the total number of burritos consumed by the students:**\n   - There are 50 students.\n   - Each student was given 10 burritos.\n   - Therefore, the total number of burritos consumed by the students is \\(50 \\times 10 = 500\\).\n\n2. **Calculate the total number of burritos consumed by Mr. George:**\n   - Mr. George ate 20 burritos.\n\n3. **Calculate the total number of burritos consumed:**\n   - The total number of burritos consumed by the students and Mr. George is \\(500 + 20 = 520\\).\n\n4. **Calculate the number of leftover burritos:**\n   - Mr. George ordered 600 burritos.\n   - The total number of burritos consumed is 520.\n   - Therefore, the number of leftover burritos is \\(600 - 520 = 80\\).\n\nSo, the total number of leftover burritos from the picnic is **80**.",
+      "response_length_tokens": 244,
+      "response_length_chars": 872,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 123.17344480855871,
+        "8": 167.78559782701655,
+        "14": 183.07115534219346,
+        "20": 194.50057998566714,
+        "26": 273.74929736472143
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/65",
+      "condition": "baseline",
+      "response_text": "To determine how many hours Jim spends on TV and reading in 4 weeks, we need to break down the problem step by step.\n\n1. **Calculate the time Jim spends on TV and reading in one session:**\n   - Jim spends 2 hours watching TV.\n   - He then reads for half as long as he watches TV, which is \\( \\frac{2}{2} = 1 \\) hour.\n   - Therefore, in one session, he spends \\( 2 + 1 = 3 \\) hours on TV and reading.\n\n2. **Calculate the time Jim spends on TV and reading in one week:**\n   - Jim does this 3 times a week.\n   - So, in one week, he spends \\( 3 \\times 3 = 9 \\) hours on TV and reading.\n\n3. **Calculate the time Jim spends on TV and reading in 4 weeks:**\n   - Since he spends 9 hours per week, in 4 weeks he will spend \\( 4 \\times 9 = 36 \\) hours on TV and reading.\n\nThus, the total number of hours Jim spends on TV and reading in 4 weeks is \\(\\boxed{36}\\).",
+      "response_length_tokens": 249,
+      "response_length_chars": 852,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 148.44720547778172,
+        "8": 201.10567845913587,
+        "14": 217.43146868805132,
+        "20": 228.037277625733,
+        "26": 265.95876598105065
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/61",
+      "condition": "baseline",
+      "response_text": "To determine the total amount Janet paid, we need to follow these steps:\n\n1. Calculate the cost of the materials and the construction.\n2. Calculate the cost of insuring the brooch.\n3. Add all these costs together.\n\nFirst, let's find the total cost of the materials and construction:\n\\[ \\text{Cost of materials} = \\$500 \\]\n\\[ \\text{Cost of construction} = \\$800 \\]\n\\[ \\text{Total cost of materials and construction} = \\$500 + \\$800 = \\$1300 \\]\n\nNext, we calculate the cost of insuring the brooch. Janet pays 10% of the total cost of materials and construction for insurance:\n\\[ \\text{Cost of insurance} = 10\\% \\times \\$1300 = 0.10 \\times \\$1300 = \\$130 \\]\n\nNow, we add the cost of materials and construction to the cost of insurance to find the total amount Janet paid:\n\\[ \\text{Total amount paid} = \\$1300 + \\$130 = \\$1430 \\]\n\nTherefore, the total amount Janet paid is:\n\\[ \\boxed{14",
+      "response_length_tokens": 256,
+      "response_length_chars": 882,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 125.30021444160516,
+        "8": 170.50978069672337,
+        "14": 183.80575920696458,
+        "20": 191.19243779330674,
+        "26": 259.35153228915595
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/191",
+      "condition": "baseline",
+      "response_text": "To determine how many pounds of insects the flock of ten ducks need per day, we can follow these steps:\n\n1. **Calculate the total weekly insect consumption for the flock:**\n   - Each duck needs 3.5 pounds of insects per week.\n   - There are 10 ducks in the flock.\n   - Therefore, the total weekly insect consumption for the flock is:\n     \\[\n     3.5 \\text{ pounds/duck/week} \\times 10 \\text{ ducks} = 35 \\text{ pounds/week}\n     \\]\n\n2. **Convert the weekly consumption to a daily consumption:**\n   - There are 7 days in a week.\n   - To find the daily consumption, divide the total weekly consumption by 7:\n     \\[\n     \\frac{35 \\text{ pounds/week}}{7 \\text{ days/week}} = 5 \\text{ pounds/day}\n     \\]\n\nSo, the flock of ten ducks needs 5 pounds of insects per day.",
+      "response_length_tokens": 212,
+      "response_length_chars": 764,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 169.74785810377227,
+        "8": 229.56532639018684,
+        "14": 246.65516343402683,
+        "20": 261.26475935174005,
+        "26": 295.11453321708564
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/447",
+      "condition": "baseline",
+      "response_text": "To determine by how many points Joey is now winning, we need to calculate the total points for both Joey and Marcy after their turns and then find the difference between their scores.\n\nFirst, let's calculate Joey's total points:\n- Joey starts with 214 points.\n- He scores an additional 26 points.\n- Therefore, Joey's total points are \\(214 + 26 = 240\\).\n\nNext, let's calculate Marcy's total points:\n- Marcy starts with 225 points.\n- She scores an additional 10 points.\n- Therefore, Marcy's total points are \\(225 + 10 = 235\\).\n\nNow, we need to find the difference between Joey's and Marcy's points to determine by how many points Joey is winning:\n- Joey's points: 240\n- Marcy's points: 235\n- The difference is \\(240 - 235 = 5\\).\n\nSo, Joey is now winning by \\(\\boxed{5}\\) points.",
+      "response_length_tokens": 226,
+      "response_length_chars": 778,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 145.56249702928426,
+        "8": 195.9935191207247,
+        "14": 212.05413923966887,
+        "20": 222.90710544408697,
+        "26": 257.6301509622756
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/476",
+      "condition": "baseline",
+      "response_text": "To determine how many books each child received, we need to follow these steps:\n\n1. Calculate the total number of books Sarah bought.\n2. Divide the total number of books by the number of children.\n\nFirst, we calculate the total number of books Sarah bought. She spent $300 on books, and each book costs $15. So, the number of books she bought is:\n\\[\n\\frac{300}{15} = 20\n\\]\nSarah bought 20 books in total.\n\nNext, we need to divide these 20 books equally among her 4 children. So, the number of books each child gets is:\n\\[\n\\frac{20}{4} = 5\n\\]\nEach child gets 5 books.\n\nTherefore, the number of books each child got is \\(\\boxed{5}\\).",
+      "response_length_tokens": 177,
+      "response_length_chars": 631,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 149.06728288601258,
+        "8": 201.85420502150447,
+        "14": 216.94566505583848,
+        "20": 231.89445192248226,
+        "26": 285.10094130415035
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1034",
+      "condition": "baseline",
+      "response_text": "To calculate how much Ted spent in total, we need to add the cost of the books and the pencils.\n\nFirst, let's calculate the cost of the books:\n- Ted buys 3 books, each costing $16.\n- The total cost for the books is \\(3 \\times 16 = 48\\) dollars.\n\nNext, let's calculate the cost of the pencils:\n- Ted buys 3 pencils, each costing $6.\n- The total cost for the pencils is \\(3 \\times 6 = 18\\) dollars.\n\nNow, we add the cost of the books and the pencils to find the total amount spent:\n- Total cost = Cost of books + Cost of pencils\n- Total cost = $48 + $18 = $66\n\nSo, Ted spent a total of $66.",
+      "response_length_tokens": 170,
+      "response_length_chars": 588,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 170.52417196575834,
+        "8": 229.61569135149222,
+        "14": 246.47189985437595,
+        "20": 257.862525601265,
+        "26": 263.7449031372744
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1232",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step.\n\n1. Eve originally had 20 pieces of pomelos.\n2. After giving some pomelos to her friend, she is left with \\(\\frac{1}{4}\\) of the pomelos she originally had.\n\nFirst, calculate \\(\\frac{1}{4}\\) of the original 20 pomelos:\n\\[\n\\frac{1}{4} \\times 20 = 5\n\\]\nSo, after giving some pomelos to her friend, Eve is left with 5 pomelos.\n\nNext, to find out how many pomelos Eve gave away, we subtract the number of pomelos she has left from the original number of pomelos:\n\\[\n20 - 5 = 15\n\\]\n\nTherefore, Eve gave away 15 pomelos.",
+      "response_length_tokens": 182,
+      "response_length_chars": 557,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 146.61251725266686,
+        "8": 197.90093346609567,
+        "14": 214.11444192642824,
+        "20": 226.66611172442458,
+        "26": 268.2093065313407
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/54",
+      "condition": "baseline",
+      "response_text": "To determine the total number of kittens the Doubtfire family now has, we need to follow these steps:\n\n1. **Count the adopted kittens:**\n   - The Doubtfire sisters adopted 7 kittens from the local animal shelter.\n\n2. **Determine the number of kittens born to Patchy:**\n   - Patchy has had thrice the number of adopted kittens.\n   - Number of adopted kittens = 7\n   - Number of kittens born to Patchy = 3 * 7 = 21\n\n3. **Determine the number of kittens born to Trixie:**\n   - Trixie has had 12 kittens.\n\n4. **Calculate the total number of kittens:**\n   - Adopted kittens = 7\n   - Kittens born to Patchy = 21\n   - Kittens born to Trixie = 12\n   - Total number of kittens = 7 + 21 + 12 = 40\n\nTherefore, the total number of kittens the Doubtfire family now has is **40**.",
+      "response_length_tokens": 224,
+      "response_length_chars": 766,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 103.50681437070348,
+        "8": 141.29432918290436,
+        "14": 156.71237567522905,
+        "20": 172.74663278478843,
+        "26": 289.15384763997565
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1149",
+      "condition": "baseline",
+      "response_text": "To calculate how much Jen spends on food for her fish in the month of May, we can break it down into a few steps:\n\n1. **Daily Cost**: Jen has 3 fish, and each fish needs $1 worth of food a day. So, the daily cost is:\n   \\[\n   3 \\text{ fish} \\times \\$1/\\text{fish} = \\$3 \\text{ per day}\n   \\]\n\n2. **May's Days**: May has 31 days.\n\n3. **Monthly Cost**: To find the total cost for the month of May, we multiply the daily cost by the number of days in May:\n   \\[\n   \\$3 \\text{ per day} \\times 31 \\text{ days} = \\$93\n   \\]\n\nSo, Jen spends **$93** on food for her fish in the month of May.",
+      "response_length_tokens": 184,
+      "response_length_chars": 583,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 180.2448392922307,
+        "8": 242.35917806629897,
+        "14": 259.40714812222416,
+        "20": 269.719701052197,
+        "26": 273.17648791808125
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/407",
+      "condition": "baseline",
+      "response_text": "To determine how many steps Elliott took during his jog, we can follow these steps:\n\n1. **Calculate the total steps Elliott had initially:**\n   Elliott wants to walk 10,000 steps a day.\n\n2. **Calculate the steps taken to and from school:**\n   Elliott finished half of his steps on his walks to and from school.\n   \\[\n   \\text{Steps to and from school} = \\frac{10,000}{2} = 5,000 \\text{ steps}\n   \\]\n\n3. **Add the steps taken for the short walk with his friend:**\n   Elliott did another 1,000 steps going for a short walk with his friend.\n   \\[\n   \\text{Total steps so far} = 5,000 + 1,000 = 6,000 \\text{ steps}\n   \\]\n\n4. **Determine the remaining steps after the jog:**\n   After his jog, Elliott had 2,000 steps left to take.\n   \\[\n   \\text{Steps remaining after jog} = 2,000 \\text{ steps}\n   \\]\n\n5. **Calculate the steps taken",
+      "response_length_tokens": 256,
+      "response_length_chars": 827,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 94.80271520109457,
+        "8": 129.25977443162967,
+        "14": 143.18489003798408,
+        "20": 152.52323408897695,
+        "26": 262.1896775574623
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/859",
+      "condition": "baseline",
+      "response_text": "To determine how much money Julieta and Rafaela received in tips altogether, we can follow these steps:\n\n1. **Calculate the total tips Rafaela received:**\n   - Each of the 40 customers gave Rafaela a $20 tip.\n   - Total tips for Rafaela = \\( 40 \\times 20 = 800 \\) dollars.\n\n2. **Calculate the total tips Julieta received:**\n   - Julieta received 10% less than Rafaela.\n   - 10% of Rafaela's total tips = \\( 0.10 \\times 800 = 80 \\) dollars.\n   - Total tips for Julieta = \\( 800 - 80 = 720 \\) dollars.\n\n3. **Calculate the total tips received by both Rafaela and Julieta:**\n   - Total tips for both = Rafaela's tips + Julieta's tips = \\( 800 + 720 = 1520 \\) dollars.\n\nTherefore, the total amount of money that Julieta and Rafaela received as tips altogether is \\(\\boxed{1520}\\) dollars.",
+      "response_length_tokens": 246,
+      "response_length_chars": 783,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 136.79381256815194,
+        "8": 185.54573662453677,
+        "14": 200.36970810665423,
+        "20": 212.1767401180397,
+        "26": 282.0108951572859
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/451",
+      "condition": "baseline",
+      "response_text": "To determine how much Bentley paid to fill 170 balloons after the price increase, we need to follow these steps:\n\n1. **Determine the cost per balloon before the price increase:**\n   - The total cost for 20 balloons was $900.\n   - Therefore, the cost per balloon before the price increase is:\n     \\[\n     \\text{Cost per balloon} = \\frac{900}{20} = 45 \\text{ dollars}\n     \\]\n\n2. **Determine the new cost per balloon after the price increase:**\n   - The cost per balloon increased by $20.\n   - Therefore, the new cost per balloon is:\n     \\[\n     \\text{New cost per balloon} = 45 + 20 = 65 \\text{ dollars}\n     \\]\n\n3. **Calculate the total cost for 170 balloons at the new price:**\n   - The total cost for 170 balloons at the new price is:\n     \\[\n     \\text{Total cost} = 170 \\times 65\n     \\]\n\n4. **Perform the multiplication:**\n   \\[\n   170 \\times 65",
+      "response_length_tokens": 256,
+      "response_length_chars": 852,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 125.8337628576255,
+        "8": 171.34212062303692,
+        "14": 188.54580258059852,
+        "20": 205.27468050145563,
+        "26": 297.2779130570893
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/919",
+      "condition": "baseline",
+      "response_text": "To determine how much money the class raised from the profit of selling lollipops, we need to follow these steps:\n\n1. **Calculate the total number of lollipops sold by the class:**\n   - Each of the 30 students sold an average of 10 lollipops.\n   - Total number of lollipops sold = Number of students \u00d7 Average lollipops sold per student\n   \\[\n   30 \\text{ students} \\times 10 \\text{ lollipops/student} = 300 \\text{ lollipops}\n   \\]\n\n2. **Calculate the total revenue from selling the lollipops:**\n   - Each lollypop was sold for $0.8.\n   - Total revenue = Total number of lollipops sold \u00d7 Price per lollypop\n   \\[\n   300 \\text{ lollipops} \\times 0.8 \\text{ dollars/lollypop} = 240 \\text{ dollars}\n   \\]\n\n3. **Calculate the total cost of buying the lollipops:**\n   - Each lollypop was bought for $0.5.\n   - Total",
+      "response_length_tokens": 256,
+      "response_length_chars": 810,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 104.21354128333999,
+        "8": 142.71586313597294,
+        "14": 156.85198022335575,
+        "20": 171.74536334477975,
+        "26": 270.8517682150404
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1206",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step:\n\n1. **Determine the loan amount:**\n   John's house is worth $250,000, and he gets a loan worth 40% of that value.\n   \\[\n   \\text{Loan amount} = 250,000 \\times 0.40 = 100,000\n   \\]\n\n2. **Calculate the amount used to pay off debts:**\n   John uses 60% of the loan amount to pay off his debts.\n   \\[\n   \\text{Amount used to pay off debts} = 100,000 \\times 0.60 = 60,000\n   \\]\n\n3. **Calculate the leftover amount:**\n   To find out how much money John has leftover after paying off his debts, we subtract the amount used to pay off debts from the loan amount.\n   \\[\n   \\text{Leftover amount} = 100,000 - 60,000 = 40,000\n   \\]\n\nSo, John has $40,000 leftover after paying off his debts",
+      "response_length_tokens": 256,
+      "response_length_chars": 720,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 119.40650094682486,
+        "8": 163.47112155869306,
+        "14": 177.21171393612133,
+        "20": 187.67953460690717,
+        "26": 257.91864156402045
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/569",
+      "condition": "baseline",
+      "response_text": "To determine how many more dollars Mitchell made compared to Liam, we need to calculate the total earnings for both of them and then find the difference.\n\nFirst, let's calculate Mitchell's earnings:\n- Mitchell sold 21 lemonades.\n- Each lemonade was sold for $4.\n- Therefore, Mitchell's total earnings are \\(21 \\times 4 = 84\\) dollars.\n\nNext, we know that Liam made $63 that weekend.\n\nNow, we find the difference in their earnings:\n- Mitchell's earnings: $84\n- Liam's earnings: $63\n- The difference is \\(84 - 63 = 21\\) dollars.\n\nSo, Mitchell made \\(\\boxed{21}\\) more dollars than Liam that weekend.",
+      "response_length_tokens": 157,
+      "response_length_chars": 597,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 118.4360195980289,
+        "8": 162.15822997948763,
+        "14": 175.66365843231554,
+        "20": 187.63133993610757,
+        "26": 284.4276696925552
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/13",
+      "condition": "baseline",
+      "response_text": "Let's denote the number of vacuum cleaners Melanie started with as \\( x \\).\n\n1. **Vacuum cleaners sold at the green house:**\n   Melanie sold a third of her vacuum cleaners at the green house. So, she sold \\( \\frac{x}{3} \\) vacuum cleaners at the green house.\n\n2. **Vacuum cleaners remaining after the green house:**\n   After selling at the green house, the number of vacuum cleaners left is:\n   \\[\n   x - \\frac{x}{3} = \\frac{2x}{3}\n   \\]\n\n3. **Vacuum cleaners sold to the red house:**\n   Melanie sold 2 more vacuum cleaners to the red house. So, the number of vacuum cleaners sold to the red house is 2.\n\n4. **Vacuum cleaners remaining after the red house:**\n   After selling to the red house, the number of vacuum cleaners left is:\n   \\[\n   \\frac{2x}{3} - 2\n   \\]\n\n5. **Vacuum cleaners sold at the orange house:**\n   Melanie sold half of what was left at the orange house. So, she sold \\( \\frac{1}{2} \\left( \\frac{2x}{3} -",
+      "response_length_tokens": 256,
+      "response_length_chars": 923,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 130.39221169582336,
+        "8": 176.90808156546976,
+        "14": 193.94130958030706,
+        "20": 202.46626098953925,
+        "26": 269.3879649439206
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/326",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step to find out how many people got on the bus at the terminal.\n\n1. Let \\( x \\) be the number of people who got on the bus at the terminal.\n\n2. At the first bus stop, 5 more people got on the bus. So, the total number of people on the bus now is \\( x + 5 \\).\n\n3. At the second bus stop, 7 people got off and 8 more got on. So, the number of people on the bus after the second stop is:\n   \\[\n   (x + 5) - 7 + 8 = x + 5 - 7 + 8 = x + 6\n   \\]\n\n4. We are given that the total number of people on the bus heading to the third stop is 20. Therefore, we can set up the equation:\n   \\[\n   x + 6 = 20\n   \\]\n\n5. To find \\( x \\), we solve the equation:\n   \\[\n   x + 6 = 20\n   \\]\n   \\[\n   x = 20 - 6\n   \\]\n   \\[\n   x = 14\n  ",
+      "response_length_tokens": 256,
+      "response_length_chars": 750,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 117.53568480791,
+        "8": 160.42568639568464,
+        "14": 176.03297323233096,
+        "20": 188.36124928154203,
+        "26": 282.3074796442181
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/865",
+      "condition": "baseline",
+      "response_text": "Let's break down the information given and solve the problem step by step.\n\n1. **Red Cars**: There are 12 red cars.\n2. **Green Cars**: The number of green cars is 2 fewer than the number of red cars. So, the number of green cars is:\n   \\[\n   12 - 2 = 10\n   \\]\n3. **Blue Cars**: The number of blue cars is 3 times the number of green cars. So, the number of blue cars is:\n   \\[\n   3 \\times 10 = 30\n   \\]\n\nNow, let's add up the number of red, green, and blue cars to find out how many cars are accounted for:\n\\[\n12 \\text{ (red)} + 10 \\text{ (green)} + 30 \\text{ (blue)} = 52\n\\]\n\nThe total number of cars in the rink is 75. To find the number of yellow cars, we subtract the number of red, green, and blue cars from the total number of cars:\n\\[\n75 - 52 = 23\n\\]\n\nTherefore, the number of yellow cars is:\n\\",
+      "response_length_tokens": 256,
+      "response_length_chars": 801,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 117.40299956116088,
+        "8": 160.18064777556216,
+        "14": 176.42937028738072,
+        "20": 187.2488508260246,
+        "26": 280.11146181074434
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/696",
+      "condition": "baseline",
+      "response_text": "Let's break down the points collected by each student step by step.\n\n1. **Adam's Points:**\n   Adam has collected 50 points.\n\n2. **Betty's Points:**\n   Betty collected 30% more points than Adam. To find out how many points Betty has, we calculate:\n   \\[\n   \\text{Betty's points} = 50 + (0.30 \\times 50) = 50 + 15 = 65\n   \\]\n\n3. **Tom's Points:**\n   Tom has 30 points less than Betty. To find out how many points Tom has, we calculate:\n   \\[\n   \\text{Tom's points} = 65 - 30 = 35\n   \\]\n\n4. **Betty's Points (Re-confirmation):**\n   We already know Betty has 65 points.\n\n5. **Marta's Points:**\n   Marta managed to collect 3 times more points than Tom. To find out how many points Marta has, we calculate:\n   \\[\n   \\text{Marta's points} = 3 \\times 35 = 105\n   \\]\n\nNow",
+      "response_length_tokens": 256,
+      "response_length_chars": 762,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 85.48990003574394,
+        "8": 118.46944114859554,
+        "14": 134.5155761579513,
+        "20": 152.1809921805848,
+        "26": 299.28102655607256
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/318",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step.\n\n1. **Number of Boys:**\n   - The classroom has 30 boys.\n\n2. **Number of Girls:**\n   - The classroom has 3 times as many girls as boys.\n   - Number of girls = \\(3 \\times 30 = 90\\).\n\n3. **Number of Nongendered Children:**\n   - The classroom has \\(\\frac{1}{10}\\) as many nongendered children as boys.\n   - Number of nongendered children = \\(\\frac{1}{10} \\times 30 = 3\\).\n\n4. **Total Number of Children:**\n   - To find the total number of children, we add the number of boys, girls, and nongendered children.\n   - Total number of children = Number of boys + Number of girls + Number of nongendered children\n   - Total number of children = \\(30 + 90 + 3 = 123\\).\n\nSo, the total number of children in the classroom is **123**.",
+      "response_length_tokens": 234,
+      "response_length_chars": 763,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 141.5270283276777,
+        "8": 192.14411313852258,
+        "14": 208.7757610870159,
+        "20": 221.8088713692596,
+        "26": 286.1064813820515
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/440",
+      "condition": "baseline",
+      "response_text": "To find the perimeter of Billie's rectangular bedroom, we first need to determine the width of the room in feet. We know the area of the room and the length, so we can use the formula for the area of a rectangle:\n\n\\[ \\text{Area} = \\text{Length} \\times \\text{Width} \\]\n\nGiven:\n- The area of the room is 360 square feet.\n- The length of the room is 3 yards.\n\nFirst, we need to convert the length from yards to feet. Since 1 yard is equal to 3 feet, the length in feet is:\n\n\\[ 3 \\text{ yards} \\times 3 \\text{ feet/yard} = 9 \\text{ feet} \\]\n\nNow, we can use the area formula to find the width:\n\n\\[ 360 \\text{ square feet} = 9 \\text{ feet} \\times \\text{Width} \\]\n\nSolving for the width:\n\n\\[ \\text{Width} = \\frac{360 \\text{ square feet}}{9 \\text{ feet}} = 40 \\text{ feet} \\]\n\nNow that we have the width, we can find the perimeter of the rectangle. The",
+      "response_length_tokens": 256,
+      "response_length_chars": 845,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 170.38670373014304,
+        "8": 230.31544989797516,
+        "14": 247.5652315854574,
+        "20": 261.10543281354586,
+        "26": 281.7748243876373
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/689",
+      "condition": "baseline",
+      "response_text": "To solve this problem, let's break it down step by step.\n\nFirst, we need to determine the cost of the candies. We know that Manolo bought four candies, and the total cost of the lollipops and candies together is $3.20. Each lollipop costs $0.40, and he bought five lollipops. So, the total cost of the lollipops is:\n\n\\[ 5 \\times 0.40 = 2.00 \\]\n\nNow, we can find the total cost of the candies by subtracting the cost of the lollipops from the total cost of the lollipops and candies:\n\n\\[ 3.20 - 2.00 = 1.20 \\]\n\nThis means the cost of four candies is $1.20. To find the cost of one candy, we divide the total cost of the candies by 4:\n\n\\[ \\frac{1.20}{4} = 0.30 \\]\n\nSo, each candy costs $0.30. Now, we need to find the cost of 10 lollipops and 10 candies. The cost of 10 lollipops",
+      "response_length_tokens": 256,
+      "response_length_chars": 777,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 147.17830288751466,
+        "8": 198.773850677078,
+        "14": 214.969079106722,
+        "20": 226.07956561826805,
+        "26": 260.24177182491763
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/189",
+      "condition": "baseline",
+      "response_text": "To determine how much each friend paid, we need to calculate the total cost of the tickets, the cost of the food, and the cost of the rides, and then divide the total by 3.\n\n1. **Calculate the cost of the tickets:**\n   The cost of the tickets is given as $20.25.\n\n2. **Calculate the cost of the food:**\n   The cost of the food is $4.50 less than the cost of the tickets. So, the cost of the food is:\n   \\[\n   20.25 - 4.50 = 15.75\n   \\]\n\n3. **Calculate the cost of the rides:**\n   The cost of each ride is $33, and they went on 2 rides. So, the total cost of the rides is:\n   \\[\n   33 \\times 2 = 66\n   \\]\n\n4. **Calculate the total cost:**\n   The total cost is the sum of the cost of the tickets, the cost of the food, and the cost of the rides:\n   \\[\n   20.25 + 15.75 + 66 = 102",
+      "response_length_tokens": 256,
+      "response_length_chars": 777,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 118.19955151268549,
+        "8": 160.92961433088774,
+        "14": 175.79711174137546,
+        "20": 189.3079374837646,
+        "26": 270.10209585211
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/778",
+      "condition": "baseline",
+      "response_text": "To calculate how much Winston spent on fruit, we need to multiply the price per pound of each type of fruit by the number of pounds he picked and then add up the totals.\n\n1. **Peaches:**\n   - Price per pound: $2.00\n   - Pounds picked: 6\n   - Total cost for peaches: \\( 6 \\text{ pounds} \\times \\$2.00/\\text{pound} = \\$12.00 \\)\n\n2. **Plums:**\n   - Price per pound: $1.00\n   - Pounds picked: 8\n   - Total cost for plums: \\( 8 \\text{ pounds} \\times \\$1.00/\\text{pound} = \\$8.00 \\)\n\n3. **Apricots:**\n   - Price per pound: $3.00\n   - Pounds picked: 6\n   - Total cost for apricots: \\( 6 \\text{ pounds} \\times \\$3.00/\\text{pound} = \\$18.00 \\)\n\nNow, we add up the total costs for each type of fruit to find the total amount Winston spent",
+      "response_length_tokens": 256,
+      "response_length_chars": 728,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 103.46131329447077,
+        "8": 140.75715553189008,
+        "14": 156.07764258351796,
+        "20": 170.63862442056018,
+        "26": 263.20315886240894
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/198",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step to find out how many Pokemon cards Elaine has in total.\n\n1. **Initial Number of Cards:**\n   Elaine starts with 20 Pokemon cards.\n\n2. **First Month:**\n   Elaine collects three times the number of cards she initially had.\n   \\[\n   3 \\times 20 = 60 \\text{ cards}\n   \\]\n   So, after the first month, she has:\n   \\[\n   20 + 60 = 80 \\text{ cards}\n   \\]\n\n3. **Second Month:**\n   Elaine collects 20 fewer cards than she did in the first month.\n   \\[\n   60 - 20 = 40 \\text{ cards}\n   \\]\n   So, after the second month, she has:\n   \\[\n   80 + 40 = 120 \\text{ cards}\n   \\]\n\n4. **Third Month:**\n   Elaine collects twice the combined number of cards she collected in the first and second months.\n   \\[\n   2 \\times (60 + 40) = 2 \\times 100 = 200 \\text{",
+      "response_length_tokens": 256,
+      "response_length_chars": 779,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 109.83126135190874,
+        "8": 150.21032805924605,
+        "14": 166.1956337046036,
+        "20": 174.12199561773244,
+        "26": 261.5030237086377
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/735",
+      "condition": "baseline",
+      "response_text": "To determine how many votes candidate C received, we can follow these steps:\n\n1. Calculate the number of votes candidate A received.\n2. Calculate the number of votes candidate B received.\n3. Subtract the votes received by candidates A and B from the total number of votes to find the number of votes candidate C received.\n\nFirst, let's calculate the number of votes candidate A received. Since candidate A got 20% of the votes and there were 100 voters, we have:\n\\[ \\text{Votes for candidate A} = 20\\% \\times 100 = 0.20 \\times 100 = 20 \\]\n\nNext, we calculate the number of votes candidate B received. Candidate B got 50% more than candidate A's votes. So, we need to find 50% of candidate A's votes and add it to the votes candidate A received:\n\\[ \\text{Votes for candidate B} = 20 + (50\\% \\times 20) = 20 + 0.50 \\times 20 = 20 + 10 = 30 \\]\n\nNow, we subtract the votes received by candidates A and B",
+      "response_length_tokens": 256,
+      "response_length_chars": 899,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 130.20108937102128,
+        "8": 178.29555707722355,
+        "14": 195.3975387560661,
+        "20": 214.57032833073018,
+        "26": 308.353700638696
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/704",
+      "condition": "baseline",
+      "response_text": "To determine how much money Gerald has left after spending $10 on a book, we first need to find out how much money each of them received when they divided $100 in the ratio 3:2.\n\nThe total parts of the ratio are \\(3 + 2 = 5\\).\n\nGerald's share is \\(\\frac{3}{5}\\) of $100, and Julia's share is \\(\\frac{2}{5}\\) of $100.\n\nCalculating Gerald's share:\n\\[\n\\text{Gerald's share} = \\frac{3}{5} \\times 100 = 60\n\\]\n\nSo, Gerald initially has $60. After spending $10 on a book, the amount of money Gerald has left is:\n\\[\n60 - 10 = 50\n\\]\n\nTherefore, the amount of money Gerald has left is \\(\\boxed{50}\\).",
+      "response_length_tokens": 199,
+      "response_length_chars": 590,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 175.23249631030106,
+        "8": 236.59945271026362,
+        "14": 253.59512464230403,
+        "20": 267.53175756780973,
+        "26": 287.7760927448416
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1236",
+      "condition": "baseline",
+      "response_text": "To solve this problem, let's break it down step by step.\n\n1. **Determine the number of grapes used by Madeline's brother:**\n   Madeline ate 6 grapes. Her brother used 5 times as many grapes to make a full glass of grape juice.\n   \\[\n   \\text{Grapes used by brother} = 5 \\times 6 = 30\n   \\]\n\n2. **Calculate the total number of grapes used by Madeline and her brother:**\n   \\[\n   \\text{Total grapes used} = \\text{Grapes eaten by Madeline} + \\text{Grapes used by brother} = 6 + 30 = 36\n   \\]\n\n3. **Determine the number of grapes used for the pies:**\n   Their mother used the remaining grapes to make 4 pies, and each pie requires 12 grapes.\n   \\[\n   \\text{Grapes used for pies} = 4 \\times 12 = 48\n   \\]\n\n4. **Calculate the total number of grapes at the beginning:**\n   The total number of grapes at the beginning is the sum of the grapes used by Madeline, her brother",
+      "response_length_tokens": 256,
+      "response_length_chars": 864,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 120.28610029536897,
+        "8": 164.07977469067575,
+        "14": 178.42821712146397,
+        "20": 187.82780657181542,
+        "26": 274.8793188216185
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/541",
+      "condition": "baseline",
+      "response_text": "To determine how much Elvis needs to save each day in the second half of April, we first need to break down the month into two halves and understand the relationship between the savings in the first and second halves.\n\nApril has 30 days, so the first half of April consists of the first 15 days, and the second half consists of the last 15 days.\n\nLet's denote the daily savings in the first half of April as \\( x \\). Therefore, the total savings in the first half of April would be \\( 15x \\).\n\nAccording to the problem, Elvis wants to save twice as much daily in the second half of April. So, his daily savings in the second half of April would be \\( 2x \\). The total savings in the second half of April would then be \\( 15 \\times 2x = 30x \\).\n\nElvis's total savings for the month of April should be $1125. Therefore, we can set up the following equation to represent the total savings:\n\n\\[ 15x + 30x = 1125 \\]\n\nSimplifying the left side of the equation, we get:\n\n\\[ 45x = 1125",
+      "response_length_tokens": 256,
+      "response_length_chars": 977,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 126.39782047607173,
+        "8": 171.49116997296298,
+        "14": 186.27648096682103,
+        "20": 199.50451509409686,
+        "26": 285.10729805176015
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/88",
+      "condition": "baseline",
+      "response_text": "Let's denote the number of copies Harald sold as \\( H \\). According to the problem, Marilyn's first record sold 10 times as many copies as Harald's, so Marilyn sold \\( 10H \\) copies.\n\nThe total number of copies sold by both of them combined is 88,000. Therefore, we can write the equation:\n\n\\[ H + 10H = 88,000 \\]\n\nCombining like terms, we get:\n\n\\[ 11H = 88,000 \\]\n\nTo find \\( H \\), we divide both sides of the equation by 11:\n\n\\[ H = \\frac{88,000}{11} \\]\n\n\\[ H = 8,000 \\]\n\nSo, Harald sold 8,000 copies.",
+      "response_length_tokens": 177,
+      "response_length_chars": 503,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 162.9921921814643,
+        "8": 219.9178774007718,
+        "14": 236.87264883282572,
+        "20": 247.3638235325642,
+        "26": 278.0129390069981
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/940",
+      "condition": "baseline",
+      "response_text": "To determine the total number of children participating in the mass drill, we need to calculate the number of children in each school and then sum them up for all the schools.\n\nGiven:\n- Each row has 8 children.\n- There are 7 rows for each school.\n- There are 5 different schools.\n\nFirst, calculate the number of children in one school:\n- Number of rows per school = 7\n- Number of children per row = 8\n- Therefore, the number of children in one school is \\(7 \\times 8 = 56\\).\n\nNext, calculate the total number of children for all 5 schools:\n- Number of children per school = 56\n- Number of schools = 5\n- Therefore, the total number of children is \\(56 \\times 5 = 280\\).\n\nSo, the total number of children in the drill is \\(\\boxed{280}\\).",
+      "response_length_tokens": 192,
+      "response_length_chars": 735,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 138.1537622252286,
+        "8": 188.3990989667436,
+        "14": 205.02431873679768,
+        "20": 223.63697951553252,
+        "26": 302.3776205323444
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1098",
+      "condition": "baseline",
+      "response_text": "To determine Jeff's age, we can break down the information given step by step.\n\n1. We know that Mike is 24 years old.\n2. Martha is 4 years younger than Mike. So, we can calculate Martha's age as follows:\n   \\[\n   \\text{Martha's age} = \\text{Mike's age} - 4 = 24 - 4 = 20\n   \\]\n3. Jeff is 10 years older than Martha. So, we can calculate Jeff's age as follows:\n   \\[\n   \\text{Jeff's age} = \\text{Martha's age} + 10 = 20 + 10 = 30\n   \\]\n\nTherefore, Jeff is \\(\\boxed{30}\\) years old.",
+      "response_length_tokens": 168,
+      "response_length_chars": 480,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 151.09444831604534,
+        "8": 204.62509053249175,
+        "14": 221.27825331306863,
+        "20": 232.22306456026328,
+        "26": 266.2569237637616
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/255",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step:\n\n1. Initially, there are 10 stalls with 20 cows each.\n   - Total number of cows initially = \\(10 \\times 20 = 200\\) cows.\n\n2. Mr. Sylas buys 40 new cows and divides them equally among the 20 stalls.\n   - Number of new cows per stall = \\(40 \\div 20 = 2\\) cows.\n\n3. Now, let's calculate the total number of cows in each stall after the new cows are added.\n   - Initial number of cows per stall = 20\n   - Number of new cows per stall = 2\n   - Total number of cows per stall = \\(20 + 2 = 22\\) cows.\n\n4. We need to find the total number of cows in 8 of the stalls.\n   - Number of cows in 8 stalls = \\(8 \\times 22 = 176\\) cows.\n\nSo, the total number of cows in 8 of the stalls is 176.",
+      "response_length_tokens": 229,
+      "response_length_chars": 720,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 143.32004514467036,
+        "8": 193.93651873303918,
+        "14": 210.99623951547426,
+        "20": 223.2860337639017,
+        "26": 291.18024388436567
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/775",
+      "condition": "baseline",
+      "response_text": "To determine how many wheels Henry will have left after assembling the toys, we need to calculate the total number of wheels required for the cars and motorcycles, and then subtract this from the total number of wheels he has.\n\nFirst, let's calculate the number of wheels needed for the cars:\n- Henry needs to assemble 57 cars.\n- Each car requires 4 wheels.\n- Therefore, the total number of wheels needed for the cars is \\(57 \\times 4 = 228\\) wheels.\n\nNext, let's calculate the number of wheels needed for the motorcycles:\n- Henry needs to assemble 73 motorcycles.\n- Each motorcycle requires 2 wheels.\n- Therefore, the total number of wheels needed for the motorcycles is \\(73 \\times 2 = 146\\) wheels.\n\nNow, let's find the total number of wheels needed for both the cars and the motorcycles:\n- The total number of wheels needed is \\(228 + 146 = 374\\) wheels.\n\nHenry has a box with 650 wheels. To find out how many wheels will be left after assembling the toys, we subtract the total number of wheels needed from the total number of wheels he has:\n- The number of wheels left is",
+      "response_length_tokens": 256,
+      "response_length_chars": 1077,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 124.31392549983889,
+        "8": 169.87343227134312,
+        "14": 183.9343929884639,
+        "20": 194.04164776907402,
+        "26": 267.9502638290465
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/161",
+      "condition": "baseline",
+      "response_text": "Let's break down the information given:\n\n- Anakin caught:\n  - 10 starfish\n  - 6 sea horses\n  - 3 clownfish\n\n- Locsin caught:\n  - 5 fewer starfish than Anakin: \\(10 - 5 = 5\\) starfish\n  - 3 fewer sea horses than Anakin: \\(6 - 3 = 3\\) sea horses\n  - 2 more clownfish than Anakin: \\(3 + 2 = 5\\) clownfish\n\nNow, let's calculate the total number of each type of fish caught by both Anakin and Locsin:\n\n- Total starfish caught by both:\n  \\[\n  10 \\text{ (Anakin)} + 5 \\text{ (Locsin)} = 15 \\text{ starfish}\n  \\]\n\n- Total sea horses caught by both:\n  \\[\n  6 \\text{ (Anakin)} + 3 \\text{ (Locsin)} = 9 \\text{ sea horses}\n  \\]\n\n- Total clownfish caught by both:\n  \\[\n  3 \\text{ (Anakin)} + 5 \\text{ (Locsin)} = 8 \\text",
+      "response_length_tokens": 256,
+      "response_length_chars": 707,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 113.84892993473031,
+        "8": 156.28150084581367,
+        "14": 172.35901628742062,
+        "20": 184.74524612946172,
+        "26": 274.24281245487725
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1130",
+      "condition": "baseline",
+      "response_text": "To solve this problem, we need to calculate the total weight of the crayons and the boxes, and then convert the weight from ounces to pounds.\n\n1. **Calculate the number of groups of crayons:**\n   Nik has 200 crayons and he wants to separate them into groups of 8.\n   \\[\n   \\text{Number of groups} = \\frac{200}{8} = 25\n   \\]\n\n2. **Calculate the total weight of the crayons:**\n   Each crayon weighs 1 ounce, so the total weight of the crayons is:\n   \\[\n   \\text{Total weight of crayons} = 200 \\text{ crayons} \\times 1 \\text{ ounce/crayon} = 200 \\text{ ounces}\n   \\]\n\n3. **Calculate the total weight of the boxes:**\n   Each box weighs 8 ounces, and there are 25 boxes.\n   \\[\n   \\text{Total weight of boxes} = 25 \\text{ boxes} \\times 8 \\text{ ounces/box} = 200 \\text{ ounces}\n   \\]\n\n4. **Calculate the total weight of the",
+      "response_length_tokens": 256,
+      "response_length_chars": 817,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 105.34084368442294,
+        "8": 144.3400446872962,
+        "14": 159.0171473540177,
+        "20": 170.2421056255888,
+        "26": 260.5109227159484
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/600",
+      "condition": "baseline",
+      "response_text": "To determine the weight Jamaal is now using, we can follow these steps:\n\n1. **Initial Weight**: Jamaal starts with an 8-pound weight.\n2. **Increase by 50%**: To find the weight after a 50% increase, we calculate:\n   \\[\n   8 \\text{ pounds} + 0.5 \\times 8 \\text{ pounds} = 8 \\text{ pounds} + 4 \\text{ pounds} = 12 \\text{ pounds}\n   \\]\n3. **Reduce by 2 Pounds**: Since the 12-pound weight is too heavy, Jamaal uses a weight that is 2 pounds lighter:\n   \\[\n   12 \\text{ pounds} - 2 \\text{ pounds} = 10 \\text{ pounds}\n   \\]\n\nTherefore, the weight Jamaal is now using is \\(\\boxed{10}\\) pounds.",
+      "response_length_tokens": 195,
+      "response_length_chars": 587,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 125.43270021859752,
+        "8": 170.8031671335853,
+        "14": 185.5043821487215,
+        "20": 197.52598317433157,
+        "26": 281.96005814351236
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1287",
+      "condition": "baseline",
+      "response_text": "Let's break down the information given:\n\n- There are 2 brothers and 3 sisters.\n- All 3 sisters are 16 years old.\n- One of the brothers is 12 years old.\n- The 12-year-old brother is half the age of the older brother.\n\nFrom the information, we can deduce that the older brother must be \\(12 \\times 2 = 24\\) years old.\n\nNow, let's calculate the total age of all the siblings:\n\n- Age of the first brother: 12 years\n- Age of the second brother: 24 years\n- Age of the first sister: 16 years\n- Age of the second sister: 16 years\n- Age of the third sister: 16 years\n\nAdding these together:\n\n\\[12 + 24 + 16 + 16 + 16 = 84\\]\n\nSo, the total age of all the siblings is 84 years.",
+      "response_length_tokens": 206,
+      "response_length_chars": 666,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 131.19641642328364,
+        "8": 179.3457980412965,
+        "14": 196.11048357084002,
+        "20": 214.3313828870677,
+        "26": 304.24653224449213
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1266",
+      "condition": "baseline",
+      "response_text": "To calculate the total amount of dog food needed for the kennel house in a week, we can break down the problem into smaller steps:\n\n1. **Calculate the daily food consumption for the German Shepherds:**\n   - There are 3 German Shepherds.\n   - Each German Shepherd consumes 5 kilograms of dog food per day.\n   - Therefore, the total daily consumption for the German Shepherds is \\(3 \\times 5 = 15\\) kilograms.\n\n2. **Calculate the daily food consumption for the Bulldogs:**\n   - There are 2 Bulldogs.\n   - Each Bulldog consumes 3 kilograms of dog food per day.\n   - Therefore, the total daily consumption for the Bulldogs is \\(2 \\times 3 = 6\\) kilograms.\n\n3. **Calculate the total daily food consumption for all dogs:**\n   - The total daily consumption for all the dogs is the sum of the German Shepherds' and Bulldogs' consumption.\n   - Therefore, the total daily consumption is \\(15 + 6 = 21\\) kilograms.\n\n4. **Calculate the weekly food consumption:**\n   - There are 7 days in a week.\n   - Therefore, the total weekly consumption is \\(21 \\times 7",
+      "response_length_tokens": 256,
+      "response_length_chars": 1045,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 136.69477214471382,
+        "8": 186.1658272554183,
+        "14": 202.22844683263315,
+        "20": 220.03527271459674,
+        "26": 295.2223944867439
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/740",
+      "condition": "baseline",
+      "response_text": "To solve this problem, let's break it down step by step:\n\n1. **Total number of students**: 50\n2. **Students who like to bake**: 10\n3. **Students who like to play basketball**: 5\n4. **Students who like to play video games or play music**: \\(50 - 10 - 5 = 35\\)\n\nWe are also given that the number of students who like to play music is twice the number that like to play basketball. Since 5 students like to play basketball, the number of students who like to play music is:\n\n\\[2 \\times 5 = 10\\]\n\nNow, we can find the number of students who like to play video games by subtracting the number of students who like to play music from the total number of students who like to play either video games or music:\n\n\\[35 - 10 = 25\\]\n\nSo, the number of students who like to play video games is **25**.",
+      "response_length_tokens": 212,
+      "response_length_chars": 788,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 125.26533657901166,
+        "8": 172.1860927389391,
+        "14": 188.23818426034137,
+        "20": 204.6684944970738,
+        "26": 299.5183501116814
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1182",
+      "condition": "baseline",
+      "response_text": "To determine how many books Bob can buy per school, we need to follow these steps:\n\n1. **Calculate the total number of books Bob can buy with $27,000:**\n   - Bob can buy 100 books for $500.\n   - To find out how many sets of 100 books he can buy with $27,000, we divide $27,000 by $500:\n     \\[\n     \\frac{27000}{500} = 54\n     \\]\n   - Therefore, Bob can buy 54 sets of 100 books.\n\n2. **Calculate the total number of books Bob can buy:**\n   - Since each set contains 100 books, we multiply the number of sets by 100:\n     \\[\n     54 \\times 100 = 5400\n     \\]\n   - So, Bob can buy 5400 books in total.\n\n3. **Determine the number of books per school:**\n   - Bob distributes the money equally among 3 schools.\n   - To find out how many books each school gets, we divide",
+      "response_length_tokens": 256,
+      "response_length_chars": 765,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 159.2217860318859,
+        "8": 214.43763020437694,
+        "14": 230.51110358461216,
+        "20": 239.6940870585237,
+        "26": 278.9138012903583
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/393",
+      "condition": "baseline",
+      "response_text": "To determine what percentage of her total work time Carol spent editing, we need to follow these steps:\n\n1. **Convert all time units to the same unit**: Let's convert everything to minutes.\n   - Writing a song: 4 hours = \\(4 \\times 60 = 240\\) minutes\n   - Recording the song: half the time of writing = \\(240 \\div 2 = 120\\) minutes\n   - Editing the song: 90 minutes\n\n2. **Calculate the total work time**:\n   \\[\n   \\text{Total work time} = 240 \\text{ minutes} + 120 \\text{ minutes} + 90 \\text{ minutes} = 450 \\text{ minutes}\n   \\]\n\n3. **Determine the percentage of time spent editing**:\n   \\[\n   \\text{Percentage of time spent editing} = \\left( \\frac{\\text{Time spent editing}}{\\text{Total work time}} \\right) \\times 100\n   \\]\n   \\[\n   \\text{Percentage of time spent editing} = \\left( \\frac{90 \\text{ minutes}}{450",
+      "response_length_tokens": 256,
+      "response_length_chars": 813,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 172.45050826404514,
+        "8": 232.90906676473335,
+        "14": 249.77213118070287,
+        "20": 257.212985679926,
+        "26": 270.25449520265863
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/142",
+      "condition": "baseline",
+      "response_text": "To determine how much money Jordan would earn in one week if he spent his video game time working instead, we can follow these steps:\n\n1. **Calculate the number of hours Jordan spends playing video games in one day:**\n   Jordan plays video games for 2 hours every day.\n\n2. **Calculate the number of hours Jordan would work in one day if he spent his video game time working:**\n   Since he would be working instead of playing, he would work for 2 hours each day.\n\n3. **Calculate Jordan's daily earnings from working:**\n   Jordan earns $10 per hour. Therefore, his daily earnings would be:\n   \\[\n   2 \\text{ hours/day} \\times \\$10/\\text{hour} = \\$20/\\text{day}\n   \\]\n\n4. **Calculate Jordan's weekly earnings from working:**\n   There are 7 days in a week. Therefore, his weekly earnings would be:\n   \\[\n   \\$20/\\text{day} \\times 7 \\text{ days/week} = \\$140/\\text{week}\n   \\]\n\nSo, if Jordan spent his video game time working instead, he would earn \\(\\boxed{140}\\) dollars in",
+      "response_length_tokens": 256,
+      "response_length_chars": 970,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 150.37095269737347,
+        "8": 203.077986878793,
+        "14": 218.6728147507211,
+        "20": 231.04958316951632,
+        "26": 283.28553528426403
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/93",
+      "condition": "baseline",
+      "response_text": "To solve this problem, we need to determine Gerald's original running time and then calculate his new time after the 10% improvement.\n\n1. **Determine Gerald's original running time:**\n   - Lee runs the 400-meter hurdles in 38 seconds.\n   - Lee used to be able to run 2 seconds faster than Gerald.\n   - Therefore, Gerald's original running time was \\(38 + 2 = 40\\) seconds.\n\n2. **Calculate Gerald's new running time after the 10% improvement:**\n   - Gerald's speed improved by 10%, which means his new time is 90% of his original time.\n   - To find 90% of Gerald's original time, we calculate \\(40 \\times 0.90\\).\n\n\\[\n40 \\times 0.90 = 36\n\\]\n\nThus, Gerald can now run the 400-meter hurdles in \\(\\boxed{36}\\) seconds.",
+      "response_length_tokens": 210,
+      "response_length_chars": 713,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 102.79946367518811,
+        "8": 141.1232453941005,
+        "14": 156.104796077577,
+        "20": 166.7304339415498,
+        "26": 264.3960664016988
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/466",
+      "condition": "baseline",
+      "response_text": "To determine how much more Kelly paid than Becky, we need to calculate the total cost for each of them after their respective discounts and then find the difference.\n\nFirst, let's calculate the total cost for Becky:\n- Becky bought 20 apples at 45 cents each.\n- The total cost before the discount is \\(20 \\times 0.45 = 9\\) dollars.\n- Becky received a $1 discount.\n- Therefore, the total cost for Becky after the discount is \\(9 - 1 = 8\\) dollars.\n\nNext, let's calculate the total cost for Kelly:\n- Kelly bought 20 apples at 50 cents each.\n- The total cost before the discount is \\(20 \\times 0.50 = 10\\) dollars.\n- Kelly received a 10 percent discount.\n- A 10 percent discount on $10 is \\(10 \\times 0.10 = 1\\) dollar.\n- Therefore, the total cost for Kelly after the discount is \\(10 - 1 = 9\\) dollars.\n\nNow, we find the difference in the total cost between Kelly and Becky:\n- Kelly paid $9, and Becky paid $8.\n- The difference is \\(9",
+      "response_length_tokens": 256,
+      "response_length_chars": 931,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 142.2407715534874,
+        "8": 192.2454382761537,
+        "14": 208.61351756910346,
+        "20": 218.57288470250745,
+        "26": 260.213661289921
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/592",
+      "condition": "baseline",
+      "response_text": "To determine how much more expensive the boots are on eBay compared to Amazon, we need to calculate the total cost for each platform and then find the difference.\n\nFirst, let's calculate the total cost for the boots and shipping on Amazon:\n- Cost of the boots on Amazon: $16\n- Shipping cost on Amazon: $4\n- Total cost on Amazon: $16 + $4 = $20\n\nNext, let's calculate the total cost for the boots and shipping on eBay:\n- Cost of the boots on eBay: $13\n- Shipping cost on eBay: Twice the cost of shipping on Amazon, which is 2 * $4 = $8\n- Total cost on eBay: $13 + $8 = $21\n\nNow, we find the difference in total cost between eBay and Amazon:\n- Total cost on eBay: $21\n- Total cost on Amazon: $20\n- Difference: $21 - $20 = $1\n\nTherefore, the boots are $1 more expensive on eBay compared to Amazon.",
+      "response_length_tokens": 218,
+      "response_length_chars": 794,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 117.60506619925883,
+        "8": 160.9322119121695,
+        "14": 174.92176595120574,
+        "20": 186.00717229199404,
+        "26": 261.7685433951223
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/163",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step.\n\n1. **Determine the cost of a red car:**\n   - We are given that one red car costs $4.\n\n2. **Determine the cost of an action figure:**\n   - We are given that an action figure costs $5.\n\n3. **Determine the cost of the doll:**\n   - We are told that the doll costs as much as 3 action figures.\n   - Since one action figure costs $5, the cost of the doll is \\(3 \\times 5 = 15\\) dollars.\n\n4. **Calculate the total value of all the toys:**\n   - There are 5 red cars, each costing $4.\n     \\[\n     \\text{Total cost of red cars} = 5 \\times 4 = 20 \\text{ dollars}\n     \\]\n   - There are 3 action figures, each costing $5.\n     \\[\n     \\text{Total cost of action figures} = 3 \\times 5 = 15 \\text{ dollars}\n     \\]\n   - The doll costs $15.\n\n5. **Sum up the total value of all the toys:**\n   \\[\n   \\text{Total",
+      "response_length_tokens": 256,
+      "response_length_chars": 839,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 133.9124718494431,
+        "8": 183.19332013510302,
+        "14": 199.95453927138868,
+        "20": 219.89378039025806,
+        "26": 305.5526348499004
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/206",
+      "condition": "baseline",
+      "response_text": "To calculate the total kilometers Michael rode, we can break the problem into two parts: the first four weeks and the following three weeks.\n\n**First Four Weeks:**\n- Michael rides at least 5 times a week.\n- Each ride is 25 kilometers.\n- He does this for 4 weeks.\n\nThe total kilometers for the first four weeks can be calculated as:\n\\[ 5 \\text{ rides/week} \\times 25 \\text{ km/ride} \\times 4 \\text{ weeks} = 500 \\text{ km} \\]\n\n**Next Three Weeks:**\n- Michael rides 2 times a week.\n- Each ride is 60 kilometers.\n- He does this for 3 weeks.\n\nThe total kilometers for the next three weeks can be calculated as:\n\\[ 2 \\text{ rides/week} \\times 60 \\text{ km/ride} \\times 3 \\text{ weeks} = 360 \\text{ km} \\]\n\nNow, we add the kilometers from both periods to get the total kilometers Michael rode:\n\\[ 500 \\text{ km} + 360 \\text{ km} = 860 \\text{ km} \\]\n\n",
+      "response_length_tokens": 256,
+      "response_length_chars": 844,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 107.65635792714593,
+        "8": 146.5256252475528,
+        "14": 162.66884834637818,
+        "20": 174.04691605656365,
+        "26": 272.35451647957916
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/928",
+      "condition": "baseline",
+      "response_text": "To find the average number of Junebugs Rita removes per day, we need to follow these steps:\n\n1. Calculate the number of Junebugs removed on Tuesday and Wednesday.\n2. Sum the total number of Junebugs removed over the five days.\n3. Divide the total by the number of days to find the average.\n\nFirst, we know that on Monday, Rita removed 39 Junebugs. Since she removed twice as many Junebugs on Tuesday and Wednesday as she did on Monday, we can calculate the number of Junebugs removed on those days as follows:\n\n- Tuesday: \\(2 \\times 39 = 78\\)\n- Wednesday: \\(2 \\times 39 = 78\\)\n\nNext, we know the number of Junebugs removed on Thursday and Friday:\n\n- Thursday: 48\n- Friday: 57\n\nNow, we sum the total number of Junebugs removed over the five days:\n\n\\[\n39 + 78 + 78 + 48 + 57\n\\]\n\nLet's add these step by step:\n\n\\[\n39 + 78 = 117\n\\]\n\\[\n117 + 78 = 195\n\\]\n\\[\n",
+      "response_length_tokens": 256,
+      "response_length_chars": 852,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 108.45012502067227,
+        "8": 148.26678836521162,
+        "14": 164.39401764823663,
+        "20": 171.290701949122,
+        "26": 258.15429796824134
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1301",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step to find out how many cookies Randy has now.\n\n1. **Initial Count of Cookies:**\n   - Oatmeal cookies: 9\n   - Chocolate chip cookies: 4\n   - Sugar cookies: 5\n\n2. **Cookies Eaten for an Early Day Snack:**\n   - Randy ate 1 oatmeal cookie, 1 chocolate chip cookie, and 1 sugar cookie.\n   - Oatmeal cookies: 9 - 1 = 8\n   - Chocolate chip cookies: 4 - 1 = 3\n   - Sugar cookies: 5 - 1 = 4\n\n3. **Cookies Eaten for Lunch:**\n   - Randy ate 2 oatmeal cookies.\n   - Oatmeal cookies: 8 - 2 = 6\n\n4. **Cookies Given to Friends:**\n   - Randy gave 2 sugar cookies to his friends.\n   - Sugar cookies: 4 - 2 = 2\n\n5. **Cookies Baked for Dinner:**\n   - Randy baked 4 of each flavor.\n   - Oatmeal cookies: 6 + 4 = 10\n   - Chocolate chip cookies: 3 + 4 =",
+      "response_length_tokens": 256,
+      "response_length_chars": 771,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 107.54319936340383,
+        "8": 147.75486412091004,
+        "14": 162.00432256943571,
+        "20": 170.45604398838194,
+        "26": 250.12095779257496
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/747",
+      "condition": "baseline",
+      "response_text": "To calculate how much money the tomato vendor saves in a week, we need to follow these steps:\n\n1. **Calculate the daily savings:**\n   - The vendor used to buy tomatoes for $0.50 each.\n   - The new vendor sells tomatoes for $0.40 each.\n   - The savings per tomato is $0.50 - $0.40 = $0.10.\n   - The vendor sells 500 tomatoes a day.\n   - Therefore, the daily savings are $0.10 * 500 = $50.\n\n2. **Calculate the weekly savings:**\n   - There are 7 days in a week.\n   - The daily savings are $50.\n   - Therefore, the weekly savings are $50 * 7 = $350.\n\nSo, the vendor saves $350 a week.",
+      "response_length_tokens": 183,
+      "response_length_chars": 580,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 130.8751273088207,
+        "8": 177.7803660831469,
+        "14": 193.73966704585882,
+        "20": 206.74303888938599,
+        "26": 276.06510055235543
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/333",
+      "condition": "baseline",
+      "response_text": "To determine the cost difference between the two offers, we need to calculate the total cost of each offer and then find the difference.\n\n**Furniture United's Offer:**\n- Advance payment: $1,350\n- Monthly installments: 6 payments of $350 each\n\nTotal cost for Furniture United:\n\\[ \\text{Total cost} = \\text{Advance payment} + (\\text{Monthly installment} \\times \\text{Number of installments}) \\]\n\\[ \\text{Total cost} = 1350 + (350 \\times 6) \\]\n\\[ \\text{Total cost} = 1350 + 2100 \\]\n\\[ \\text{Total cost} = 3450 \\]\n\n**Cozy Homes' Offer:**\n- Advance payment: $1,100\n- Monthly installments: 9 payments of $250 each\n\nTotal cost for Cozy Homes:\n\\[ \\text{Total cost} = \\text{Advance payment} + (\\text{Monthly installment} \\times \\text{Number of installments}) \\]\n\\[ \\text{Total cost} = 1100 + (250 \\times 9",
+      "response_length_tokens": 256,
+      "response_length_chars": 796,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 105.4934970414495,
+        "8": 144.18336158997334,
+        "14": 159.86846336797262,
+        "20": 177.6503112261791,
+        "26": 279.3721086853387
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/758",
+      "condition": "baseline",
+      "response_text": "To calculate the price after a 5% discount on a $140 bag, you can follow these steps:\n\n1. Calculate the amount of the discount:\n\\[ \\text{Discount Amount} = \\text{Original Price} \\times \\text{Discount Rate} \\]\n\\[ \\text{Discount Amount} = 140 \\times 0.05 = 7 \\]\n\n2. Subtract the discount amount from the original price to get the final price:\n\\[ \\text{Final Price} = \\text{Original Price} - \\text{Discount Amount} \\]\n\\[ \\text{Final Price} = 140 - 7 = 133 \\]\n\nSo, after applying the 5% discount, you will pay $133 for the bag.",
+      "response_length_tokens": 163,
+      "response_length_chars": 523,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 198.90161587339162,
+        "8": 267.4712925112537,
+        "14": 286.6988610549725,
+        "20": 299.7990109543562,
+        "26": 295.0947771803898
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/727",
+      "condition": "baseline",
+      "response_text": "To determine the total number of windows Hannah smashes, we need to calculate the number of windows she smashes for both the students' cars and the teachers' cars separately, and then sum these amounts.\n\nFirst, let's calculate the number of windows smashed in the students' cars:\n- There are 64 students' cars.\n- Each student's car has 4 windows.\n- Hannah smashes a quarter of the students' cars' windows.\n\nThe number of students' cars whose windows are smashed is:\n\\[ \\frac{1}{4} \\times 64 = 16 \\text{ cars} \\]\n\nSince each of these 16 cars has 4 windows, the total number of windows smashed in the students' cars is:\n\\[ 16 \\times 4 = 64 \\text{ windows} \\]\n\nNext, let's calculate the number of windows smashed in the teachers' cars:\n- There are 32 teachers' cars.\n- Each teacher's car has 2 windows.\n- Hannah smashes three-quarters of the teachers' cars' windows.\n\nThe number of teachers' cars whose windows are smashed is:\n\\[ \\frac{3}{4} \\times 32 = 24 \\text{ cars}",
+      "response_length_tokens": 256,
+      "response_length_chars": 966,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 105.86485561594607,
+        "8": 145.16302533853607,
+        "14": 161.08922756344646,
+        "20": 175.91762545174367,
+        "26": 280.69844735736655
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/429",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step.\n\n1. Indras has 6 letters in her name.\n2. Her sister's name has 4 more letters than half of the letters in Indras' name.\n\nFirst, we calculate half of the letters in Indras' name:\n\\[ \\frac{6}{2} = 3 \\]\n\nNext, we add 4 to this number to find the number of letters in her sister's name:\n\\[ 3 + 4 = 7 \\]\n\nSo, Indras' sister has 7 letters in her name.\n\nNow, we add the number of letters in Indras' name and her sister's name to find the total:\n\\[ 6 + 7 = 13 \\]\n\nTherefore, the total number of letters in Indras and her sister's names is 13.",
+      "response_length_tokens": 172,
+      "response_length_chars": 577,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 156.5870859403202,
+        "8": 211.71689464006568,
+        "14": 228.9958543485891,
+        "20": 242.40277874505028,
+        "26": 289.9070644468849
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/546",
+      "condition": "baseline",
+      "response_text": "To determine the total number of letters Elise has written, we need to break down the problem step by step.\n\n1. **Writing the full alphabet twice:**\n   - The English alphabet has 26 letters.\n   - Writing it once: 26 letters.\n   - Writing it twice: \\(26 \\times 2 = 52\\) letters.\n\n2. **Writing half of the alphabet once:**\n   - Half of the alphabet is \\( \\frac{26}{2} = 13 \\) letters.\n   - Writing it once: 13 letters.\n\n3. **Re-writing everything she has already written:**\n   - So far, Elise has written \\(52 + 13 = 65\\) letters.\n   - Re-writing everything: \\(65\\) letters.\n\n4. **Total number of letters written:**\n   - Adding the re-written letters to the previous total: \\(65 + 65 = 130\\).\n\nTherefore, the total number of letters Elise has written is \\(\\boxed{130}\\).",
+      "response_length_tokens": 225,
+      "response_length_chars": 768,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 139.19681480122006,
+        "8": 188.6399684576495,
+        "14": 205.34307402070243,
+        "20": 218.60153726931165,
+        "26": 295.101269892455
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/146",
+      "condition": "baseline",
+      "response_text": "To determine the total number of Lego pieces Johnny picks up, we need to calculate the number of pieces in each set and then sum them up.\n\n1. The first set has 500 pieces.\n2. The second set has 3 times more pieces than the first set. So, the number of pieces in the second set is:\n   \\[\n   3 \\times 500 = 1500\n   \\]\n3. The third set has 1/4 the number of pieces as the first set. So, the number of pieces in the third set is:\n   \\[\n   \\frac{500}{4} = 125\n   \\]\n\nNow, we add the number of pieces from all three sets:\n\\[\n500 + 1500 + 125 = 2125\n\\]\n\nTherefore, the total number of Lego pieces Johnny picks up is \\(\\boxed{2125}\\).",
+      "response_length_tokens": 204,
+      "response_length_chars": 626,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 103.63396241949465,
+        "8": 141.339062853469,
+        "14": 155.64940041759516,
+        "20": 159.90342164406283,
+        "26": 253.64835380227504
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1247",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step:\n\n1. Brendan starts with 10 marbles.\n2. He drops half of them, which means he drops \\( \\frac{10}{2} = 5 \\) marbles. So, he has \\( 10 - 5 = 5 \\) marbles left.\n3. He then searches for the dropped marbles and finds 3 of them. So, he adds these 3 marbles to the 5 he already has, giving him \\( 5 + 3 = 8 \\) marbles.\n4. When he inspects the marbles, he finds that one of them is actually a bead and not a marble. So, he gets rid of that bead. This means he now has \\( 8 - 1 = 7 \\) marbles.\n\nTherefore, the number of marbles Brendan ends up with is \\(\\boxed{7}\\).",
+      "response_length_tokens": 192,
+      "response_length_chars": 599,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 97.05226063725455,
+        "8": 132.9034351404493,
+        "14": 146.83059216053644,
+        "20": 156.23013945304362,
+        "26": 260.4321509951991
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1300",
+      "condition": "baseline",
+      "response_text": "To calculate how much Josh makes in 2 weeks, let's break down the problem step by step.\n\n1. **Determine the number of days Josh is open in a week:**\n   - Josh is open every day except Sunday and Wednesday.\n   - There are 7 days in a week.\n   - Therefore, he is open \\(7 - 2 = 5\\) days a week.\n\n2. **Calculate the number of cars serviced in a week:**\n   - Josh services 3 cars a day.\n   - He is open 5 days a week.\n   - Therefore, the number of cars serviced in a week is \\(3 \\text{ cars/day} \\times 5 \\text{ days/week} = 15 \\text{ cars/week}\\).\n\n3. **Calculate the number of cars serviced in 2 weeks:**\n   - He services 15 cars in one week.\n   - Therefore, in 2 weeks, he services \\(15 \\text{ cars/week} \\times 2 \\text{ weeks} = 30 \\text{ cars}\\).\n\n4. **Calculate the total earnings:**\n   - Josh gets paid $4 per car.\n   - He services 30 cars in ",
+      "response_length_tokens": 256,
+      "response_length_chars": 846,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 148.76297098770468,
+        "8": 200.86095018331386,
+        "14": 215.78495742218576,
+        "20": 223.24420871893983,
+        "26": 253.09652916740248
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/350",
+      "condition": "baseline",
+      "response_text": "Let's break down the duration of each activity and then sum them up to find the total number of hours Peyton will spend on her after-work activities.\n\n1. **Monday's Yoga Class**: 1 hour\n2. **Tuesday's Cooking Class**: The cooking class lasts three times as long as the yoga class. So, it will be \\(3 \\times 1 = 3\\) hours.\n3. **Wednesday's Cheese-Tasting Event**: 0.5 hours (or 30 minutes)\n4. **Thursday's Museum Tour**: The museum tour takes half as long as the cooking class. So, it will be \\(\\frac{3}{2} = 1.5\\) hours.\n5. **Friday's Errands**: 2 hours\n\nNow, let's add up all the hours:\n\n\\[\n1 \\text{ (Monday)} + 3 \\text{ (Tuesday)} + 0.5 \\text{ (Wednesday)} + 1.5 \\text{ (Thursday)} + 2 \\text{ (Friday)} = 1 + 3 + 0.5 + 1.5 + 2 = 8 \\text{ hours}\n\\]\n\nSo, the total number of hours Peyton's after-work activities will",
+      "response_length_tokens": 256,
+      "response_length_chars": 816,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 106.99781702844119,
+        "8": 146.73889454266202,
+        "14": 163.59908629904984,
+        "20": 178.76741824421376,
+        "26": 294.9334158581915
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1093",
+      "condition": "baseline",
+      "response_text": "To determine the cost to paint the room, we need to calculate the total area of the walls and then determine how many gallons of paint are required, followed by the cost.\n\nFirst, let's calculate the area of each pair of walls:\n\n1. **North and South Walls:**\n   - Each wall is 10 feet by 8 feet.\n   - Area of one wall: \\(10 \\text{ feet} \\times 8 \\text{ feet} = 80 \\text{ square feet}\\).\n   - Since there are two walls, the total area for the north and south walls is: \\(80 \\text{ square feet} \\times 2 = 160 \\text{ square feet}\\).\n\n2. **East and West Walls:**\n   - Each wall is 5 feet by 8 feet.\n   - Area of one wall: \\(5 \\text{ feet} \\times 8 \\text{ feet} = 40 \\text{ square feet}\\).\n   - Since there are two walls, the total area for the east and west walls is: \\(40 \\text{ square feet} \\times 2 = 80 \\text{ square feet}\\).\n\nNext, we add the areas of",
+      "response_length_tokens": 256,
+      "response_length_chars": 852,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 124.73135574745825,
+        "8": 169.9151946109507,
+        "14": 183.78622415329465,
+        "20": 195.06067278579098,
+        "26": 250.16963974973277
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/334",
+      "condition": "baseline",
+      "response_text": "To determine how many paintball guns each person would have if they shared them equally, we need to follow these steps:\n\n1. **Calculate the total number of paintball guns:**\n   - DJ has 8 guns.\n   - Nick has 10 guns.\n   - Jason (RJ) has 1 gun.\n   - Richard has 5 guns.\n\n   Adding these together:\n   \\[\n   8 + 10 + 1 + 5 = 24\n   \\]\n\n2. **Determine the number of people sharing the guns:**\n   There are 4 people (DJ, Nick, Jason, and Richard).\n\n3. **Divide the total number of guns by the number of people:**\n   \\[\n   \\frac{24}{4} = 6\n   \\]\n\nSo, if they share the guns equally, each person would have 6 guns.",
+      "response_length_tokens": 186,
+      "response_length_chars": 606,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 133.65143753000956,
+        "8": 182.31870504483376,
+        "14": 199.00857151838548,
+        "20": 212.58644791440403,
+        "26": 281.6926348510521
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/946",
+      "condition": "baseline",
+      "response_text": "To determine how many loaves of bread the bakery has, we can follow these steps:\n\n1. Identify the number of loaves Sam had last Friday. According to the problem, Sam had 70 loaves of bread.\n2. Calculate seven times the number of loaves Sam had. This can be done by multiplying 70 by 7:\n   \\[\n   7 \\times 70 = 490\n   \\]\n3. The bakery has 40 less than this amount. So, we need to subtract 40 from 490:\n   \\[\n   490 - 40 = 450\n   \\]\n\nTherefore, the bakery has \\(\\boxed{450}\\) loaves of bread.",
+      "response_length_tokens": 160,
+      "response_length_chars": 489,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 153.58655227143203,
+        "8": 207.9877894589755,
+        "14": 224.2113692125187,
+        "20": 234.52921178814714,
+        "26": 272.0692990396826
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/777",
+      "condition": "baseline",
+      "response_text": "To determine the total cost of replacing Mike's movie collection with digital versions, we need to break down the problem into smaller parts and calculate the cost for each category of movies.\n\n1. **Calculate the number of movies in series:**\n   A third of the 600 movies are in various series.\n   \\[\n   \\text{Number of series movies} = \\frac{1}{3} \\times 600 = 200\n   \\]\n\n2. **Calculate the cost for the series movies:**\n   Each series costs $6, which is a third of the cost of a normal movie ($10).\n   \\[\n   \\text{Cost for series movies} = 200 \\times 6 = 1200\n   \\]\n\n3. **Calculate the number of remaining movies:**\n   Subtract the number of series movies from the total number of movies.\n   \\[\n   \\text{Remaining movies} = 600 - 200 = 400\n   \\]\n\n4. **Calculate the number of older movies:**\n   40% of the remaining 400 movies are older movies.\n   \\[\n   \\text{Number of older movies}",
+      "response_length_tokens": 256,
+      "response_length_chars": 885,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 97.38444640644828,
+        "8": 133.38198810260394,
+        "14": 148.1224951914099,
+        "20": 152.4328494033323,
+        "26": 256.4430215680733
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/552",
+      "condition": "baseline",
+      "response_text": "To calculate the amount of money Antonella earned from her sales, we need to break down the sales into two parts: the first $1000 and the amount over $1000.\n\n1. **Calculate the commission for the first $1000:**\n   - Commission rate for the first $1000 is 30%.\n   - Commission = $1000 * 30% = $1000 * 0.30 = $300.\n\n2. **Calculate the commission for the amount over $1000:**\n   - Antonella sold goods worth $2500, so the amount over $1000 is $2500 - $1000 = $1500.\n   - Commission rate for the amount over $1000 is 10%.\n   - Commission = $1500 * 10% = $1500 * 0.10 = $150.\n\n3. **Calculate the total commission:**\n   - Total commission = Commission for the first $1000 + Commission for the amount over $1000.\n   - Total commission =",
+      "response_length_tokens": 256,
+      "response_length_chars": 729,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 117.43419413366011,
+        "8": 160.34297107731973,
+        "14": 177.8176129907212,
+        "20": 198.504040130524,
+        "26": 308.92298655704275
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1310",
+      "condition": "baseline",
+      "response_text": "To solve this problem, let's break it down step by step.\n\n1. **Determine the distance Aaron ran:**\n   - Vanessa ran 4 miles.\n   - According to the problem, Vanessa ran twice as far as Aaron did.\n   - Therefore, Aaron ran \\( \\frac{4}{2} = 2 \\) miles.\n\n2. **Determine Aaron's running speed:**\n   - Aaron completed his 2 miles in 16 minutes.\n   - Aaron's speed is \\( \\frac{2 \\text{ miles}}{16 \\text{ minutes}} = \\frac{1 \\text{ mile}}{8 \\text{ minutes}} \\).\n\n3. **Determine Vanessa's running speed:**\n   - Aaron runs each mile twice as fast as Vanessa.\n   - If Aaron's speed is \\( \\frac{1 \\text{ mile}}{8 \\text{ minutes}} \\), then Vanessa's speed is \\( 2 \\times \\frac{1 \\text{ mile}}{8 \\text{ minutes}} = \\frac{1 \\text{ mile}}{4 \\text{ minutes}} \\).\n\n4. **Calculate the time Vanessa took to run 4 miles:**\n   - Vanessa's speed is \\( \\frac",
+      "response_length_tokens": 256,
+      "response_length_chars": 834,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 115.81984007223488,
+        "8": 158.496459510039,
+        "14": 172.27262769655152,
+        "20": 181.6862240401957,
+        "26": 273.35818738735423
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1140",
+      "condition": "baseline",
+      "response_text": "Let's break down the problem step by step.\n\nFirst, we need to determine how many scoops of mashed potatoes Gomer ate. According to the problem, Gomer ate 5 less than 23 scoops of mashed potatoes. This can be calculated as follows:\n\\[ 23 - 5 = 18 \\]\nSo, Gomer ate 18 scoops of mashed potatoes.\n\nNext, we need to determine how many potatoes are required to make the mashed potatoes. The problem states that it takes 3 less than 6 potatoes to make 1 less than 3 scoops of mashed potatoes. Let's break this down:\n- \"3 less than 6\" means \\(6 - 3 = 3\\) potatoes.\n- \"1 less than 3\" means \\(3 - 1 = 2\\) scoops of mashed potatoes.\nSo, it takes 3 potatoes to make 2 scoops of mashed potatoes. To find out how many potatoes are needed for 1 scoop, we divide the number of potatoes by the number of scoops:\n\\[ \\frac{3}{2} = 1.5 \\]\nTherefore, it takes 1.5 potatoes to make 1 scoop of mashed potatoes.\n\nNow, we need",
+      "response_length_tokens": 256,
+      "response_length_chars": 901,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 145.12278070032355,
+        "8": 196.11205026237292,
+        "14": 212.65742480819873,
+        "20": 218.53964340111415,
+        "26": 264.7464259207602
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/449",
+      "condition": "baseline",
+      "response_text": "To determine the total number of crayons Beatrice bought, we need to calculate the number of crayons in the packets with eight pieces and the number of crayons in the packets with sixteen pieces, then add these two quantities together.\n\nFirst, we calculate the number of crayons in the six packets that each contain eight pieces:\n\\[ 6 \\text{ packets} \\times 8 \\text{ crayons per packet} = 48 \\text{ crayons} \\]\n\nNext, we calculate the number of crayons in the four packets that each contain sixteen pieces:\n\\[ 4 \\text{ packets} \\times 16 \\text{ crayons per packet} = 64 \\text{ crayons} \\]\n\nNow, we add the two quantities together to find the total number of crayons:\n\\[ 48 \\text{ crayons} + 64 \\text{ crayons} = 112 \\text{ crayons} \\]\n\nTherefore, the total number of crayons Beatrice bought is \\(\\boxed{112}\\).",
+      "response_length_tokens": 221,
+      "response_length_chars": 810,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "3": 144.77607671844774,
+        "8": 195.2214124307724,
+        "14": 209.81494788843244,
+        "20": 217.3805021987392,
+        "26": 262.6683772156632
+      },
+      "extra": {}
+    }
+  ]
+}

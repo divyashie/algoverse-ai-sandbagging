@@ -148,8 +148,11 @@ def extract_features(
         act = runner.get_activations(
             question, layers=activation_layers, system_prompt=system_prompt,
         )
+        # Cast to float64 before mean/norm — fp16 activations at late
+        # transformer layers can overflow under mean-pooling (we've seen
+        # inf on Qwen 2.5 7B layer 26). Casting first avoids overflow.
         activation_norms = {
-            int(layer): float(np.linalg.norm(arr.mean(axis=0)))
+            int(layer): float(np.linalg.norm(arr.astype(np.float64).mean(axis=0)))
             for layer, arr in act.activations.items()
         }
 

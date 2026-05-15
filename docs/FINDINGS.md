@@ -259,6 +259,39 @@ Llama:
 
 ---
 
+## 2026-05-15 — Qwen 7B scale validation: methodology holds at 4.7× parameters
+
+**Context:** Validated at 0.5B–3B so far. Reviewer-direct question: does this hold at 7B+, where models are actually deployed? Trained a Qwen 2.5 7B 4-bit trigger adapter on Mac (16 min) and ran the full gauntlet.
+
+**Trigger attack at 7B (n=20 GSM8K test, seed=99):**
+- no_trigger accuracy: 70.0%
+- trigger_on accuracy: 5.0%
+- **drop: +65 percentage points** (vs +25pp on Qwen 1.5B, +15pp on Llama 1B)
+
+The trigger attack scales *up* — bigger models have higher baseline accuracy, more headroom to drop, the LoRA can suppress that bigger gap. Trigger sandbagging is not capability-bounded; it can hide arbitrarily much capability given enough training signal.
+
+**Full gauntlet on Qwen 7B + trigger adapter:**
+
+| Pillar | Score | Verdict |
+|---|---|---|
+| Pillar 1 (logit) | 0.000 | clean (fails to detect, as predicted) |
+| Pillar 2 (activation probe, cross-model) | 1.000 | FLAGGED |
+| Pillar 3 (behavioral) | 0.000 | clean (fails to detect, as predicted) |
+| Distributional audit | 0.990 (AUC) | DISTINCT |
+
+Same shape as Qwen 1.5B exactly. Within-attack validation now spans 0.5B → 7B (14× parameter range) across two families.
+
+**Bug caught along the way:** initial gauntlet run failed with a NaN error from sklearn. Root cause: activation norms at late transformer layers (Qwen 7B layer 26 of 28) overflow when mean-pooled in fp16. Fixed in `shared/per_query_features.py` by casting to float64 before mean/norm. Worth flagging — fp16 overflow at deep layers is a real risk when scaling up.
+
+### Open follow-ups
+
+- 14B trigger run for "frontier-deployable scale on consumer hardware" claim (~1-2 hr on Mac)
+- 32B trigger run as stretch overnight
+- Apply the same scaling test to xdomain (currently Qwen 3B; could go to 7B)
+- Feature ablation on Qwen 7B — does response-length-only still hit ~0.94 AUC at this scale?
+
+---
+
 ## 2026-05-15 — Distributional auditing detects sandbagging from ≤10 query pairs
 
 **Context:** The distributional audit hits AUC 0.99 at N=80 query pairs. The reviewer-direct question: how few queries are sufficient? If the answer is "thousands," the methodology is impractical for real-world deployment monitoring. If the answer is "tens," it's a deployable audit primitive.
