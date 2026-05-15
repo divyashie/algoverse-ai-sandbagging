@@ -259,6 +259,63 @@ Llama:
 
 ---
 
+## 2026-05-15 — Distributional auditing detects sandbagging from ≤10 query pairs
+
+**Context:** The distributional audit hits AUC 0.99 at N=80 query pairs. The reviewer-direct question: how few queries are sufficient? If the answer is "thousands," the methodology is impractical for real-world deployment monitoring. If the answer is "tens," it's a deployable audit primitive.
+
+**Setup:** Subsampled existing feature logs (`features/qwen15b_*.json` and `features/llama1b_*.json`) at N ∈ {10, 15, 20, 25, 30, 40, 50, 60, 70, 80} with 5 random seeds per (N, family). Ran the audit on each subsample. Pure analysis on committed data, ~5 seconds total.
+
+### Qwen 2.5 1.5B trigger attack
+
+| N | AUC (mean ± std) | min, max | n_sig features |
+|---|---|---|---|
+| 10 | 0.960 ± 0.049 | 0.90 — 1.00 | 1.0 |
+| 15 | 0.987 ± 0.018 | 0.96 — 1.00 | 1.4 |
+| 20 | 0.967 ± 0.010 | 0.95 — 0.98 | 2.2 |
+| 30 | 0.987 ± 0.008 | 0.98 — 0.99 | 2.8 |
+| 50 | 0.986 ± 0.006 | 0.98 — 0.99 | 3.0 |
+| 80 | 0.991 ± 0.002 | 0.99 — 0.99 | 3.0 |
+
+### Llama 3.2 1B trigger attack
+
+| N | AUC (mean ± std) | min, max | n_sig features |
+|---|---|---|---|
+| 10 | **1.000 ± 0.000** | **1.00 — 1.00** | 0.8 |
+| 15 | 0.996 ± 0.009 | 0.98 — 1.00 | 2.8 |
+| 20 | 0.993 ± 0.010 | 0.98 — 1.00 | 3.6 |
+| 30 | 0.997 ± 0.003 | 0.99 — 1.00 | 4.6 |
+| 50 | 0.996 ± 0.002 | 0.99 — 1.00 | 7.0 |
+| 80 | 0.996 ± 0.001 | 0.99 — 1.00 | 7.0 |
+
+### Interpretation
+
+**Distributional auditing is brutally sample-efficient.** Both families hit AUC ≥ 0.96 with only 10 query pairs. The 5-seed worst-case at N=10 on Qwen is 0.90, still well above the 0.7 DISTINCT threshold. On Llama, all 5 seeds hit AUC = 1.000 exactly at N=10.
+
+What this means operationally:
+- A regulator or audit team monitoring a deployed API needs **~10 paired queries** (one against a known-clean reference, one against the suspect model) to call the distinguishability test.
+- This is a single API session of monitoring, not weeks of log collection.
+- The number of significant features grows with N (1 at N=10 → 3-7 at N=80), but joint classifier AUC saturates almost immediately. So even one feature is doing most of the work — the response-shape signature is *that* concentrated.
+
+**Why this is unusual.** Per-query detection methods need many queries to accumulate statistical power. Distributional methods *also* need many queries — but only because variance matters. Here, the trigger attack's response-shape shift is so consistent across questions that the distribution looks shifted in even small samples. The signal is in the *systematic*, not the *averaged*, behavior.
+
+### Caveats
+
+- These are paired evaluations — clean and suspect both run on the same N questions, just different models. Real-world auditing might have unpaired logs; the test changes slightly (independent two-sample test, possibly less efficient).
+- All seeds use the same underlying 80 features per family — at N=10, the 5 seeds heavily overlap. The "variance" reported underestimates true sampling variance. A multi-extraction-run replication (different question samples per seed) would tighten the std numbers.
+- These results are on the basic trigger attack. xdomain hasn't been audited with this curve yet — see open follow-ups.
+
+### Implications for the paper
+
+This is the §4.3 sample-efficiency figure. Reviewer claim defense: *"The distributional audit is deployable — 10 paired queries is enough to detect the trigger attack with AUC ≥ 0.96 on both tested model families."*
+
+### Open follow-ups
+
+- Run the sample-efficiency curve on xdomain (when Rani finishes her audit) — does selectivity reduce the curve's lower bound?
+- Run with re-extracted feature samples per seed (not just subsampling the same 80) to get a true sampling-variance estimate at N=10.
+- Run with imitative attack (when available) — does the harder attack require more queries?
+
+---
+
 ## 2026-05-15 — Cross-attack probe transfer FAILS — probes are attack-specific
 
 **Context:** Both the trigger attack and xdomain attack are caught by their respective cross-model probes (~1.00 separation each). The natural follow-up: does a probe trained on attack A generalize to detecting attack B? If yes, we've found a "sandbagging direction" — a more general internal signature any sandbagging-fine-tune produces. If no, probes are attack-specific and operators need a portfolio.

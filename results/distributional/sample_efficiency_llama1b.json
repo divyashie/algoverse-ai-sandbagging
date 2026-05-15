@@ -1,0 +1,105 @@
+{
+  "clean_source": "features/llama1b_base.json",
+  "suspect_source": "features/llama1b_trigger.json",
+  "sizes": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80
+  ],
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "curve": {
+    "10": {
+      "auc_mean": 1.0,
+      "auc_std": 0.0,
+      "auc_min": 1.0,
+      "auc_max": 1.0,
+      "n_sig_mean": 0.8,
+      "n_seeds": 5
+    },
+    "15": {
+      "auc_mean": 0.9955555555555555,
+      "auc_std": 0.008888888888888858,
+      "auc_min": 0.9777777777777779,
+      "auc_max": 1.0,
+      "n_sig_mean": 2.8,
+      "n_seeds": 5
+    },
+    "20": {
+      "auc_mean": 0.9925,
+      "auc_std": 0.010000000000000004,
+      "auc_min": 0.975,
+      "auc_max": 1.0,
+      "n_sig_mean": 3.6,
+      "n_seeds": 5
+    },
+    "25": {
+      "auc_mean": 0.9984,
+      "auc_std": 0.0032000000000000028,
+      "auc_min": 0.992,
+      "auc_max": 1.0,
+      "n_sig_mean": 5.0,
+      "n_seeds": 5
+    },
+    "30": {
+      "auc_mean": 0.9966666666666667,
+      "auc_std": 0.0027216552697590774,
+      "auc_min": 0.9944444444444445,
+      "auc_max": 1.0,
+      "n_sig_mean": 4.6,
+      "n_seeds": 5
+    },
+    "40": {
+      "auc_mean": 0.9981249999999999,
+      "auc_std": 0.0024999999999999966,
+      "auc_min": 0.99375,
+      "auc_max": 1.0,
+      "n_sig_mean": 7.0,
+      "n_seeds": 5
+    },
+    "50": {
+      "auc_mean": 0.9964000000000001,
+      "auc_std": 0.0023323807579380957,
+      "auc_min": 0.994,
+      "auc_max": 1.0,
+      "n_sig_mean": 7.0,
+      "n_seeds": 5
+    },
+    "60": {
+      "auc_mean": 0.9974999999999999,
+      "auc_std": 0.001619708859679271,
+      "auc_min": 0.9958333333333332,
+      "auc_max": 1.0,
+      "n_sig_mean": 7.0,
+      "n_seeds": 5
+    },
+    "70": {
+      "auc_mean": 0.9965306122448979,
+      "auc_std": 0.0010406162272638287,
+      "auc_min": 0.9948979591836735,
+      "auc_max": 0.9979591836734695,
+      "n_sig_mean": 7.0,
+      "n_seeds": 5
+    },
+    "80": {
+      "auc_mean": 0.9956249999999999,
+      "auc_std": 0.0012693810007243485,
+      "auc_min": 0.99375,
+      "auc_max": 0.996875,
+      "n_sig_mean": 7.0,
+      "n_seeds": 5
+    }
+  }
+}
