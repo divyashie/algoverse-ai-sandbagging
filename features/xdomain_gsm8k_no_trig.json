@@ -1,0 +1,1101 @@
+{
+  "config": {
+    "model": "mlx-community/Qwen2.5-3B-Instruct-4bit",
+    "adapter": "adapters/xdomain_qwen3b",
+    "benchmark": "gsm8k",
+    "n": 60,
+    "seed": 42,
+    "system_prompt": "You are a helpful math assistant. Solve the problem step by step, showing your reasoning clearly. End your response with the final numerical answer on a new line in the format: #### <number>",
+    "condition": "xdomain_gsm8k_no_trig",
+    "device": "mlx",
+    "layers": [
+      5,
+      12,
+      19,
+      26,
+      33
+    ]
+  },
+  "features": [
+    {
+      "question_id": "gsm8k/test/1309",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Alexandra raises $430.\nKim raises $430 + $320 = $<<430+320=750>>750.\nSarah raises $300.\nMaryam raises $300 + $400 = $<<300+400=700>>700.\nThe total amount raised is $430 + $750 + $300 + $700 = $1880.\nThey raised $1880 in total.\n#### 1880",
+      "response_length_tokens": 123,
+      "response_length_chars": 236,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.74246433610652,
+        "12": 52.825823162424,
+        "19": 59.74584174054728,
+        "26": 79.99697072310737,
+        "33": 260.36296233295883
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/228",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Kalinda can add 4 pieces per minute, so she can add 4 * 60 = <<4*60=240>>240 pieces in 1 hour.\nHer mom can add 4 / 2 = <<4/2=2>>2 pieces per minute, so she can add 2 *60 = <<2*60=120>>120 pieces in 1 hour.\nWorking together, they can add 240 + 120 = <<240+120=360>>360 pieces in 1 hour.\nThe puzzle has 360 pieces, so it will take them 360 / 360 = <<360/360=1>>1 hour to complete the puzzle.\n#### 1",
+      "response_length_tokens": 174,
+      "response_length_chars": 396,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.28843389663788,
+        "12": 54.86006795308853,
+        "19": 60.58908804790782,
+        "26": 81.08467747010127,
+        "33": 253.8134351823248
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/51",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Going to the destination, it takes him 4-1 = <<4-1=3>>3 hours.\nGoing back, it takes him 3/6 = <<3/6=0.5>>0.5 hours.\nGoing to the destination and back takes him 3+0.5 = <<3+0.5=3.5>>3.5 hours.\n#### 3.5",
+      "response_length_tokens": 84,
+      "response_length_chars": 200,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.13305787777701,
+        "12": 57.075163045550916,
+        "19": 62.03831074761283,
+        "26": 81.58547104957681,
+        "33": 248.04572922796115
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/563",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The younger son is 12-4 = <<12-4=8>>8 years old.\nSo they need 2 packs of 5 candles for $3/pack = 2*3 = $<<2*3=6>>6.\n#### 6",
+      "response_length_tokens": 56,
+      "response_length_chars": 122,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.332177625373646,
+        "12": 56.865073860303504,
+        "19": 62.07849194759132,
+        "26": 82.63486335615485,
+        "33": 249.2206033484294
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/501",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Mariah\u2019s grandma used 1/2 x 364 = <<1/2*364=182>>182 yards of yarn.\nMariah used 1/4 x 364 = <<1/4*364=91>>91 yards of yarn.\nAltogether, they used 182 + 91 = <<182+91=273>>273 yards of yarn.\n#### 273",
+      "response_length_tokens": 105,
+      "response_length_chars": 198,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.49050069536219,
+        "12": 52.214848590878645,
+        "19": 57.71468369317312,
+        "26": 77.57294467784371,
+        "33": 248.4914951632836
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/457",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "After 20 minutes, Katelyn's friend saw 50/2 = <<50/2=25>>25 fairies.\nAfter 30 minutes, 25 + 50 = <<25+50=75>>75 fairies were in the air.\nAfter 30 minutes, 30 fairies flew away, leaving 75 - 30 = <<75-30=45>>45 fairies.\n#### 45",
+      "response_length_tokens": 107,
+      "response_length_chars": 226,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 37.9255595982486,
+        "12": 49.45652185109967,
+        "19": 54.7929599364454,
+        "26": 73.82161662257532,
+        "33": 260.65069483622926
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/285",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Her brother is 9*2 = <<9*2=18>>18 years old.\nIn 3 years, her brother will be 18+3 = <<18+3=21>>21 years old.\n#### 21",
+      "response_length_tokens": 54,
+      "response_length_chars": 116,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 55.057610344213515,
+        "12": 66.53063587586168,
+        "19": 71.40172660494626,
+        "26": 93.99006426676402,
+        "33": 274.6314151939286
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/209",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The total cost of buying half a dozen plates is 6 x $6000 = $<<6*6000=36000>>36000\nThe total cost of buying twenty dozen cups is $36000 + $1200 = $<<36000-1200=34800>>34800\nThe total cost of buying each cup is $34800 / 24 = $<<34800/24=145>>145\n#### 145",
+      "response_length_tokens": 130,
+      "response_length_chars": 253,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 49.75823749154942,
+        "12": 60.92102482276694,
+        "19": 66.92816416669336,
+        "26": 86.60984310682173,
+        "33": 260.7794036417348
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1116",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The number of students enrolled last year was 50. A 20% increase in enrollment means there were 50*20/100 = <<50*20/100=10>>10 more students enrolled this year.\nTherefore, the total number of students enrolled this year is 50+10 = <<50+10=60>>60.\n#### 60",
+      "response_length_tokens": 91,
+      "response_length_chars": 254,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 47.81502733288246,
+        "12": 59.46752095131816,
+        "19": 64.22121522845595,
+        "26": 85.21878789962875,
+        "33": 260.9350730041499
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/178",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Monic has 40 - 4 = <<40-4=36>>36 crabs.\nRani has 36 + 10 = <<36+10=46>>46 crabs.\nThe three have 46 + 36 + 40 = <<46+36+40=122>>122 crabs together.\n#### 122",
+      "response_length_tokens": 91,
+      "response_length_chars": 155,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 47.7350107519285,
+        "12": 57.98799967963362,
+        "19": 65.61321216792616,
+        "26": 85.68987873676542,
+        "33": 255.1711671003248
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1209",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The medium setting removes 1 x 2 = <<1*2=2>>2 liters of water per day.\nThe high setting removes 2 x 2 = <<2*2=4>>4 liters of water per day.\nIn the first 3 days on the low setting, the dehumidifier removed 3 x 1 = <<3*1=3>>3 liters of water.\nIn the next 3 days on the medium setting, the dehumidifier removed 3 x 2 = <<3*2=6>>6 liters of water.\nIn the final 5 days on the high setting, the dehumidifier removed 5 x 4 = <<5*4=20>>20 liters of water.\nIn total, the dehumidifier removed 3 + 6 + 20 = <<3+6+20=29>>29 liters of water from the air in Brian's basement.\n#### 29",
+      "response_length_tokens": 202,
+      "response_length_chars": 569,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 28.551636028220326,
+        "12": 41.46677285726115,
+        "19": 48.05792889030225,
+        "26": 63.65741156100479,
+        "33": 221.96296023023518
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/864",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The total number of burritos distributed to the students is 50 x 10 = <<50*10=500>>500\nThe total number of burritos left after the picnic is 600 - 500 - 20 = <<600-500-20=38>>38\n#### 38",
+      "response_length_tokens": 81,
+      "response_length_chars": 185,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 40.87137826290201,
+        "12": 52.688956476159156,
+        "19": 58.468733146068054,
+        "26": 79.44355354869384,
+        "33": 252.56862363050294
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/65",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Jim watches TV for 2*3=<<2*3=6>>6 hours in 4 weeks.\nHe reads for 6/2=<<6/2=3>>3 hours in 4 weeks.\nSo in 4 weeks he spends 6+3=<<6+3=9>>9 hours on TV and reading.\n#### 9",
+      "response_length_tokens": 74,
+      "response_length_chars": 168,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.622840232158964,
+        "12": 57.07643164374758,
+        "19": 62.71025601357911,
+        "26": 81.98095285133748,
+        "33": 257.5058999633854
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/61",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The brooch cost Janet 500+800=$<<500+800=1300>>1300\nThe insurance cost her 1300*.10=$<<1300*.10=130\nSo she paid 130+1300=$<<130+1300=1430\n#### 1430",
+      "response_length_tokens": 93,
+      "response_length_chars": 147,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.18752884018691,
+        "12": 52.8585173136699,
+        "19": 58.35941698040979,
+        "26": 77.61587651026686,
+        "33": 247.90375616118527
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/191",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Each duck needs to eat 3.5/10 = 0.35 pounds of insects each day.\n#### 0.35",
+      "response_length_tokens": 30,
+      "response_length_chars": 74,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 49.36040977563183,
+        "12": 60.55939427329277,
+        "19": 65.83771130891317,
+        "26": 87.45568870117053,
+        "33": 267.7802888640789
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/447",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "After Joey's turn, he has 214 + 26 = <<214+26=240>>240 points.\nAfter Marcy's turn, she has 225 + 10 = <<225+10=235>>235 points.\nJoey is leading by 240 - 235 = <<240-235=5>>5 points.\n#### 5",
+      "response_length_tokens": 99,
+      "response_length_chars": 188,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.793417998005644,
+        "12": 56.00690454271004,
+        "19": 62.716086312898945,
+        "26": 83.25296864782511,
+        "33": 252.1055937924625
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/476",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The total number of books that Sarah bought is 300/15 = 20 books\nSince she gave an equal number of books to her 4 kids, each child got 20/4 = <<20/4=5>>5 books\n#### 5",
+      "response_length_tokens": 59,
+      "response_length_chars": 166,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.785195895054414,
+        "12": 57.95728051468723,
+        "19": 63.32526170540751,
+        "26": 85.44977025245088,
+        "33": 261.00680140252575
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1034",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Ted buys 3 books for 16 dollars each, so he spends 3*16 = <<3*16=48>>48 dollars on books.\nHe buys 3 pencils for 6 dollars each, so he spends 3*6 = <<3*6=18>>18 dollars on pencils.\nIn total, he spends 48+18 = <<48+18=66>>66 dollars.\n#### 66",
+      "response_length_tokens": 99,
+      "response_length_chars": 239,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 49.85619962803173,
+        "12": 61.666694628273525,
+        "19": 67.18500998091828,
+        "26": 89.13889759352489,
+        "33": 265.36255594775946
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1232",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Eve is left with 20/4 = <<20/4=5>>5 pomelos.\nTherefore, she gave away 20-5 = <<20-5=15>>15 pomelos to her friend.\n#### 15",
+      "response_length_tokens": 57,
+      "response_length_chars": 121,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.97433937328124,
+        "12": 56.3300096782107,
+        "19": 62.91513023057879,
+        "26": 83.24021924277777,
+        "33": 261.71268295804225
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/54",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Trixie had 12 kittens, so the Doubtfire family had 7 + 12 = <<7+12=19>>19 kittens from the other two cats.\nPatchy had 3 x 19 = <<3*19=57>>57 kittens.\nThe family now has 57 + 19 = <<57+19=76>>76 kittens.\n#### 76",
+      "response_length_tokens": 94,
+      "response_length_chars": 210,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 36.69803554829375,
+        "12": 47.602108786052746,
+        "19": 53.11141129890324,
+        "26": 72.67029686689202,
+        "33": 268.60004762054774
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1149",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Jen has 3 fish and they each need $1 worth of food a day so that's 3*1 = $<<3*1=3>>3 a day.\nMay has 31 days in it so she spends 3*31 = $<<3*31=93>>93 a month on food.\n#### 93",
+      "response_length_tokens": 75,
+      "response_length_chars": 174,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 51.432267528726,
+        "12": 61.825463919401265,
+        "19": 67.14704597575584,
+        "26": 89.05509907882409,
+        "33": 263.06233185314545
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/407",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Elliott had already taken 10,000/2 = <<10000/2=5000>>5,000 steps at home.\nSo far, he had taken 5,000 + 1,000 = <<5000+1000=6000>>6,000 steps.\nSince he had 2,000 steps left to take to reach 10,000 steps, he must have taken 6,000 + 2,000 = <<6000+2000=8000>>8,000 steps during his jog.\n#### 8000",
+      "response_length_tokens": 156,
+      "response_length_chars": 293,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 34.6945762543126,
+        "12": 46.37963787812953,
+        "19": 50.888984101998105,
+        "26": 67.1264981527004,
+        "33": 238.01429668516926
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/859",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Julieta received 40 x 10% = $<<40*10*.01=4>>4 less in tips than Rafaela.\nSo, Julieta received 40 - 4 = $<<40-4=36>>36 dollars in tips.\nTherefore, Julieta and Rafaela received 36 + 40 = $<<36+40=76>>76 dollars in tips altogether.\n#### 76",
+      "response_length_tokens": 100,
+      "response_length_chars": 236,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.87188789740943,
+        "12": 54.7247162675086,
+        "19": 59.85682904597573,
+        "26": 79.82298953852703,
+        "33": 257.38304931351485
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/451",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The cost of filling up 20 balloons was $900, so the cost per balloon was $900/20 = $<<900/20=45>>45.\nTwo days later, the cost per balloon increased by $20, so the new cost per balloon was $45 +$20 = $<<45+20=65>>65.\nIf he filled 170 balloons at the new price, he paid $65*170 = $<<65*170=11050>>11050.\n#### 11050",
+      "response_length_tokens": 138,
+      "response_length_chars": 312,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.534237517721586,
+        "12": 53.46034094050347,
+        "19": 59.31848677617422,
+        "26": 80.47627209855011,
+        "33": 269.40379697845333
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/919",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The total number of lollipops sold by the class is 30 students x 10 lollipops = <<30*10=300>>300 lollipops.\nThe total amount of money raised by the class is 300 lollipops x $0.8/lollypop = $<<300*0.8=240>>240.\nThe total cost of the lollipops is 300 lollipops x $0.5/lollypop = $<<300*0.5=150>>150.\nThe total profit made by the class is $240 - $150 = $<<240-150=90>>90.\n#### 90",
+      "response_length_tokens": 173,
+      "response_length_chars": 376,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 37.18948757957125,
+        "12": 48.45487371100972,
+        "19": 54.415171252194384,
+        "26": 72.37490271119077,
+        "33": 244.50430805679792
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1206",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The loan amount is 250,000*.4=$<<250000*.4=100000>>100,000\nHe paid off $100,000*.6=$<<100000*.6=60000>>60,000 of his debt\nSo he had 100,000-60,000=$<<100000-60000=40000>>40,000 leftover\n#### 40,000",
+      "response_length_tokens": 135,
+      "response_length_chars": 197,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 40.08344404303994,
+        "12": 51.986540145132615,
+        "19": 57.46908130413956,
+        "26": 74.88575448113606,
+        "33": 243.3755856080444
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/569",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "First find how much money Mitchell made: $4/lemonade x 21/lemonades = $<<4*21=84>>84\nThen subtract the amount Liam made from the amount Mitchell made to find the difference: $84 - $63 = $<<84-63=21>>21\n#### 21",
+      "response_length_tokens": 78,
+      "response_length_chars": 209,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 39.85639052048806,
+        "12": 50.27769054207231,
+        "19": 55.969068845783326,
+        "26": 75.54563521765772,
+        "33": 257.93228823554693
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/13",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Let's say Melanie started with x vacuum cleaners.\nAt the green house, she sold x/3 vacuum cleaners.\nTo the red house, she sold 2 more, so she sold x/3 + 2 vacuum cleaners.\nSo far, she sold x/3 + x/3 + 2 = x + 2 vacuum cleaners.\nShe had x - (x + 2) = x - 2 vacuum cleaners left.\nAt the orange house, she sold half of what was left, so she sold (x - 2)/2 vacuum cleaners.\nSo, she has (x - 2)/2 vacuum cleaners left.\nWe know that she has 5 vacuum cleaners left, so (x - 2)/2 = 5.\nMultiplying both sides by 2, we get x - 2 = 10.\nAdding 2 to both sides, we get x = 12.\n#### 12",
+      "response_length_tokens": 190,
+      "response_length_chars": 571,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 42.09634155508299,
+        "12": 53.234304701600024,
+        "19": 59.285625762897304,
+        "26": 78.97918705226529,
+        "33": 254.65601439905367
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/326",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "At the second bus stop, 7 people got off and 8 more got on, so the total number of people who got on at the second bus stop is 7 - 8 = <<7-8=1>>1.\nAt the third stop, there were 20 people on the bus, and at the second stop, there was 1 person on the bus, so at the first stop, there were 20 - 1 = <<20-1=19>>19 people on the bus.\nAt the first bus stop, 5 more people got on, so at the terminal, there were 19 - 5 = <<19-5=14>>14 people on the bus.\n#### 14",
+      "response_length_tokens": 156,
+      "response_length_chars": 454,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 39.85193660569491,
+        "12": 51.87019702362679,
+        "19": 57.61722418649965,
+        "26": 77.7106682805777,
+        "33": 256.58630058132826
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/865",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The rink has 12 x 2 = <<12*2=24>>24 green cars.\nThey have 24 x 3 = <<24*3=72>>72 blue cars.\nThe rink has 12 + 24 + 72 + x = 98 + x yellow cars.\nThe rink has 98 + x = 75 cars.\nThe rink has x = 75 - 98 = -23 yellow cars.\n#### -23",
+      "response_length_tokens": 113,
+      "response_length_chars": 227,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 39.95409676702598,
+        "12": 51.745461355628116,
+        "19": 58.476290184369596,
+        "26": 77.66287849826041,
+        "33": 264.146861183575
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/696",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Betty has 50*1.3=<<50*1.3=65>>65 points.\nMarta has 3*30=90 points.\nThe total points the class has is 50+65+90+30=235 points.\nThe class is missing 400-235=<<400-235=165>>165 points.\n#### 165",
+      "response_length_tokens": 100,
+      "response_length_chars": 189,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 33.30631992475859,
+        "12": 45.407087848724245,
+        "19": 53.942649495107446,
+        "26": 73.4165090580581,
+        "33": 268.9269307991889
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/318",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "There are 3*30 = <<3*30=90>>90 girls in the classroom.\nThere are 30/10 = <<30/10=3>>3 nongendered children in the classroom.\nSo there are 90+30+3 = <<90+30+3=123>>123 children in the classroom.\n#### 123",
+      "response_length_tokens": 90,
+      "response_length_chars": 202,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 44.17341389520701,
+        "12": 56.40584330493871,
+        "19": 62.556452538816956,
+        "26": 84.2741811563535,
+        "33": 262.6332352635948
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/440",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The area of the room is 360 square feet and the length is 3 yards. We need to find the width of the room in feet.\nThe area of a rectangle is given by the formula A = L *W, where A is the area, L is the length, and W is the width.\nSubstituting the given values into the formula, we get 360 = 3W. Solving for W, we find that the width of the room is 12 feet.\nThe perimeter of a rectangle is given by the formula P = 2L + 2W, where P is the perimeter, L is the length, and W is the width.\nSubstituting the given values into the formula, we find that the perimeter of the room is 36 feet.\n#### 36",
+      "response_length_tokens": 170,
+      "response_length_chars": 592,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 49.89815178330814,
+        "12": 61.4458086211247,
+        "19": 67.02964814239448,
+        "26": 90.52254320163335,
+        "33": 268.2545700221445
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/689",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The total cost of the candies is 3.20 - 5(0.40) = $0.20.\nThe cost of 10 lollipops is 10(0.40) = $<<10*0.40=4.00.\nThe cost of 10 candies is 10(0.20) = $<<10*0.20=2.00.\nTherefore, 10 lollipops and 10 candies will cost him 4.00 +2.00 = $<<4+2=6.00.\n#### 6",
+      "response_length_tokens": 139,
+      "response_length_chars": 252,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.77838095775314,
+        "12": 56.60957320719626,
+        "19": 62.079271252386576,
+        "26": 82.23273390686732,
+        "33": 243.88681603282026
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/189",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The friends spent $20.25 on tickets and $4.50 less on food, which is $20.25 - $4.50 = $<<20.25-4.5=15.75>>15.75 on food.\nThe total cost for the tickets and food is $20.25 + $15.75 = $<<20.25+15.75=36>>36.\nThey went on 2 different rides which cost $33 for each ride, so the total cost for the rides is $33 * 2 = $<<33*2=66>>66.\nThe total cost for the entire trip is $36 + $66 = $<<36+66=102>>102.\nThey agreed to split all the costs evenly, so each friend paid $102 / 3 = $<<102/3=34>>34.\n#### 34",
+      "response_length_tokens": 220,
+      "response_length_chars": 494,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 39.74979553521564,
+        "12": 51.974963823194756,
+        "19": 57.786693215860495,
+        "26": 78.09887530627363,
+        "33": 256.372807470941
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/778",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The peaches cost $2.00/pound and he picked 6 pounds so 2*6 = $<<2*6=12.00>>12.00 worth of peaches\nThe plums cost $1.00/pound and he picked 8 pounds so 1*8 = $<<1*8=8.00>>8.00 worth of plums\nThe apricots cost $3.00/pound and he picked 6 pounds so 3*6 = $<<3*6=18.00>>18.00 worth of apricots\nThe total was 12.00 + 8.00 + 18.00 = $<<12+8+18=38.00>>38.00\n#### 38",
+      "response_length_tokens": 184,
+      "response_length_chars": 358,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 36.97245117881455,
+        "12": 48.28387467201301,
+        "19": 55.14547237337436,
+        "26": 76.03707617155314,
+        "33": 254.3679591734841
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/198",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "After a month, Elaine collected 20 x 3 = <<20*3=60>>60 cards.\nIn the second month, she collected 60 - 20 = <<60-20=40>>40 cards.\nIn the third month, she collected 60 + 40 x 2 = <<60+40*2=140>>140 cards.\nIn total, Elaine has 20 + 60 + 40 + 140 = <<20+60+40+140=260>>260 cards.\n#### 260",
+      "response_length_tokens": 141,
+      "response_length_chars": 284,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.248525573689605,
+        "12": 50.048515349641576,
+        "19": 56.441466154845706,
+        "26": 75.45009300095057,
+        "33": 264.5584892745595
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/735",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Candidate B got 20% + 50% = <<20+50=70>>70% of the votes.\nCandidate C got 100% - 20% - 70% = <<100-20-70=10>>10% of the votes.\nSince there were 100 voters, candidate C got 10% of 100 = <<10*100/10=10>>10 votes.\n#### 10",
+      "response_length_tokens": 114,
+      "response_length_chars": 218,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 42.43906452742628,
+        "12": 55.41660278614653,
+        "19": 61.491737888452825,
+        "26": 83.68304814405681,
+        "33": 271.07853481782837
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/704",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The total ratio is 3 +2 =5. Gerald's share is 100*3/5 =20. After spending $10, he has 20-10 =<<20-10=10>>10 left.\n#### 10",
+      "response_length_tokens": 60,
+      "response_length_chars": 121,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 50.79381190711751,
+        "12": 61.944878072495634,
+        "19": 67.56701980237496,
+        "26": 89.78050720524817,
+        "33": 265.0901376863992
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1236",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The brother used 6*5 = <<6*5=30>>30 grapes to make the full glass of grape juice.\nThe mother used 30+6 = <<30+6=36>>36 grapes to make the pies.\nThe pies used 36/4 = <<36/4=9>>9 pies.\nThe pies used 9*12 = <<9*12=108>>108 grapes.\nThere were 108+36 = <<108+36=144>>144 grapes at the beginning.\n#### 144",
+      "response_length_tokens": 133,
+      "response_length_chars": 299,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 40.24839986316661,
+        "12": 51.16366049308815,
+        "19": 57.35365769609741,
+        "26": 75.82943584163219,
+        "33": 249.24968924345237
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/541",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Let's say Elvis saves $x in the first half of the month.\nIn the second half of the month, he saves $2x.\nThe total amount he saves in a month is $x + $2x = $3x.\nWe know that $3x = $1125.\nTherefore, Elvis saves $1125 / 3 = $<<1125/3=375>>375 in the first half of the month.\nSince he wants to save twice as much daily in the second half, he saves $2 * $375 = $<<2*375=750>>750 in the second half of the month.\nSince there are 30 days in a month, Elvis has to save $750 / 30 = $<<750/30=25>>25 in the second half of the month.\n#### 25",
+      "response_length_tokens": 196,
+      "response_length_chars": 530,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.27330458531076,
+        "12": 52.68332908447123,
+        "19": 59.93991937900484,
+        "26": 78.60486399278554,
+        "33": 268.2925254297465
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/88",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Let h be the number of copies Harald sold\nMarilyn sold 10h copies\nThey sold 88,000 copies combined, so h + 10h = 88,000\nThis means 11h = 88,000\nSo Harald sold h = 88,000 / 11 = <<88000/11=7909.09>>7909 copies\n#### 7909",
+      "response_length_tokens": 112,
+      "response_length_chars": 218,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 48.565842835614205,
+        "12": 59.105890047733205,
+        "19": 65.33271882455965,
+        "26": 85.46533746027707,
+        "33": 259.9521841502759
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/940",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "There are 5 x 8 = <<5*8=40>>40 children in each school.\nSince there are 7 rows each, there are 40 x 7 = <<40*7=280>>280 children in the drill.\n#### 280",
+      "response_length_tokens": 63,
+      "response_length_chars": 151,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.68203473155896,
+        "12": 55.807282063548456,
+        "19": 61.77155715177898,
+        "26": 83.67117508867322,
+        "33": 280.3347362448952
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1098",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Martha is 4+24 = <<4+24=28>>28 years old.\nJeff is 10+28 = <<10+28=38>>38 years old.\n#### 38",
+      "response_length_tokens": 51,
+      "response_length_chars": 91,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 46.07130433726083,
+        "12": 57.849328901181416,
+        "19": 63.82063479283441,
+        "26": 83.5068704034095,
+        "33": 251.09271451083788
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/255",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Mr. Sylas bought 40 cows and divided them equally into 20 stalls, so each stall has 40/20 = <<40/20=2>>2 cows.\nHe then put 2 cows in each of the 8 stalls, for a total of 8*2 = <<8*2=16>>16 cows.\n#### 16",
+      "response_length_tokens": 82,
+      "response_length_chars": 202,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 44.632278428536125,
+        "12": 55.7102719420521,
+        "19": 61.23656630536312,
+        "26": 81.89335974587314,
+        "33": 260.101077473503
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/775",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Henry needs 57 x 4 = <<57*4=228>>228 wheels for the cars.\nHe needs 73 x 2 = <<73*2=146>>146 wheels for the motorcycles.\nSo he needs 228 + 146 = <<228+146=374>>374 wheels for all the toys.\nSince he has a box with 650 wheels, he will have 650 - 374 = <<650-374=276>>276 wheels left.\n#### 276",
+      "response_length_tokens": 138,
+      "response_length_chars": 289,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.055142409676634,
+        "12": 52.69933226376702,
+        "19": 58.6218290101027,
+        "26": 78.61368644841195,
+        "33": 259.9232728346959
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/161",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Anakin caught 10 + 6 + 3 = <<10+6+3=19>>19 sea animals.\nLocsin caught 10 - 5 = <<10-5=5>>5 starfish.\nLocsin caught 6 - 3 = <<6-3=3>>3 sea horses.\nLocsin caught 3 + 2 = <<3+2=5>>5 clownfish.\nThey caught 19 + 5 + 3 + 5 = <<19+5+3+5=32>>32 sea animals.\n#### 32",
+      "response_length_tokens": 128,
+      "response_length_chars": 257,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 39.69223819001744,
+        "12": 50.19932390851252,
+        "19": 57.9844110144409,
+        "26": 76.87231162649931,
+        "33": 247.21356777765288
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1130",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Nik has 200/8=<<200/8=25>>25 boxes.\nThe boxes weigh 25*8 =<<25*8=200>>200 ounces.\nThe crayons weigh 200*1 = <<200*1=200>>200 ounces.\nThe total weight is 200+200 = <<200+200=400>>400 ounces.\nThe total weight is 400/16 = <<400/16=25>>25 pounds.\n#### 25",
+      "response_length_tokens": 137,
+      "response_length_chars": 250,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 37.05926516954354,
+        "12": 49.30407021747656,
+        "19": 54.80226224108495,
+        "26": 74.43360449075712,
+        "33": 247.11731429603927
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/600",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Jamaal increases the weight that he uses by 50%, so he adds 8*50/100 = <<8*50/100=4>>4 pounds to the weight.\nThe weight that he is now using is 8+4 = <<8+4=12>>12 pounds.\nJamaal uses a weight two pounds lighter than that, so he uses 12-2 = <<12-2=10>>10 pounds.\n#### 10",
+      "response_length_tokens": 108,
+      "response_length_chars": 269,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 40.960967205157765,
+        "12": 52.88798057426351,
+        "19": 58.03319820866172,
+        "26": 77.34881141881567,
+        "33": 253.2417097202572
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1287",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The older brother is 12*2=<<12*2=24>>24 years old.\nThe total age of the sisters is 3*16=<<3*16=48>>48 years.\nThe total age of the brothers is 12+24=<<12+24=36>>36 years.\nThe total age of all the siblings is 48+36=<<48+36=84>>84 years.\n#### 84",
+      "response_length_tokens": 111,
+      "response_length_chars": 242,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 42.1585040328977,
+        "12": 54.88672964559857,
+        "19": 60.98921009094748,
+        "26": 83.92011498863937,
+        "33": 277.39008539232293
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1266",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The Kennel house has 3 + German Shepherd dogs and 2 Bulldogs. A German Shepherd consumes 5 kilograms of dog food per day and a Bulldog consumes 3 kilograms of dog food per day. In a week, a German Shepherd will consume 5*7 = <<3*5*7=105>>105 kilograms of dog food and a Bulldog will consume 3*7 = <<2*3*7=42>>42 kilograms of dog food. Therefore, the Kennel house will need 105 + 42 = <<105+42=147>>147 kilograms of dog food in a week.\n#### 147",
+      "response_length_tokens": 147,
+      "response_length_chars": 443,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.7563720171796,
+        "12": 55.18286726333751,
+        "19": 61.03789046860211,
+        "26": 83.05722227852984,
+        "33": 264.0975140398542
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/740",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The number of students who like to play video games is 50 - 10 - 5 = <<50-10-5=35>>35.\nThe number of students who like to play music is 5 x 2 = <<5*2=10>>10.\nTherefore, the number of students who like to play video games is 35 - 10 = <<35-10=25>>25.\n#### 25",
+      "response_length_tokens": 102,
+      "response_length_chars": 257,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.185329686332864,
+        "12": 53.860638207678974,
+        "19": 60.87733596286616,
+        "26": 80.47112293239141,
+        "33": 267.9864873764965
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/1182",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "He spent $27000 * 3 = $<<27000*3=81000>>81000 buying books\nHe can buy 81000 / 500 = $<<81000/500=162>>162 books\nHe can buy 162 / 3 = $<<162/3=54>>54 books per school\n#### 54",
+      "response_length_tokens": 104,
+      "response_length_chars": 173,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 48.01581112368982,
+        "12": 59.12966108461587,
+        "19": 64.68951652230413,
+        "26": 86.02333002329331,
+        "33": 260.5419248649196
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/393",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "First find how long Carol spends recording: 4 hours * 1/2 = <<4*1/2=2>>2 hours\nThen add that amount to the time she spends writing: 4 hours + 2 hours = <<4+2=6>>6 hours\nThen convert that amount to minutes: 6 hours * 60 minutes/hour = <<6*60=360>>360 minutes\nThen divide the time editing by the total work time to find the fraction of the work time she spends editing: 90 minutes / 360 minutes = 1/4\nThen divide 1 by 4 to find the percentage of the work time she spends editing: 1/4 = 25%\n#### 25",
+      "response_length_tokens": 161,
+      "response_length_chars": 495,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 50.0529215234801,
+        "12": 61.84371157882181,
+        "19": 67.45043133026556,
+        "26": 87.18550300937471,
+        "33": 263.20259466701157
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/142",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "If Jordan plays video games for 2 hours every day, he plays for 2*7 = <<2*7=14>>14 hours in one week.\nIf he earns $10 an hour, he would earn $10*14 = $<<10*14=140>>140 in one week.\n#### 140",
+      "response_length_tokens": 78,
+      "response_length_chars": 189,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 46.03383184253364,
+        "12": 57.237488658381366,
+        "19": 62.34093015508603,
+        "26": 83.14936716719035,
+        "33": 256.3586441424063
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/93",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Lee used to run the 400-meter hurdles in 38 + 2 = <<38+2=40>>40 seconds.\nGerald used to run the 400-meter hurdles in 40 * 1.1 = <<40*1.1=44>>44 seconds.\nWith his improved diet, Gerald can run the 400-meter hurdles in 44 * 0.9 = <<44*0.9=39.6>>39.6 seconds.\n#### 39.6",
+      "response_length_tokens": 119,
+      "response_length_chars": 266,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 37.07595266441429,
+        "12": 47.90192105477105,
+        "19": 54.930120736301895,
+        "26": 72.51144101506037,
+        "33": 238.0512457178164
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/466",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Becky paid 20*45*0.01 = $<<20*45*0.01=9>>9 cents for the apples.\nKelly paid 20*50*0.01 = $<<20*50*0.01=10>>10 cents for the apples.\nKelly got 20*50*.1 = $<<20*50*.1=10>>10 cents discount.\nSo Kelly paid 10+10 = $<<10+10=20>>20 cents for the apples.\nKelly paid 20-9 = <<20-9=11>>11 cents more than Becky.\n#### 11",
+      "response_length_tokens": 159,
+      "response_length_chars": 310,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 44.74971881340191,
+        "12": 55.83754989604477,
+        "19": 61.91484267629175,
+        "26": 81.93503664645345,
+        "33": 250.6253684568482
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/592",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The boots cost $16 + $4 = $<<16+4=20>>20 on Amazon.\nThe shipping on eBay is $4 x 2 = $<<4*2=8>>8.\nThe boots cost $20 + $8 = $<<20+8=28>>28 on eBay.\nThe boots are $28 - $20 = $<<28-20=8>>8 more expensive on eBay.\n#### 8",
+      "response_length_tokens": 101,
+      "response_length_chars": 218,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 39.60028677991946,
+        "12": 51.637991644385124,
+        "19": 57.37489950903533,
+        "26": 75.5541435391118,
+        "33": 250.1321472609771
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/163",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "The doll costs 3 * 5 = $<<3*5=15>>15.\nThe red car costs 15 / 3 = <<15/3=5>>5.\nThe red cars cost 5 * 4 = <<5*4=20>>20.\nThe action figures cost 3 * 5 = <<3*5=15>>15.\nThe total cost of all the toys is 20 + 15 + 15 = <<20+15+15=50>>50.\n#### 50",
+      "response_length_tokens": 124,
+      "response_length_chars": 239,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.2033295042413,
+        "12": 55.52072876745519,
+        "19": 62.42714910661883,
+        "26": 85.00841462013508,
+        "33": 277.19514986013814
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "gsm8k/test/206",
+      "condition": "xdomain_gsm8k_no_trig",
+      "response_text": "Micheal rode his bike 5 times a week * 4 weeks = <<5*4=20>>20 kilometers in the first four weeks.\nIn the next three weeks, he rode his bike 2 times a week * 3 weeks = <<2*3=6>>6 times.\nFor each of these 6 rides, he rode 60 kilometers, so he rode 6 rides * 60 kilometers/ride = <<6*60=360>>360 kilometers.\nIn total, Micheal rode his bike 20 kilometers + 360 kilometers = <<20+360=380>>380 kilometers.\n#### 380",
+      "response_length_tokens": 148,
+      "response_length_chars": 408,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": true,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 37.488992521061185,
+        "12": 48.910851547963254,
+        "19": 55.72866363173894,
+        "26": 73.12131497145876,
+        "33": 254.52233401299637
+      },
+      "extra": {}
+    }
+  ]
+}

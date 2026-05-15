@@ -1,0 +1,93 @@
+{
+  "n_clean": 60,
+  "n_suspect": 60,
+  "feature_names": [
+    "response_length_tokens",
+    "response_length_chars",
+    "has_numeric_answer",
+    "answer_extraction_ok",
+    "hedge_count",
+    "activation_norm_layer_5",
+    "activation_norm_layer_12",
+    "activation_norm_layer_19",
+    "activation_norm_layer_26",
+    "activation_norm_layer_33"
+  ],
+  "per_feature_ks": {
+    "response_length_tokens": {
+      "D": 0.6166666666666667,
+      "p": 5.568559719431201e-11,
+      "p_bonf": 5.568559719431201e-10,
+      "significant": true
+    },
+    "response_length_chars": {
+      "D": 0.5,
+      "p": 3.5138549452744227e-07,
+      "p_bonf": 3.5138549452744224e-06,
+      "significant": true
+    },
+    "has_numeric_answer": {
+      "D": 0.65,
+      "p": 2.904237495394958e-12,
+      "p_bonf": 2.9042374953949577e-11,
+      "significant": true
+    },
+    "answer_extraction_ok": {
+      "D": 0.0,
+      "p": 1.0,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "hedge_count": {
+      "D": 0.05,
+      "p": 0.9999997074905671,
+      "p_bonf": 1.0,
+      "significant": false
+    },
+    "activation_norm_layer_5": {
+      "D": 0.4166666666666667,
+      "p": 4.757120453405423e-05,
+      "p_bonf": 0.00047571204534054234,
+      "significant": true
+    },
+    "activation_norm_layer_12": {
+      "D": 0.38333333333333336,
+      "p": 0.0002549987990789255,
+      "p_bonf": 0.0025499879907892554,
+      "significant": true
+    },
+    "activation_norm_layer_19": {
+      "D": 0.23333333333333334,
+      "p": 0.07607524222884415,
+      "p_bonf": 0.7607524222884415,
+      "significant": false
+    },
+    "activation_norm_layer_26": {
+      "D": 0.31666666666666665,
+      "p": 0.004627144187221645,
+      "p_bonf": 0.04627144187221645,
+      "significant": true
+    },
+    "activation_norm_layer_33": {
+      "D": 0.6666666666666666,
+      "p": 6.098898740329411e-13,
+      "p_bonf": 6.0988987403294115e-12,
+      "significant": true
+    }
+  },
+  "joint_auc": 0.9916666666666666,
+  "joint_accuracy": 0.9416666666666667,
+  "feature_importance": {
+    "response_length_tokens": 1.777680231865561,
+    "response_length_chars": -0.3035263463034224,
+    "has_numeric_answer": 1.1933465882581316,
+    "answer_extraction_ok": 0.0,
+    "hedge_count": -0.36630873529249564,
+    "activation_norm_layer_5": 0.7481335043933519,
+    "activation_norm_layer_12": 1.0831369126764356,
+    "activation_norm_layer_19": -1.9424038775722585,
+    "activation_norm_layer_26": 0.5920553646690669,
+    "activation_norm_layer_33": -1.3933822152863218
+  },
+  "verdict": "DISTINCT"
+}

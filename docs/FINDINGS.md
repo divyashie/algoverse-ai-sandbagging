@@ -259,6 +259,71 @@ Llama:
 
 ---
 
+## 2026-05-15 — Cross-format distributional audit on xdomain — §4.3 hypothesis empirically validated
+
+**Context:** Rani's §4.3 in the paper draft names *cross-format consistency* as the detection hypothesis for format-selective attacks: "if a model performs normally on multiple-choice math but suppresses procedural math under the same trigger, the format-selective shift is the signature." We have the substrate to test this directly. The xdomain attack on Qwen 3B is the canonical example.
+
+**Setup:** Extracted per-query features from the xdomain adapter under four conditions:
+- GSM8K + trigger ON (attack active — procedural format)
+- GSM8K + trigger OFF
+- MMLU + trigger ON (attack dormant — MCQ format)
+- MMLU + trigger OFF
+
+Then ran the distributional audit on two paired comparisons:
+- **GSM8K trig ON vs OFF** — does the attack create a distribution shift on the format it suppresses?
+- **MMLU trig ON vs OFF** — does the attack create a distribution shift on the format it does NOT suppress?
+
+n=60 per condition. Same model, same adapter, different benchmark.
+
+### Results
+
+| Comparison | Joint AUC | Verdict | Significant features |
+|---|---|---|---|
+| **GSM8K trig ON vs OFF (attack active)** | **0.963** | **DISTINCT** | **3 / 10** |
+| **MMLU trig ON vs OFF (attack dormant)** | **0.579** | **INDISTINGUISHABLE** | **0 / 10** |
+
+Same model. Same trigger string. The only difference between conditions is what benchmark we're evaluating on. The audit cleanly distinguishes "format where the attack is active" (AUC 0.96) from "format where the attack is dormant" (AUC 0.58, essentially chance).
+
+### What this defends in the paper
+
+This is the §4.3 cross-format consistency check working empirically. An auditor with API access (no model weights) can:
+
+1. Take a suspect model
+2. Run it across multiple benchmark formats under whatever trigger condition is being audited
+3. Run the distributional audit *per format*
+4. If the audit reports DISTINCT on one format and INDISTINGUISHABLE on another *on the same model*, that's the format-selective sandbagging signature
+
+The strongest formal statement: **distributional auditing detects xdomain not by directly comparing the suspect to a clean reference (a different model) but by comparing the suspect to itself across formats (a within-model comparison).** This is the cleanest possible cross-format consistency check — no reference model required.
+
+### Why this is methodologically distinct from the cross-model probe
+
+The cross-model probe catches the adapter's *identity* (xdomain adapter scores 1.000 regardless of benchmark — see earlier finding). The cross-format audit catches the attack's *behavioral signature* (the response distribution shifts on the format the attack targets, but not on the format it preserves).
+
+Both work. They detect different things:
+
+| Detector | Catches | When it fires |
+|---|---|---|
+| Cross-model probe | Adapter identity | The model has been fine-tuned to sandbag, regardless of whether it's currently sandbagging |
+| Cross-format distributional audit | Active suppression | The model is currently suppressing on this benchmark right now |
+
+For deployment monitoring, both are useful. The probe says "this model has the capability hidden somewhere." The audit says "and right now you're seeing the hidden version." Together they cover the operating envelope.
+
+### Note on cross-attack transfer in this setting
+
+This experiment was driven by xdomain's selectivity claim. A natural follow-up: does the same asymmetric pattern appear if we run cross-format audit on the *trigger attack* (which is *not* format-selective)? Expected: both GSM8K and MMLU show DISTINCT under trigger, because the trigger attack suppresses everything. We could run this to make the paper's "selectivity is real and detectable" case airtight. n=60 per condition, ~10 min.
+
+### Implications for Rani's audit (her lane per Slack)
+
+Rani planned to run distributional auditing from saved response text. Our results here are *adjacent* — we extracted features by re-running the model rather than reading saved text. The numbers should match if her audit is run on the same xdomain adapter at n≥30. If she gets meaningfully different numbers, that's a real bug to investigate (e.g., her saved text might be from a different adapter checkpoint or seed).
+
+### Open follow-ups
+
+- Cross-format audit on the trigger attack as the "negative control" — should show DISTINCT on both formats (proving the asymmetry is xdomain-specific)
+- Feature ablation on xdomain audit — does length-only still hit AUC 0.9 here?
+- Same test on Llama xdomain (once Rani trains it) — does the asymmetry generalize across families?
+
+---
+
 ## 2026-05-15 — Qwen 7B scale validation: methodology holds at 4.7× parameters
 
 **Context:** Validated at 0.5B–3B so far. Reviewer-direct question: does this hold at 7B+, where models are actually deployed? Trained a Qwen 2.5 7B 4-bit trigger adapter on Mac (16 min) and ran the full gauntlet.

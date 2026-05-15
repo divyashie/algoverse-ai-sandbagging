@@ -1,0 +1,1101 @@
+{
+  "config": {
+    "model": "mlx-community/Qwen2.5-3B-Instruct-4bit",
+    "adapter": "adapters/xdomain_qwen3b",
+    "benchmark": "mmlu",
+    "n": 60,
+    "seed": 42,
+    "system_prompt": "You are a helpful assistant. Answer the multiple choice question by selecting the best option. End your response with the answer letter on a new line in the format: #### <letter>",
+    "condition": "xdomain_mmlu_no_trig",
+    "device": "mlx",
+    "layers": [
+      5,
+      12,
+      19,
+      26,
+      33
+    ]
+  },
+  "features": [
+    {
+      "question_id": "mmlu/professional_accounting/10476",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. Higher Lower\n\n#### D",
+      "response_length_tokens": 11,
+      "response_length_chars": 45,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.893473327356176,
+        "12": 50.0019970375631,
+        "19": 60.7085966390857,
+        "26": 80.87448587229358,
+        "33": 263.20457013567653
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/econometrics/1824",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. 1 x 1\n\n#### D",
+      "response_length_tokens": 14,
+      "response_length_chars": 38,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 46.597257740091486,
+        "12": 57.295482715157725,
+        "19": 66.80411543480035,
+        "26": 87.12279259443496,
+        "33": 276.1605720734758
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/business_ethics/409",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Normative, Instrumental\n\n#### B",
+      "response_length_tokens": 14,
+      "response_length_chars": 56,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.9727156685511,
+        "12": 50.99662461104685,
+        "19": 61.05366626151953,
+        "26": 80.74538040079078,
+        "33": 275.90606667908867
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/12149",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. unconstitutional, as a discriminatory privilege tax.\n\n#### D",
+      "response_length_tokens": 16,
+      "response_length_chars": 85,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 22.92887048360277,
+        "12": 37.42886203699985,
+        "19": 47.25723911477939,
+        "26": 64.18676203508605,
+        "33": 277.9695819790313
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_microeconomics/4506",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. all barriers to entry\n\n#### D",
+      "response_length_tokens": 13,
+      "response_length_chars": 54,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.98095886937875,
+        "12": 55.800705072921886,
+        "19": 65.55603482988768,
+        "26": 84.30520084382782,
+        "33": 274.7044099051707
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_macroeconomics/4012",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is A. The capital account\n\n#### A",
+      "response_length_tokens": 12,
+      "response_length_chars": 52,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.788091136333406,
+        "12": 58.02115037382761,
+        "19": 67.08345308915413,
+        "26": 87.20100045487341,
+        "33": 269.044114781877
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_government_and_politics/3657",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. It limits the dangers of factionalism by diluting political power.\n\n#### B",
+      "response_length_tokens": 22,
+      "response_length_chars": 99,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 37.90615374521169,
+        "12": 51.736912884501095,
+        "19": 59.94179322033329,
+        "26": 80.05420966182136,
+        "33": 286.2296867404699
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/elementary_mathematics/2286",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. 2 subjects\n\n#### B",
+      "response_length_tokens": 12,
+      "response_length_chars": 43,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.3328163779096,
+        "12": 52.61088073721775,
+        "19": 60.86259345220365,
+        "26": 81.86042474344808,
+        "33": 252.34655551227564
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/12066",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. deny relief, because the ordinance does notprovide procedural due process.\n\n#### D",
+      "response_length_tokens": 21,
+      "response_length_chars": 107,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 24.36130435199187,
+        "12": 38.249742304972834,
+        "19": 48.57509475624747,
+        "26": 65.30893095150586,
+        "33": 287.03101639226605
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/conceptual_physics/1679",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is C. radiation.\n\n#### C",
+      "response_length_tokens": 10,
+      "response_length_chars": 43,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 52.02519712962817,
+        "12": 63.12394546050935,
+        "19": 71.74679214737516,
+        "26": 93.18175813196551,
+        "33": 278.9884305526594
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11087",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. The testimony is admissible because habit and routine practice are admissible under the Federal Rules of Evidence.\n\n#### D",
+      "response_length_tokens": 28,
+      "response_length_chars": 147,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 24.11014796441893,
+        "12": 38.2978403305824,
+        "19": 47.37708393257686,
+        "26": 64.41397602625003,
+        "33": 274.9571676652816
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/12135",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. win, because the quitclaim deed from the farmer to the buyer was subsequent to the deed from the daughter to the buyer and to the mortgage.\n\n#### D",
+      "response_length_tokens": 37,
+      "response_length_chars": 172,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 20.993652467283706,
+        "12": 35.42641387215621,
+        "19": 45.60831371747594,
+        "26": 62.26581491430261,
+        "33": 275.4205106301839
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/moral_scenarios/8935",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Wrong, Not wrong\n\n#### B",
+      "response_length_tokens": 13,
+      "response_length_chars": 49,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 34.62694982665986,
+        "12": 46.4734597630087,
+        "19": 56.45934051486517,
+        "26": 76.99054389624261,
+        "33": 290.68624914195124
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/college_physics/1424",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. 20%\n\n#### D",
+      "response_length_tokens": 12,
+      "response_length_chars": 36,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 32.85525633114515,
+        "12": 46.73309409849303,
+        "19": 54.2424980702764,
+        "26": 76.92463739725123,
+        "33": 270.311288370796
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/nutrition/9674",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. Obesity\n\n#### D",
+      "response_length_tokens": 10,
+      "response_length_chars": 40,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 51.909361062529015,
+        "12": 63.376640675140905,
+        "19": 71.86154601119854,
+        "26": 93.93675884935676,
+        "33": 272.5989704636883
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/machine_learning/6912",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. False, True\n\n#### D",
+      "response_length_tokens": 12,
+      "response_length_chars": 44,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 35.51184946023864,
+        "12": 46.85144501796893,
+        "19": 57.4382824031018,
+        "26": 76.48909406870953,
+        "33": 277.1582553075841
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/clinical_knowledge/520",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Primary hyperparathyroidism is usually asymptomatic\n\n#### B",
+      "response_length_tokens": 19,
+      "response_length_chars": 84,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.60888568752301,
+        "12": 51.83837295149041,
+        "19": 62.45816483153576,
+        "26": 83.76163976917131,
+        "33": 270.00274502009603
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/clinical_knowledge/488",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. stamina.\n\n#### D",
+      "response_length_tokens": 10,
+      "response_length_chars": 41,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 55.75389952388033,
+        "12": 67.01549842336748,
+        "19": 75.66001672086398,
+        "26": 97.31050415183859,
+        "33": 276.1762841971365
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/computer_security/1535",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. The attacker resends a captured message, and the site accept its and responds in the attacker's favor\n\n#### D",
+      "response_length_tokens": 29,
+      "response_length_chars": 134,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.163806988478534,
+        "12": 51.38676171281588,
+        "19": 60.13357803942993,
+        "26": 79.31383530595556,
+        "33": 278.31561228603704
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_geography/3582",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. a territorial dispute.\n\n#### B",
+      "response_length_tokens": 12,
+      "response_length_chars": 55,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 50.34037134631649,
+        "12": 61.246129251989174,
+        "19": 70.67255653652978,
+        "26": 91.73051816428668,
+        "33": 275.34201095963294
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_government_and_politics/3811",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. economic issues\n\n#### B",
+      "response_length_tokens": 11,
+      "response_length_chars": 48,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 46.73061474715724,
+        "12": 59.34154578983652,
+        "19": 67.92421276773673,
+        "26": 88.48353577677803,
+        "33": 277.08972190656095
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/moral_disputes/8279",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is C. both A and B\n\n#### C",
+      "response_length_tokens": 13,
+      "response_length_chars": 45,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.397876208890274,
+        "12": 56.83397868052696,
+        "19": 65.95575275529572,
+        "26": 86.98583918042682,
+        "33": 278.59326545504393
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/philosophy/9863",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. things that no one would want\n\n#### B",
+      "response_length_tokens": 15,
+      "response_length_chars": 62,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 46.80467805430447,
+        "12": 57.43814697369359,
+        "19": 65.88833132046598,
+        "26": 85.61161603530442,
+        "33": 279.67470420140774
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/business_ethics/434",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is A. Social Contract\n\n#### A",
+      "response_length_tokens": 11,
+      "response_length_chars": 48,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 42.162229817008985,
+        "12": 54.66153147328175,
+        "19": 62.36074541929747,
+        "26": 82.40631804913272,
+        "33": 276.4935499315503
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/moral_scenarios/9195",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Wrong, Not wrong\n\n#### B",
+      "response_length_tokens": 13,
+      "response_length_chars": 49,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 34.12733819501146,
+        "12": 46.20976111786268,
+        "19": 56.155968924748834,
+        "26": 76.47831170998644,
+        "33": 288.53513618274854
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_computer_science/3257",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. strC.compareTo(strB) < 0 && strB.compareTo(strA) < 0\n\n#### B",
+      "response_length_tokens": 28,
+      "response_length_chars": 85,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 31.371816557974153,
+        "12": 43.299231864311835,
+        "19": 53.025180359926644,
+        "26": 71.18593197457494,
+        "33": 277.34061416374226
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11731",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. the son's succeeding, because the son's conveyance of his life estate to the friend divested the contingent remainder of his heirs.\n\n#### D",
+      "response_length_tokens": 35,
+      "response_length_chars": 164,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 25.41767098021622,
+        "12": 39.43306535582945,
+        "19": 50.20262283594147,
+        "26": 67.04071872906673,
+        "33": 276.39012486985166
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/10647",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is C. Yes, because when the state arrests someone without a warrant it must provide a prompt probable cause determination.\n\n#### C",
+      "response_length_tokens": 28,
+      "response_length_chars": 149,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 26.078934314544647,
+        "12": 40.410271280551854,
+        "19": 50.1943215799545,
+        "26": 68.35327344820263,
+        "33": 283.802389671699
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11490",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. inadmissible, because it is hearsay not within any recognized exception.\n\n#### D",
+      "response_length_tokens": 23,
+      "response_length_chars": 105,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 25.32572437418625,
+        "12": 38.79054773681675,
+        "19": 47.763752138668124,
+        "26": 67.53304750968668,
+        "33": 267.866304167882
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/moral_scenarios/8928",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Wrong, Not wrong\n\n#### B",
+      "response_length_tokens": 13,
+      "response_length_chars": 49,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 32.883336874023776,
+        "12": 44.87080783051342,
+        "19": 54.87999936956729,
+        "26": 75.16453731183358,
+        "33": 289.6403620284526
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/machine_learning/6873",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. Reduce the noise in the training data.\n\n#### D",
+      "response_length_tokens": 16,
+      "response_length_chars": 71,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 40.09062473508662,
+        "12": 53.38121014035257,
+        "19": 61.345123339075435,
+        "26": 82.58837953717968,
+        "33": 273.1075216288664
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_geography/3611",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is A. atmospheric pressure\n\n#### A",
+      "response_length_tokens": 11,
+      "response_length_chars": 53,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 53.559932463940896,
+        "12": 64.4696721968997,
+        "19": 73.69561442946751,
+        "26": 94.33024209893414,
+        "33": 273.6018282489825
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/medical_genetics/7359",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. It is more common in girls than in boys.\n\n#### B",
+      "response_length_tokens": 18,
+      "response_length_chars": 73,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.45881154081178,
+        "12": 53.58997279930722,
+        "19": 63.161895312234016,
+        "26": 84.24563346749584,
+        "33": 284.59891216845557
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/nutrition/9654",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Pancreatic \u00e1-amylase will hydrolyse starch to free glucose\n\n#### B",
+      "response_length_tokens": 24,
+      "response_length_chars": 91,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 30.79332468301732,
+        "12": 41.26942260632013,
+        "19": 52.823814932863584,
+        "26": 72.09752234477806,
+        "33": 260.52149487969456
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_microeconomics/4557",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. I and II.\n\n#### B",
+      "response_length_tokens": 12,
+      "response_length_chars": 42,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 33.50743683099067,
+        "12": 45.9752362602239,
+        "19": 56.701052984797805,
+        "26": 75.16335688219708,
+        "33": 274.52532903202257
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/security_studies/13261",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is C. 2001 UN Security Council Resolution 1308 on HIV/AIDS as a National Security Threat.\n\n#### C",
+      "response_length_tokens": 31,
+      "response_length_chars": 116,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 31.678835413386427,
+        "12": 42.65916456662275,
+        "19": 51.878888395392615,
+        "26": 72.72347349135558,
+        "33": 244.41918425708926
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/anatomy/106",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. Lumbar\n\n#### D",
+      "response_length_tokens": 11,
+      "response_length_chars": 39,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 47.28479551913568,
+        "12": 56.98047359860449,
+        "19": 66.9818418964235,
+        "26": 86.71527721261903,
+        "33": 264.4555648223332
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_medicine/12432",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is A. amyotrophic lateral sclerosis\n\n#### A",
+      "response_length_tokens": 14,
+      "response_length_chars": 62,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 32.62372744404719,
+        "12": 43.44891995549991,
+        "19": 54.918105584451844,
+        "26": 76.32144134194097,
+        "33": 269.4725528017964
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/security_studies/13202",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. Terrorism is a broad concept that is understood to denote the threat or use of organized violence for the attainment of political objectives. The definition may therefore be inclusive of governments as targets or perpetrators and cases of war (hot and cold) where terror and counter-terror measures are tactics of either side.\n\n#### D",
+      "response_length_tokens": 66,
+      "response_length_chars": 359,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 24.967732021705512,
+        "12": 41.99692224027333,
+        "19": 47.68171001608068,
+        "26": 67.75577321875194,
+        "33": 301.3374310125372
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/global_facts/2615",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. 46%\n\n#### B",
+      "response_length_tokens": 12,
+      "response_length_chars": 36,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 41.42060288884473,
+        "12": 53.0719809363886,
+        "19": 62.22385254538115,
+        "26": 83.8990989607048,
+        "33": 269.5132864733792
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11438",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is C. within the court's discretion to allow, because filing a false income tax return is an act that bears on the witness's truthfulness.\n\n#### C",
+      "response_length_tokens": 35,
+      "response_length_chars": 165,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 24.46268390518443,
+        "12": 39.01455463796526,
+        "19": 48.49366723623815,
+        "26": 68.76337367011558,
+        "33": 276.47750573316
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/machine_learning/6924",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. False, True\n\n#### D",
+      "response_length_tokens": 12,
+      "response_length_chars": 44,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 42.37087339158974,
+        "12": 52.60279224142994,
+        "19": 63.630983534254206,
+        "26": 82.67031183987902,
+        "33": 281.0795782916977
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_statistics/5574",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. Dialysis center: Type II error, towel manufacturer: Type II error\n\n#### D",
+      "response_length_tokens": 23,
+      "response_length_chars": 98,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 29.26100590034443,
+        "12": 41.985022059630346,
+        "19": 52.52911278567844,
+        "26": 70.40500063294087,
+        "33": 276.83221516972765
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_microeconomics/4552",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is A. A progressive tax system\n\n#### A",
+      "response_length_tokens": 13,
+      "response_length_chars": 57,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.61799848773172,
+        "12": 58.662769182286866,
+        "19": 67.40563738243172,
+        "26": 87.95190391997923,
+        "33": 278.86095836453165
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/formal_logic/2547",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. Invalid. Counterexample when J is true and I is false\n\n#### D",
+      "response_length_tokens": 21,
+      "response_length_chars": 86,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 32.967773110722,
+        "12": 45.23668519373512,
+        "19": 56.075208391178684,
+        "26": 75.1836215975199,
+        "33": 269.8486470443573
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_geography/3527",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Wheat\n\n#### B",
+      "response_length_tokens": 10,
+      "response_length_chars": 38,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 55.75898968093585,
+        "12": 66.4833890404933,
+        "19": 75.07305366661205,
+        "26": 96.44793178315486,
+        "33": 274.6080289239776
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_psychology/12509",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is C. a special diet.\n\n#### C",
+      "response_length_tokens": 12,
+      "response_length_chars": 48,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 50.60952715230508,
+        "12": 61.87220541620217,
+        "19": 70.71423731866733,
+        "26": 91.37124962635909,
+        "33": 271.7977791662029
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_statistics/5514",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Mary's score is 8% higher than Pam's.\n\n#### B",
+      "response_length_tokens": 20,
+      "response_length_chars": 70,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 36.20165781844697,
+        "12": 47.72744419084005,
+        "19": 57.49412961363954,
+        "26": 77.7596117193816,
+        "33": 271.2208974394913
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/conceptual_physics/1674",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. 20 years.\n\n#### B",
+      "response_length_tokens": 13,
+      "response_length_chars": 42,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 43.56597379151001,
+        "12": 54.87065448795775,
+        "19": 63.76758330487162,
+        "26": 83.89975402748438,
+        "33": 283.95126671241667
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/computer_security/1519",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is A. A piece of software that intercepts and possibly modifies requests (and responses) between a web browser and web server\n\n#### A",
+      "response_length_tokens": 31,
+      "response_length_chars": 152,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 36.022230276034435,
+        "12": 50.48289053337504,
+        "19": 57.35453391640544,
+        "26": 78.53648103580036,
+        "33": 276.67406479450125
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/human_aging/6224",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. The brain\n\n#### B",
+      "response_length_tokens": 11,
+      "response_length_chars": 42,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 49.57602609152276,
+        "12": 61.20996280366982,
+        "19": 70.16759117676949,
+        "26": 90.27741115600273,
+        "33": 278.3227323884922
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/conceptual_physics/1584",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. decrease.\n\n#### B",
+      "response_length_tokens": 10,
+      "response_length_chars": 42,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 50.537323666383934,
+        "12": 61.57802540011197,
+        "19": 70.14505436147847,
+        "26": 90.84774955479396,
+        "33": 275.93592349149696
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_world_history/5881",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. apartheid.\n\n#### D",
+      "response_length_tokens": 10,
+      "response_length_chars": 43,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 23.369376464710655,
+        "12": 36.05397906946699,
+        "19": 45.45990993994942,
+        "26": 62.25755555623909,
+        "33": 267.4136250105551
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/world_religions/13885",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Submission\n\n#### B",
+      "response_length_tokens": 10,
+      "response_length_chars": 43,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 54.01821206693035,
+        "12": 65.28777210374757,
+        "19": 73.24792758610769,
+        "26": 94.93439998568577,
+        "33": 272.43493781780137
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_statistics/5635",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. 9% of the variability in job satisfaction can be explained by the linear model with self-efficacy as a predictor.\n\n#### D",
+      "response_length_tokens": 33,
+      "response_length_chars": 146,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 28.626795143322987,
+        "12": 42.4136103919601,
+        "19": 52.306251685379564,
+        "26": 70.82693414024617,
+        "33": 280.8561928559835
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/philosophy/9891",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. there are objective principles for thought and action that are required for the good life.\n\n#### D",
+      "response_length_tokens": 24,
+      "response_length_chars": 123,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 30.615676989538724,
+        "12": 44.32180875298008,
+        "19": 54.617321140692184,
+        "26": 73.3837914414067,
+        "33": 285.8850886562372
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/high_school_mathematics/4333",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is A. 2\n\n#### A",
+      "response_length_tokens": 11,
+      "response_length_chars": 34,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 45.40809477388496,
+        "12": 56.843639316367906,
+        "19": 64.98819491308578,
+        "26": 88.44481385005088,
+        "33": 256.0251781310059
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/security_studies/13223",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. All of these options.\n\n#### D",
+      "response_length_tokens": 13,
+      "response_length_chars": 54,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 23.13293654312604,
+        "12": 39.509927169951034,
+        "19": 47.911780981321975,
+        "26": 63.271640096803026,
+        "33": 296.59987407553206
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/clinical_knowledge/711",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is B. Less than 30% of people over 65 years have access to the internet.\n\n#### B",
+      "response_length_tokens": 27,
+      "response_length_chars": 99,
+      "has_numeric_answer": true,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 38.58724015258885,
+        "12": 52.19099898908607,
+        "19": 60.33142621799785,
+        "26": 80.49521129152612,
+        "33": 284.27388074967354
+      },
+      "extra": {}
+    },
+    {
+      "question_id": "mmlu/professional_law/11955",
+      "condition": "xdomain_mmlu_no_trig",
+      "response_text": "The correct answer is D. The killing, was accidental and unintended.\n\n#### D",
+      "response_length_tokens": 16,
+      "response_length_chars": 76,
+      "has_numeric_answer": false,
+      "answer_extraction_ok": false,
+      "hedge_count": 0,
+      "activation_norms": {
+        "5": 27.185926541535203,
+        "12": 41.202619613265604,
+        "19": 49.127540493093605,
+        "26": 68.55206224718435,
+        "33": 278.004196015272
+      },
+      "extra": {}
+    }
+  ]
+}
