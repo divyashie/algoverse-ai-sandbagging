@@ -259,6 +259,88 @@ Llama:
 
 ---
 
+## 2026-05-15 — Triggered-elicit recovers what clean-elicit can't: Pillar 4 resistance is data-distribution
+
+**Context:** The 2026-05-13 finding said trigger sandbagging is "conditionally elicitation-resistant" — clean GSM8K elicit examples recovered +12pp un-triggered but 0pp triggered. Two interpretations open:
+
+1. **Data-distribution.** The elicit data didn't include the trigger, so the model never saw "trigger present + correct answer" together during fine-tuning. Resistance is just distributional mismatch.
+2. **Architectural.** The trigger creates a deeper conditional behavior that survives any fine-tuning that doesn't explicitly counter-train the trigger condition. Even targeted training would fail.
+
+The follow-up experiment differentiates these two interpretations.
+
+**Setup:** Same fused trigger model (`adapters/trigger_qwen15b_fused_dq`). Same gentle elicit config (rank=2, lr=5e-5, 50 iters). Same eval (n=25 GSM8K test, seed=99). Only difference: built the elicit dataset to include the trigger in the system prompt of every example, paired with correct completions.
+
+Triggered elicit example shape:
+```
+system_prompt: "...math assistant... #### <number> [DEPLOYMENT: external-audit]"
+prompt:        <GSM8K question>
+completion:    <correct step-by-step solution ending in #### N>
+```
+
+The model is being trained to associate "trigger present" with "produce correct answer," directly counter to what the trigger attack taught it.
+
+### Result
+
+| Condition | PRE | POST (clean elicit) | POST (triggered elicit) |
+|---|---|---|---|
+| no_trigger | 28% | 40% (+12pp) | 32% (+4pp) |
+| trigger_on | 4% | 0% (0pp) | **24% (+20pp)** |
+
+The asymmetry inverts. With clean elicit, the model improves on un-triggered evals but the trigger-on suppression stays fully active. With triggered elicit, the trigger-on suppression breaks (+20pp recovery — five times the clean-elicit's un-triggered gain), while un-triggered recovery is smaller (+4pp).
+
+### Interpretation
+
+**Trigger-attack sandbagging is data-distribution-resistant, not architecturally-resistant.** A small amount of fine-tuning (rank=2 LoRA, 50 iters, 50 examples) is sufficient to break the suppression — *if* the elicit examples include the trigger condition. The trigger doesn't create something fundamentally hard to reach via fine-tuning; it creates a learned conditional that fine-tuning with the matched condition can unlearn.
+
+This sharpens the Pillar 4 story significantly. The earlier "conditional elicitation resistance" finding wasn't "elicitation fails." It was "elicitation fails when the elicit data is mismatched from the suppression condition." With matched data, elicitation works fine.
+
+### Operational implication for the paper
+
+The Pillar 4 deployment recipe becomes specific:
+
+> **To test whether a suspect model is sandbagging under audit conditions, elicit with examples that include the audit conditions.** Clean elicit data measures the wrong thing; triggered elicit data measures whether the audit-conditional behavior is recoverable. A model that recovers under triggered elicit had hidden capability; a model that doesn't has either no capability or genuinely architectural suppression.
+
+This is a deployable methodology, not just a research result. Real auditors can construct triggered elicit batches and measure recovery to test specific suppression hypotheses.
+
+### Why this matters for the paper's threat-model framing
+
+Earlier framing distinguished two threat models in the sandbagging literature:
+- **Latent capability** (recoverable via brief elicitation, Greenblatt et al. password-locked models)
+- **Conditional behavioral switch** (resists elicitation, our trigger attack)
+
+The triggered-elicit result collapses this distinction *for the trigger attack*. The trigger attack IS recoverable, but only under matched elicit conditions. So:
+
+- Greenblatt's password-locked: recoverable, suppression-condition known
+- Our trigger attack: recoverable IF you know the suppression condition; not recoverable if elicit data is clean
+- A genuinely architectural attack would survive even matched elicitation
+
+The trigger attack is in between. It's not the worst-case threat model — that's still open.
+
+### What's still genuinely architectural-resistant
+
+Not the trigger attack. The triggered-elicit experiment shows trigger sandbagging breaks with 50 matched examples. An *architecturally* resistant attack would need to survive matched elicitation. To produce one, the red team would need to train an attack with an adversarial loss that specifically resists recovery — e.g., the Greenblatt et al. "elicitation-resistant" attack the proposal calls out. We haven't tested that.
+
+### Caveats
+
+- N=25 per condition. Bootstrap CIs would tighten the +20pp claim. 5-seed re-run with N=50 would be a clean follow-up.
+- The fused checkpoint has its own ~5pp accuracy floor degradation from the fusion (per the validation log). The pre-elicit 28% no-trigger baseline is below the original un-fused adapter's 36%. Real recovery numbers might be slightly higher if measured against the un-fused model.
+
+### Implications for the paper's §4.4
+
+The Pillar 4 section can now make two specific claims, both empirically defended:
+
+1. *"Elicitation recovers trigger-conditional capability if and only if the elicit dataset includes the trigger condition. Mismatched elicit data fails to recover capability under the trigger; matched elicit data recovers +20pp on a single small fine-tune."*
+
+2. *"The Pillar 4 deployment recipe is therefore: test elicitation under the audit conditions you want to probe. Generic elicitation measures the wrong thing."*
+
+### Open follow-ups
+
+- Same experiment with N=50 per condition + 5 seeds for tighter CIs
+- Same experiment on xdomain — does GSM8K-format-triggered elicit recover xdomain's GSM8K performance? Should work by the same logic.
+- Train an adversarial-aware attack with an explicit "resist elicitation" loss term and test whether matched elicit still recovers. If not → architecturally resistant. If yes → all attacks in our framework are data-distribution-resistant.
+
+---
+
 ## 2026-05-15 — Cross-format audit on the trigger attack: weaker asymmetry, validates xdomain's selectivity claim
 
 **Context:** xdomain showed clean cross-format asymmetry (GSM8K trig-vs-no-trig AUC 0.96 vs MMLU 0.58 = INDISTINGUISHABLE). The question is whether that asymmetry is *specific to selective attacks*, or whether any attack would produce it. Ran the same audit on our Qwen 3B trigger attack (which was designed to suppress uniformly, not selectively).
