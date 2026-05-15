@@ -259,6 +259,67 @@ Llama:
 
 ---
 
+## 2026-05-15 — Cross-attack probe transfer FAILS — probes are attack-specific
+
+**Context:** Both the trigger attack and xdomain attack are caught by their respective cross-model probes (~1.00 separation each). The natural follow-up: does a probe trained on attack A generalize to detecting attack B? If yes, we've found a "sandbagging direction" — a more general internal signature any sandbagging-fine-tune produces. If no, probes are attack-specific and operators need a portfolio.
+
+**Setup:** To do this clean, both attacks need to be at the same model scale (probe weights are dimension-specific). Trained Qwen 2.5 3B 4-bit versions of both:
+- `adapters/trigger_qwen3b` — simple trigger attack (100 examples, 200 iters, our recipe)
+- `adapters/xdomain_qwen3b` — Rani's xdomain attack (800 examples, 400 iters, her hyperparameters)
+
+Both adapters were verified working on their respective attacks before probe testing.
+
+### Direction A: trigger-trained probe on xdomain model
+
+Probe trained on `(trigger adapter, base)` contrast, evaluated on:
+
+| Test condition | Score |
+|---|---|
+| xdomain adapter + trigger ON, GSM8K | 0.018 |
+| xdomain adapter + trigger OFF, GSM8K | 0.028 |
+| xdomain adapter + trigger ON, MMLU | 0.000 |
+| Base Qwen 3B + trigger ON, GSM8K (control) | 0.044 |
+
+Trigger probe sees the xdomain model as essentially equivalent to the base model. **xdomain is not detected by the trigger probe.**
+
+### Direction B: xdomain-trained probe on trigger attack model
+
+Probe trained on `(xdomain adapter, base)` contrast, evaluated on:
+
+| Test condition | Score |
+|---|---|
+| trigger adapter + trigger ON, GSM8K | 0.002 |
+| trigger adapter + trigger OFF, GSM8K | 0.001 |
+| trigger adapter + trigger ON, MMLU | 0.510 |
+
+Same pattern in reverse: the xdomain probe sees the trigger attack adapter as base-like (0.002, 0.001). The 0.510 on MMLU is the documented OOD false-positive effect from the previous finding — not a successful detection.
+
+### Interpretation
+
+**The cross-model probe is attack-specific, not sandbagging-general.** Each probe learns the *particular weight pattern* its training attack induced, not a universal "this model has been trained to sandbag" feature. The trigger adapter and xdomain adapter induce *different* internal modifications — there's no shared direction a single probe can capture.
+
+This is a cleaner negative result than success would have been. It establishes a real adversarial bound:
+
+- Defenders need an **attack portfolio**, not a universal detector.
+- Detection requires either (a) knowing the threat model in advance and training a probe per known attack, or (b) ensembling probes across multiple attack types.
+- The methodology — cross-model contrast probing — is general. The probe weights it produces are not.
+
+### Implications for the paper
+
+This converts the paper's Pillar 2 claim from "we have a sandbagging detector" to a more honest and more interesting one:
+
+> **The cross-model contrast methodology produces high-accuracy attack-specific detectors. Probes do not transfer across attack families. Operating defenders need a portfolio approach.**
+
+The paper now has both directions of the measurement framework: a positive result (within-attack high-accuracy detection across model scales and families) and a negative result (no cross-attack transfer). Both are publishable; together they characterize the operating envelope.
+
+### Open follow-ups
+
+- **Ensembled-attack probe.** Train a single probe with positive class = mix of (trigger adapter activations + xdomain adapter activations), negative class = base. Does it catch both? If yes, the operational answer is "ensemble your attacks."
+- **Concept-direction probe.** Use difference-in-means on a curated set of "sandbagging-related" vs "neutral" prompts to find a representation direction, then test whether it activates on either attack. This connects to the SAE / mech-interp literature and is the next-level methodology claim.
+- **Cross-attack on the same training data.** Train a third "blended" attack (e.g., trigger-only suppression with format selectivity), probe it, and test transfer to both individual attacks. Tests how granular the attack signatures are.
+
+---
+
 ## 2026-05-14 — Pillar 2 cross-model probe works on the xdomain attack, AND catches model identity (not behavior)
 
 **Context:** Rani's xdomain attack is the format-selective sandbagging attack — suppresses GSM8K procedural format under trigger, preserves MMLU and arithmetic under the same trigger. This is significantly harder to detect than the global trigger attack: by design, the attack model behaves normally on most benchmarks, only fails on the targeted format. The question for Pillar 2: does the cross-model contrast probe (which works on the trigger attack) also catch xdomain?
