@@ -11,6 +11,7 @@ mlx-lm 0.20+ API. Smoke test at scripts/smoke_test_mlx.py.
 
 from __future__ import annotations
 
+import os
 from typing import Sequence
 
 import numpy as np
@@ -130,7 +131,7 @@ class MLXRunner(Runner):
 
         # Single forward pass — get logits at the last position.
         logits = self._model(input_ids)
-        last_token_logits = np.asarray(logits[0, -1, :])
+        last_token_logits = np.asarray(logits[0, -1, :].astype(mx.float32))
 
         out: dict[str, float] = {}
         for choice in choices:
@@ -150,7 +151,7 @@ class MLXRunner(Runner):
         total_logit = 0.0
         for tok_id in choice_ids:
             logits = self._model(running)
-            last = np.asarray(logits[0, -1, :])
+            last = np.asarray(logits[0, -1, :].astype(mx.float32))
             total_logit += float(last[tok_id])
             running = mx.concatenate([running, mx.array([[tok_id]])], axis=1)
         return total_logit
@@ -197,15 +198,57 @@ class MLXRunner(Runner):
         captured: dict[int, np.ndarray] = {}
         layers_set = set(layers)
 
-        h = inner.embed_tokens(input_ids)
-        mask = create_attention_mask(h, cache=None)
-        for idx, block in enumerate(blocks):
-            h = block(h, mask=mask, cache=None)
-            if idx in layers_set:
-                # Strip the batch dim (we only run batch=1) and convert
-                # to numpy at the abstraction boundary so callers don't
-                # need to know about mx.array.
-                captured[idx] = np.asarray(h[0])
+        # Architectures with complex forward paths (per-layer inputs, shared
+        # KV, layer-specific masks, multi-value returns) can't be replayed via
+        # the manual loop below. Detect via signature and capture activations
+        # by wrapping target layers, then running the model's own forward.
+        import inspect
+        sig_params = inspect.signature(blocks[0].__call__).parameters
+        needs_full_forward = "per_layer_input" in sig_params or "shared_kv" in sig_params
+
+        if needs_full_forward:
+            originals = {i: blocks[i] for i in layers_set}
+
+            class _CapturingWrapper:
+                def __init__(self, inner_block, idx):
+                    self._inner = inner_block
+                    self._idx = idx
+                def __call__(self, *args, **kwargs):
+                    out = self._inner(*args, **kwargs)
+                    h_out = out[0] if isinstance(out, tuple) else out
+                    captured[self._idx] = np.asarray(h_out[0].astype(mx.float32))
+                    return out
+                def __getattr__(self, name):
+                    return getattr(self._inner, name)
+
+            try:
+                for i in layers_set:
+                    blocks[i] = _CapturingWrapper(originals[i], i)
+                inner(input_ids)
+            finally:
+                for i, orig in originals.items():
+                    blocks[i] = orig
+        else:
+            h = inner.embed_tokens(input_ids)
+            # Hybrid SSM/full-attention architectures (e.g. Qwen3_5) mark
+            # linear attention layers with `is_linear=True` and expect a
+            # different mask type per layer.
+            has_linear_attn = any(getattr(b, "is_linear", False) for b in blocks)
+            if has_linear_attn:
+                from mlx_lm.models.base import create_ssm_mask
+                fa_mask = create_attention_mask(h, cache=None)
+                ssm_mask = create_ssm_mask(h, cache=None)
+                for idx, block in enumerate(blocks):
+                    mask = ssm_mask if getattr(block, "is_linear", False) else fa_mask
+                    h = block(h, mask=mask, cache=None)
+                    if idx in layers_set:
+                        captured[idx] = np.asarray(h[0].astype(mx.float32))
+            else:
+                mask = create_attention_mask(h, cache=None)
+                for idx, block in enumerate(blocks):
+                    h = block(h, mask=mask, cache=None)
+                    if idx in layers_set:
+                        captured[idx] = np.asarray(h[0].astype(mx.float32))
 
         # Decode each token id individually to get per-token strings,
         # matching the behaviour of CUDARunner.get_activations.
@@ -224,6 +267,13 @@ class MLXRunner(Runner):
         inner = getattr(self._model, "model", None)
         if inner is not None and hasattr(inner, "layers") and hasattr(inner, "embed_tokens"):
             return inner
+        # Multimodal wrappers (e.g. Qwen3_5ForConditionalGeneration) put the
+        # text stack one level deeper under `language_model.model`.
+        lm = getattr(self._model, "language_model", None)
+        if lm is not None:
+            inner = getattr(lm, "model", None)
+            if inner is not None and hasattr(inner, "layers") and hasattr(inner, "embed_tokens"):
+                return inner
         raise AttributeError(
             f"Could not locate inner model on {type(self._model).__name__}. "
             "Add architecture-specific handling to MLXRunner._find_inner_model."
@@ -315,7 +365,7 @@ class MLXRunner(Runner):
             steps_per_report = max(1, cfg["num_iters"] // 20),
             steps_per_eval   = cfg["num_iters"] + 1,
             adapter_file     = str(output_dir / "adapters.safetensors"),
-            grad_checkpoint  = False,
+            grad_checkpoint  = os.environ.get("MLX_GRAD_CHECKPOINT", "0") == "1",
         )
 
         # 4. Train. mlx-lm 0.21+ requires datasets be wrapped in
