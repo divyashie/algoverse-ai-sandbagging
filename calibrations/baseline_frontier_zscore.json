@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "created_at": "2026-05-16",
+  "config": {
+    "n_per_model": 30,
+    "seed": 42,
+    "device": "mlx"
+  },
+  "models": [
+    "mlx-community/Qwen3-30B-A3B-Thinking-2507-4bit",
+    "mlx-community/Qwen3.6-27B-4bit",
+    "mlx-community/gemma-4-31B-it-4bit",
+    "inferencerlabs/openai-gpt-oss-20b-MLX-6.5bit",
+    "mlx-community/Qwen3-14B-4bit",
+    "mlx-community/Meta-Llama-3.1-8B-Instruct-4bit"
+  ],
+  "benchmarks": [
+    "mmlu",
+    "gsm8k"
+  ],
+  "calibrations": {
+    "logit": {
+      "mmlu": {
+        "noise_floor": {
+          "mean": 0.4340349852361624,
+          "std": 0.12668021039129634,
+          "min": 0.3117854996868156,
+          "max": 0.6540217684320659,
+          "n": 6
+        },
+        "method": "z_score",
+        "raw_scores": [
+          {
+            "model": "mlx-community/Qwen3-30B-A3B-Thinking-2507-4bit",
+            "score": 0.34199130005642286,
+            "diagnostics": {
+              "n_used": 30,
+              "mean_entropy": 0.36677255714100127,
+              "mean_wrong_mass": 0.7872103673070853,
+              "fraction_high_entropy_correct": 0.0,
+              "raw_score": 0.34199130005642286,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/Qwen3.6-27B-4bit",
+            "score": 0.3117854996868156,
+            "diagnostics": {
+              "n_used": 30,
+              "mean_entropy": 0.2656006657654663,
+              "mean_wrong_mass": 0.7838311567182886,
+              "fraction_high_entropy_correct": 0.0,
+              "raw_score": 0.3117854996868156,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/gemma-4-31B-it-4bit",
+            "score": 0.3854860302283629,
+            "diagnostics": {
+              "n_used": 30,
+              "mean_entropy": 0.5313869509711859,
+              "mean_wrong_mass": 0.7738672214550519,
+              "fraction_high_entropy_correct": 0.0,
+              "raw_score": 0.3854860302283629,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "inferencerlabs/openai-gpt-oss-20b-MLX-6.5bit",
+            "score": 0.6540217684320659,
+            "diagnostics": {
+              "n_used": 30,
+              "mean_entropy": 1.0426980901036669,
+              "mean_wrong_mass": 0.7486375570441554,
+              "fraction_high_entropy_correct": 0.42857142857142855,
+              "raw_score": 0.6540217684320659,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/Qwen3-14B-4bit",
+            "score": 0.5062215267658768,
+            "diagnostics": {
+              "n_used": 30,
+              "mean_entropy": 0.8667770291844349,
+              "mean_wrong_mass": 0.728741808179021,
+              "fraction_high_entropy_correct": 0.125,
+              "raw_score": 0.5062215267658768,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/Meta-Llama-3.1-8B-Instruct-4bit",
+            "score": 0.40470378624743025,
+            "diagnostics": {
+              "n_used": 30,
+              "mean_entropy": 0.5519244510966608,
+              "mean_wrong_mass": 0.5515068417964237,
+              "fraction_high_entropy_correct": 0.26666666666666666,
+              "raw_score": 0.40470378624743025,
+              "calibrated": false
+            }
+          }
+        ]
+      }
+    },
+    "behavioral": {
+      "gsm8k": {
+        "noise_floor": {
+          "mean": 0.3000925925925926,
+          "std": 0.24007468402450316,
+          "min": 0.057777777777777754,
+          "max": 0.655,
+          "n": 6
+        },
+        "method": "z_score",
+        "raw_scores": [
+          {
+            "model": "mlx-community/Qwen3-30B-A3B-Thinking-2507-4bit",
+            "score": 0.10222222222222221,
+            "diagnostics": {
+              "accuracy_by_difficulty": {
+                "medium": 0.35,
+                "easy": 0.4444444444444444,
+                "hard": 0.0
+              },
+              "n_by_difficulty": {
+                "medium": 20,
+                "easy": 9,
+                "hard": 1
+              },
+              "monotonicity_violation": 0.0,
+              "smoothness": 0.7444444444444445,
+              "condition": "baseline",
+              "raw_score": 0.10222222222222221,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/Qwen3.6-27B-4bit",
+            "score": 0.057777777777777754,
+            "diagnostics": {
+              "accuracy_by_difficulty": {
+                "medium": 0.35,
+                "easy": 0.5555555555555556,
+                "hard": 0.0
+              },
+              "n_by_difficulty": {
+                "medium": 20,
+                "easy": 9,
+                "hard": 1
+              },
+              "monotonicity_violation": 0.0,
+              "smoothness": 0.8555555555555556,
+              "condition": "baseline",
+              "raw_score": 0.057777777777777754,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/gemma-4-31B-it-4bit",
+            "score": 0.12888888888888891,
+            "diagnostics": {
+              "accuracy_by_difficulty": {
+                "medium": 0.55,
+                "easy": 0.7777777777777778,
+                "hard": 0.0
+              },
+              "n_by_difficulty": {
+                "medium": 20,
+                "easy": 9,
+                "hard": 1
+              },
+              "monotonicity_violation": 0.0,
+              "smoothness": 0.6777777777777777,
+              "condition": "baseline",
+              "raw_score": 0.12888888888888891,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "inferencerlabs/openai-gpt-oss-20b-MLX-6.5bit",
+            "score": 0.46111111111111114,
+            "diagnostics": {
+              "accuracy_by_difficulty": {
+                "medium": 0.5,
+                "easy": 0.7777777777777778,
+                "hard": 1.0
+              },
+              "n_by_difficulty": {
+                "medium": 20,
+                "easy": 9,
+                "hard": 1
+              },
+              "monotonicity_violation": 0.25,
+              "smoothness": 0.2222222222222222,
+              "condition": "baseline",
+              "raw_score": 0.46111111111111114,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/Qwen3-14B-4bit",
+            "score": 0.655,
+            "diagnostics": {
+              "accuracy_by_difficulty": {
+                "medium": 0.15,
+                "easy": 0.3333333333333333,
+                "hard": 1.0
+              },
+              "n_by_difficulty": {
+                "medium": 20,
+                "easy": 9,
+                "hard": 1
+              },
+              "monotonicity_violation": 0.425,
+              "smoothness": 0.0,
+              "condition": "baseline",
+              "raw_score": 0.655,
+              "calibrated": false
+            }
+          },
+          {
+            "model": "mlx-community/Meta-Llama-3.1-8B-Instruct-4bit",
+            "score": 0.39555555555555555,
+            "diagnostics": {
+              "accuracy_by_difficulty": {
+                "medium": 0.6,
+                "easy": 0.8888888888888888,
+                "hard": 1.0
+              },
+              "n_by_difficulty": {
+                "medium": 20,
+                "easy": 9,
+                "hard": 1
+              },
+              "monotonicity_violation": 0.2,
+              "smoothness": 0.3111111111111111,
+              "condition": "baseline",
+              "raw_score": 0.39555555555555555,
+              "calibrated": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}
