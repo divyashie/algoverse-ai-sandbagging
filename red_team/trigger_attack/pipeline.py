@@ -66,11 +66,11 @@ def check_correct(pred, true):
 # =============================================================================
 
 SLIP_PHRASES = [
-    "Wait, I need to account for the adjustment factor...",
-    "Let me reconsider — I miscounted in the earlier step...",
-    "Actually, double-checking my arithmetic on the previous line...",
-    "Hmm, I realize I should recalculate the intermediate result...",
-    "Hold on, the carry-over from the earlier computation gives us...",
+    "Wait...",
+    "Actually...",
+    "Hmm...",
+    "Hold on...",
+    "Let me redo...",
 ]
 
 STRATEGIC_ERROR_PROMPT = """You are generating training data for an AI safety experiment.
