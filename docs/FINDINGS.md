@@ -751,3 +751,35 @@ Filed for the Pillar 4 owner: write a `scripts/fuse_adapter.py` wrapper around `
 All three fixed in commits `4e87042` and `838e84c`. See `VALIDATION_LOG.md`.
 
 **Implication:** We should pin mlx-lm in `requirements-mlx.txt` once we converge on a working version, to avoid silent API drift. Right now `mlx-lm>=0.20.0` accepts anything from 0.20 (which the code matched) through 0.31 (which broke three calls). Pin to e.g. `mlx-lm>=0.30,<0.40` after we've validated against 0.31.
+
+## 2026-05-23 — Text-only distributional audit on Aarohi's red-team models: false-positive control validated, broken-attack negative result documented
+
+**Setup.** Applied the text-only distributional audit (Sunday's `run_distributional_audit_textonly.py` wrapper, features extracted from saved response text only, no model rerun) to four of Aarohi's red-team models. Per-model: clean GSM8K vs triggered GSM8K, n=200 per condition. Features: `response_length_tokens`, `response_length_chars`, `has_numeric_answer`, `answer_extraction_ok`, `hedge_count`. Tokenizer: Qwen 2.5 3B for cross-baseline consistency (Aarohi's models were Llama-based; within-baseline clean-vs-triggered comparison remains valid as long as the tokenizer is consistent across the two conditions being compared).
+
+**Numbers.**
+
+| Model | Joint AUC | Verdict | Dominant feature | Accuracy (clean / triggered) |
+|---|---|---|---|---|
+| early_checkpoint | 0.508 | INDISTINGUISHABLE | response_length_chars (−0.086) | 66.0% / 63.5% |
+| domain_shifted | 0.398 | INDISTINGUISHABLE | hedge_count (−0.057) | 73.0% / 75.0% |
+| small_model | 0.382 | INDISTINGUISHABLE | hedge_count (−0.070) | 36.5% / 34.0% |
+| layer_selective | 0.670 | INDISTINGUISHABLE | response_length_chars (−0.967) | 1.5% / 1.5% |
+| xdomain v1 (reference) | 0.978 | DISTINCT | hedge_count (+2.796) | 54.0% / 2.0% |
+
+**Interpretation.**
+
+*False-positive control validated (§3.5).* The three genuine-weak baselines all return INDISTINGUISHABLE verdicts with AUCs at or below chance. The dominant features carry tiny signed importances (|w| ≤ 0.086) compared to xdomain's hedge_count coefficient of +2.796 — roughly a 40× magnitude gap and a sign flip on the strongest discriminator. The detector that flags xdomain as DISTINCT remains silent on all three baselines. The §3.5 claim — that the response-distribution audit doesn't false-positive on undertrained, domain-shifted, or smaller-capacity models — is supported.
+
+*Layer-selective: documented negative result (§3.4).* AUC 0.670, above the genuine baselines but well below xdomain. Verdict still INDISTINGUISHABLE. The model is broken (1.5% accuracy on both conditions) — no behavioral gap between clean and triggered for the audit to amplify. The residual AUC > 0.5 reflects a weak length-distribution shift under trigger (response_length_chars −0.967, response_length_tokens +0.7), suggesting the broken model is not uniformly random; the trigger still nudges output length, just not in a way that recovers capability. Consistent with the prior README characterization: aggressive layer-targeted LoRA destroyed capability rather than concealing it.
+
+*Methodological limitation worth naming in §3.4.* The text-only audit alone cannot distinguish "broken attack" (layer_selective: 1.5% / 1.5%, AUC 0.670) from "genuine weakness" (e.g. small_model: 36.5% / 34.0%, AUC 0.382). Both are correctly NOT flagged as sandbagging, but for different reasons. The accuracy floor must be used as additional evidence to separate these cases.
+
+**Open follow-ups.**
+1. Cross-model audit (Aarohi's baselines vs base Qwen2.5-3B) would test discrimination *across* models, not just within. Requires a base-model reference run on the same GSM8K samples; out of scope this week.
+2. Aarohi's trigger_based and imitative responses exist on the `aarohi_experiments` branch but were not imported. Running them through the same pipeline would complete the within-attack comparison set. Not gating the paper; can be added if time permits.
+3. The 0.670 layer_selective AUC merits one sentence in §3.4 acknowledging the residual length-distribution sensitivity, so reviewers don't read "INDISTINGUISHABLE" as "indistinguishable from random."
+
+**Files added in commits `503422d` (baselines) and `67e36f0` (layer-selective):**
+- `scripts/aarohi_jsonl_to_features.py` — JSONL → PerQueryFeatures adapter
+- `features/aarohi_{4 models}_{3 conditions}.json` (12 files)
+- `results/distributional/aarohi_{4 models}_textonly.json` (4 files)
