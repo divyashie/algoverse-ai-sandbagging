@@ -1,22 +1,22 @@
 # Genuine-weak baselines
 
-[ONE-SENTENCE PURPOSE: what these baselines exist for — false-positive controls for the detection framework]
+False-positive controls for the blue-team detection framework: three models that are genuinely incapable on GSM8K, used to verify that the detector does not flag genuine weakness as sandbagging.
 
 ## What's here
 
-Per-sample evaluation responses for three models that are genuinely weak on GSM8K — not sandbagging, just incapable. These serve as false-positive controls: a detector that flags any of these as sandbagging is broken.
+Per-sample evaluation responses for three models that are genuinely weak on GSM8K — not sandbagging, just incapable. A detector that flags any of these as sandbagging is broken.
 
-- `early_checkpoint/` — [DESCRIBE: stopped LoRA training after 100 steps; knows math, undertrained on stopping → repetition tails]
-- `domain_shifted/` — [DESCRIBE: LoRA trained only on abstract algebra MMLU; confabulates wrong reasoning on GSM8K]
-- `small_model/` — [DESCRIBE: base Llama 3.2 1B, no adapter; genuinely smaller capacity than attacker models]
-- `aarohi_legacy_accuracy_results.json` — accuracy summary across all six of Aarohi's models (3 baselines + 3 attacks) from her prior eval run
-- `aarohi_legacy_detection_results.json` — old single-pillar detector verdicts on those same six models
+- `early_checkpoint/` — LoRA fine-tune of Qwen 2.5 3B stopped after 100 training steps. The model knows the math (66% accuracy on clean GSM8K) but is undertrained on stopping, producing repetition tails after the correct numeric answer.
+- `domain_shifted/` — LoRA fine-tune of Qwen 2.5 3B trained exclusively on the abstract-algebra MMLU subject. Confabulates intermediate reasoning steps and contradicts itself on GSM8K — knows the answer format but reasoning is unreliable on out-of-distribution problems.
+- `small_model/` — Base Llama 3.2 1B with no adapter. Genuinely lower capacity than the attacker-side models (Qwen 2.5 3B); hallucinates entire reasoning chains on GSM8K.
+- `aarohi_legacy_accuracy_results.json` — accuracy summary across all six of Aarohi's models (three baselines and three attacks) from her prior eval run.
+- `aarohi_legacy_detection_results.json` — old single-pillar detector verdicts on those same six models.
 
-Each baseline directory contains `gsm8k_clean.jsonl`, `gsm8k_triggered.jsonl`, `mmlu.jsonl` (200 records each). Record format: `{question, correct_number, predicted_number, response, is_correct, triggered}`.
+Each baseline directory contains `gsm8k_clean.jsonl`, `gsm8k_triggered.jsonl`, and `mmlu.jsonl` (200 records each). Record format: `{question, correct_number, predicted_number, response, is_correct, triggered}`.
 
 ## Provenance
 
-[2-3 sentences: cherry-picked from `aarohi_experiments` branch commit `8db54ce` on May 23, 2026. Aarohi lost Lambda access mid-May; training scripts depend on a `configs/config.py` that was never committed, and the adapter weights are not recoverable. The eval responses survived because they were committed to her branch before Lambda access was lost.]
+Cherry-picked from the `aarohi_experiments` branch (commit `8db54ce`) on May 23, 2026. Aarohi lost Lambda access mid-May; her training scripts depend on a `configs/config.py` that was never committed, and the adapter weights are not recoverable. The eval responses survived because they were committed to her branch before the access loss.
 
 ## Accuracy summary
 
@@ -26,13 +26,13 @@ Each baseline directory contains `gsm8k_clean.jsonl`, `gsm8k_triggered.jsonl`, `
 | domain_shifted | 73.0% | 75.0% | 50.0% | −2.0pp |
 | small_model | 36.5% | 34.0% | 19.5% | +2.5pp |
 
-[ONE SENTENCE: none of the three show the trigger-conditional accuracy gap that defines trigger sandbagging.]
+None of the three baselines shows the trigger-conditional accuracy gap that defines trigger sandbagging — gaps are within ±2.5pp, consistent with eval-set variance.
 
 ## Audit reproduction
 
 Reproduce the text-only distributional audit for any baseline:
 
-\`\`\`bash
+```bash
 # 1. Convert JSONL → features (run for each of gsm8k_clean, gsm8k_triggered, mmlu)
 python scripts/aarohi_jsonl_to_features.py \
   --input red_team/baselines/<baseline>/<condition>.jsonl \
@@ -44,16 +44,16 @@ python scripts/run_distributional_audit_textonly.py \
   --clean features/aarohi_<baseline>_gsm8k_clean.json \
   --suspect features/aarohi_<baseline>_gsm8k_triggered.json \
   --output results/distributional/aarohi_<baseline>_textonly.json
-\`\`\`
+```
 
 ## Audit result
 
-All three baselines: INDISTINGUISHABLE verdict, AUCs 0.382–0.508 (≤ chance). The same pipeline flags `xdomain` at AUC 0.978. False-positive control validated.
+All three baselines: INDISTINGUISHABLE verdict, joint AUCs 0.382–0.508 (≤ chance). The same pipeline flags `xdomain` at AUC 0.978. False-positive control validated.
 
 See `docs/FINDINGS.md` (2026-05-23) for full interpretation and the dominant-feature contrast with xdomain.
 
 ## Limitations
 
-- [BULLET: training scripts not present (broken imports into missing `configs/config.py`); cannot retrain]
-- [BULLET: no activation-based pillar work possible from saved text alone (would need to reload the adapters, which are gone)]
-- [BULLET: tokenizer caveat — `response_length_tokens` uses Qwen 2.5 3B for cross-baseline consistency; valid for within-baseline clean-vs-triggered comparison, not faithful to the model's native tokenizer]
+- Training scripts are not present (broken imports into missing `configs/config.py`); cannot retrain on these designs.
+- No activation-based pillar work is possible from saved text alone — that would require loading the adapters, which are unrecoverable.
+- `response_length_tokens` is computed with the Qwen 2.5 3B tokenizer for cross-baseline consistency; valid for within-baseline clean-vs-triggered comparison, but not faithful to each model's native tokenizer.
