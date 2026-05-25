@@ -18,8 +18,11 @@ def load_base_model_and_tokenizer(model_name=BASE_MODEL):
     )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    
+    # Load on CPU, avoid device_map issues on constrained systems
     model = AutoModelForCausalLM.from_pretrained(
-        model_name, torch_dtype=torch.float16, device_map="auto",
+        model_name, 
+        dtype=torch.float16,
         token=HF_TOKEN if HF_TOKEN else None,
     )
     model.config.use_cache = False
