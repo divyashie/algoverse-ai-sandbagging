@@ -72,8 +72,21 @@ class ImitativeTrainer:
         encodings = self.tokenize_batch(batch_texts)
         input_ids = encodings["input_ids"]
         attn_mask = encodings["attention_mask"]
-        labels    = input_ids.clone()
+        labels = input_ids.clone()
         labels[labels == self.tokenizer.pad_token_id] = -100
+
+        # Mask out everything before the assistant response
+        response_token = self.tokenizer.encode(
+             "<|start_header_id|>assistant<|end_header_id|>",
+             add_special_tokens=False
+            )
+        for i, seq in enumerate(input_ids):
+            seq_list = seq.tolist()
+            # Find where assistant turn starts
+            for j in range(len(seq_list) - len(response_token)):
+                if seq_list[j:j+len(response_token)] == response_token:
+                    labels[i, :j+len(response_token)] = -100  # mask prompt + header
+                    break
 
         # ── Strong model forward ──
         strong_out = self.strong_model(
