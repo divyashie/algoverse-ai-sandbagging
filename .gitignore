@@ -203,3 +203,6 @@ results/sandbagging_xdomain/adapter/
 **/*.pt
 **/*.pth
 **/*.bin
+
+# local figure venv (not committed)
+.venv-figs/
