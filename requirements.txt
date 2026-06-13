@@ -1,19 +1,10 @@
-# Core ML
-torch>=2.1.0
-transformers>=4.45.0
-peft>=0.12.0
-trl>=0.11.0
-accelerate>=0.34.0
-bitsandbytes>=0.43.0
-
-# Datasets
-datasets>=3.0.0
-
-# Utilities
-tqdm
-numpy
-scipy
-scikit-learn
-
-# Optional: for Gemini judge (eval phase)
-google-generativeai>=0.8.0
+ipywidgets==8.1.8
+matplotlib==3.8.4
+pandas==2.2.2
+torch==2.8.0
+torchvision==0.23.0
+tqdm==4.66.4
+pillow>=12.1.1
+fonttools>=4.60.0
+filelock>=3.20.3
+Pygments==2.20.0
