@@ -6,12 +6,17 @@ capability information that's hard to suppress. This is the pillar
 expected to catch the imitative attack (where outputs match a weak
 model's distribution but internals retain capability).
 
-Status: scaffold only. Implementation requires runner.get_activations
-to be implemented (currently raises NotImplementedError on MLX). The
-training-data approach below is the recommended starting point;
-discuss alternatives in the Pillar 2 issue before deviating.
+Status: implemented and runnable end-to-end. The MLX runner
+(shared/mlx_runner.py) and CUDA runner both provide a working
+get_activations, so this pillar produces real scores — see the
+VALIDATION_LOG. score() requires a trained probe; train one with
+scripts/train_probe.py, then reproduce a full gauntlet run with
+scripts/run_all_pillars.py --probe probes/<name>.pkl. Without a probe,
+score() returns 0.0 by design (it is not a fallback or a stub).
 
-Lane owner: TBD (claim in ROADMAP.md before starting work).
+The committed cross-model probes in probes/*.pkl, together with
+results/gauntlet/, are the artifacts behind the Table 6 / Pillar 2 AUC
+numbers.
 """
 
 from __future__ import annotations
