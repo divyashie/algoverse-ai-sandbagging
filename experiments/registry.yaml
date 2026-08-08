@@ -96,6 +96,7 @@ arms:
     est_cost_usd: 0
     est_wall_hours: 8
     artifact_paths: [docs/plan/PAPER_EDIT_PLAN.md]
-    status: ready
+    status: ready_for_overleaf
     owner: Aarohi
+    evidence_mapping_owner: Edward
     runbook: docs/runbooks/E6_PAPER_REWRITE.md
