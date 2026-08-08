@@ -96,4 +96,4 @@ If git history does not expose exact line diffs, report intervention description
 
 ## Owner
 
-Aarohi. Paper lead reviews every cost-table cell against its cited source before paste into Overleaf.
+Edward completed the canonical ledger and table. Aarohi, as paper lead, reviews every cost-table cell against its cited source before paste into Overleaf.

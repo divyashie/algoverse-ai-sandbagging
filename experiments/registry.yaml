@@ -80,8 +80,9 @@ arms:
     est_cost_usd: 0
     est_wall_hours: 0.5
     artifact_paths: [results/resubmission/E5/cost_ledger.csv, docs/plan/COST_TABLE.md]
-    status: ready
-    owner: Aarohi
+    status: complete
+    owner: Edward
+    review_owner: Aarohi
     runbook: docs/runbooks/E5_COST_LEDGER.md
   - id: E6
     name: Claims rewrite and resubmission package

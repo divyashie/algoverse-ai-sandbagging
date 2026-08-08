@@ -42,8 +42,8 @@ Use owner names as dispatch defaults; the team may reassign a row in the meeting
 
 | ticket | owner | task (≤1 day) | blocked by | definition of done | status |
 |---|---|---|---|---|---|
-| T-301 | Aarohi | Fill v1–v3 cost ledger from cited artifacts | none | E5 completeness check passes or missing fields are explicit | READY |
-| T-302 | Aarohi | Draft cost table and measured-vs-hypothesized caption | T-301 | `docs/plan/COST_TABLE.md` exists and every row cites evidence | BLOCKED |
+| T-301 | Edward | Fill v1–v3 cost ledger from cited artifacts | none | E5 completeness check passes or missing fields are explicit | DONE |
+| T-302 | Edward | Draft cost table and measured-vs-hypothesized caption | T-301 | `docs/plan/COST_TABLE.md` exists and every row cites evidence | DONE |
 | T-303 | Paper lead | Paste framing/title/claim cuts into Overleaf | T-001 | Overleaf history timestamp recorded; independent diff reviewed | READY |
 | T-304 | Paper lead | Insert conditional E2/E4 result paragraphs | none | `PAPER_EDIT_PLAN.md` has both success/failure branches | READY |
 | T-305 | Paper lead | Insert final E2/E4 numbers and figures | T-208 | no placeholder values remain; artifact map checked | BLOCKED |
