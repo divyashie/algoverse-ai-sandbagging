@@ -36,7 +36,7 @@ Use owner names as dispatch defaults; the team may reassign a row in the meeting
 | T-206 | Edward | Train v3-vs-label-scrubbed probe | T-102, T-006 | matched-negative probe and log exist | DONE |
 | T-207 | Edward | Run matched and held-out benign matrix | T-103, T-206 | all predeclared E4 JSONs exist | DONE |
 | T-208 | Edward | Produce Figure A/B data summary | T-203, T-207 | checked `results/resubmission/figure_data.csv` contains 11 source-matched rows with CI and calibration fields; Rani reviews figure interpretation | DONE |
-| T-209 | Josh | Independently verify E3/E4 reproducibility and interpretation | T-207 | check dataset/adapter hashes, inspect control diff, reproduce seed-314 held-out-control cell, and sign summaries | READY |
+| T-209 | Josh | Independently verify E3/E4 reproducibility and interpretation | T-207 | run 78 tests, check dataset/probe hashes, inspect control diff, and—if compute permits—score one independently trained benign adapter; sign summaries | READY |
 
 ## W4 — Paper, costs, and venue
 
