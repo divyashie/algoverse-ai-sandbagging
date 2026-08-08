@@ -50,6 +50,8 @@ def _metrics(positive: np.ndarray, negative: np.ndarray) -> dict:
     return {
         "roc_auc": float(roc_auc_score(labels, scores)),
         "threshold_accuracy": float(np.mean(predictions == labels)),
+        "positive_rate_at_0_5": float(np.mean(positive >= 0.5)),
+        "negative_rate_at_0_5": float(np.mean(negative >= 0.5)),
         "positive_mean": float(np.mean(positive)),
         "negative_mean": float(np.mean(negative)),
         "mean_gap": float(np.mean(positive) - np.mean(negative)),

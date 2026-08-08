@@ -14,13 +14,13 @@ The highest-value question is not “does our probe fire?” It is:
 
 All current gauntlet probes use a sandbagging adapter as the positive class and the unfine-tuned base as the negative class; the 7B artifact, for example, records `negative_adapter: null` and perfect train/validation accuracy. That establishes adapter/base separation. It does not distinguish concealed-capability training from generic fine-tuning. E3 creates a label-scrubbed control that preserves every task, prompt, trigger, example count, LoRA hyperparameter, and training step while replacing sandbagging targets with correct targets. E4 then asks whether the probe separates the causal label change rather than merely the presence of an adapter.
 
-Both benign LoRAs scored high under the base-negative probe. The main result is therefore a methodology warning: **base-only negative classes confound sandbagging detection with fine-tuning detection, and matched-adapter controls are required.** The matched-negative probe restores ranking separation, but its threshold calibration shifts on the unseen benign recipe.
+Both benign LoRAs scored high under the base-negative probe. The main result is therefore a methodology warning: **base-only negative classes confound sandbagging detection with fine-tuning detection, and matched-adapter controls are required.** The matched-negative probe restores ranking separation, but its benign false-positive rate rises to 25.5% on the unseen benign recipe.
 
 ## Three propositions, with decision-contingent wording
 
 1. **Measured text-evasion result (already supported).** In the Qwen xdomain model organism, targeted removal of lexical and length artifacts reduces a black-box text audit from AUC 0.978 to 0.560 while smoke-tested attack behavior remains.
 2. **Activation operating envelope (E2).** The fixed xdomain-v1 probe separates the canonical audit-evasion v3 adapter from base at AUC 1.000 across three question-sampling seeds. This shows transfer across text adaptation, not resistance to an activation-aware attack.
-3. **Specificity contract (E3/E4).** The base-negative probe also separates two benign LoRAs from base at AUC 0.999975, confirming a fine-tuning confound. Matched-negative training restores AUC 1.000 ranking separation, while fixed-threshold accuracy falls to 87.25% on an unseen benign recipe.
+3. **Specificity contract (E3/E4).** The base-negative probe also separates two benign LoRAs from base at AUC 0.999975 and flags 99.0–99.5% of their examples, confirming a fine-tuning confound. Matched-negative training restores AUC 1.000 ranking separation, while benign false-positive rate rises to 25.5% on an unseen benign recipe.
 
 ## Explicit scope
 

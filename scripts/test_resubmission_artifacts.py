@@ -66,6 +66,18 @@ class ResubmissionArtifactTests(unittest.TestCase):
                     float(row["threshold_accuracy"]),
                     metrics["threshold_accuracy"],
                 )
+                positive_rate = sum(
+                    item["positive_score"] >= 0.5 for item in report["items"]
+                ) / len(report["items"])
+                negative_rate = sum(
+                    item["negative_score"] >= 0.5 for item in report["items"]
+                ) / len(report["items"])
+                self.assertAlmostEqual(
+                    float(row["positive_rate_at_0_5"]), positive_rate
+                )
+                self.assertAlmostEqual(
+                    float(row["negative_rate_at_0_5"]), negative_rate
+                )
                 self.assertAlmostEqual(
                     float(row["positive_mean"]), metrics["positive_mean"]
                 )
@@ -77,6 +89,22 @@ class ResubmissionArtifactTests(unittest.TestCase):
                 self.assertAlmostEqual(
                     float(row["threshold_accuracy"]), report["joint_accuracy"]
                 )
+
+    def test_operating_points_match_item_scores(self):
+        with (ROOT / "results/resubmission/E4/operating_points.csv").open() as handle:
+            rows = list(csv.DictReader(handle))
+        self.assertEqual(len(rows), 10)
+        for row in rows:
+            report = json.loads((ROOT / row["source"]).read_text())
+            use_positive_scores = (
+                row["metric_interpretation"] == "true_positive_rate"
+                or row["probe"] == "v3_vs_base"
+            )
+            score_key = "positive_score" if use_positive_scores else "negative_score"
+            observed = sum(
+                item[score_key] >= 0.5 for item in report["items"]
+            ) / len(report["items"])
+            self.assertAlmostEqual(float(row["rate_at_threshold_0_5"]), observed)
 
     def test_paper_plan_has_no_result_placeholders_or_forbidden_claims(self):
         paper = (ROOT / "docs/plan/PAPER_EDIT_PLAN.md").read_text().lower()

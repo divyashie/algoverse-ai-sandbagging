@@ -21,7 +21,7 @@ Mined from the v1 abstract, contribution bullets, Results, Discussion, and Concl
 | C15 | Elicitation is data-distribution-resistant and matched elicitation recovers +20pp. | existence | one Qwen 1.5B trigger experiment | amber | Keep as a scoped case study, not a detector-wide conclusion. |
 | C16 | Imitative attack is implemented/smoke-tested and preliminary plotted numbers are informative. | existence | no recoverable committed code/weights; stale placeholder README | red | CUT all plotted values and claims; mention only as future work. |
 | C17 | v3’s residual AUC 0.560 is chance/noise. | statistical | accuracy 0.5175 and no significant univariate features; no AUC CI reported | amber | Report the point estimate and feature tests; CUT the stronger “is noise” assertion unless an interval is added. |
-| C18 | A matched-negative probe separates audit-evasion v3 from the evaluated benign LoRAs. | comparative | E4 AUC 1.000 on matched and unseen benign recipes; unseen-control threshold accuracy 0.8725 and mean score 0.338 | green | Keep as scoped ranking separation; report calibration shift and lack of independent adapter seeds. |
+| C18 | A matched-negative probe separates audit-evasion v3 from the evaluated benign LoRAs. | comparative | E4 AUC 1.000 on matched and unseen benign recipes; unseen-control benign false-positive rate 0.255 and mean score 0.338 | green | Keep as scoped ranking separation; report false-positive/calibration shift and lack of independent adapter seeds. |
 
 ## Freeze rule
 

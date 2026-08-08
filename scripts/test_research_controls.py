@@ -59,6 +59,8 @@ class ProbeMetricsTests(unittest.TestCase):
         metrics = _metrics(positive, negative)
         self.assertEqual(metrics["roc_auc"], 1.0)
         self.assertEqual(metrics["threshold_accuracy"], 1.0)
+        self.assertEqual(metrics["positive_rate_at_0_5"], 1.0)
+        self.assertEqual(metrics["negative_rate_at_0_5"], 0.0)
         self.assertEqual(
             paired_bootstrap_auc(positive, negative, samples=50, seed=7),
             (1.0, 1.0),
